@@ -105,7 +105,7 @@
     ],
     # Libraries for GNU/Linux environment.
     'linux_ldflags': [
-      '-lc++',
+      '-lstdc++',
       '-pthread',
     ],
 
@@ -123,10 +123,10 @@
         'compiler_host_version_int': 304,  # Clang 3.4 or higher
       }],
       ['target_platform=="Linux"', {
-        'compiler_target': 'clang',
-        'compiler_target_version_int': 304,  # Clang 3.4 or higher
-        'compiler_host': 'clang',
-        'compiler_host_version_int': 304,  # Clang 3.4 or higher
+        'compiler_target': 'gcc',
+        'compiler_target_version_int': 900,  # gcc 9.0 or higher
+        'compiler_host': 'gcc',
+        'compiler_host_version_int': 900,  # gcc 9.0 or higher
       }],
     ],
   },
