@@ -17,8 +17,9 @@ makedepends="
 	git
 	clang
 "
-source="https://gitlab.com/phoep/mozc/-/jobs/974012190/artifacts/raw/ibus-mozc.tar.gz"
+source="https://gitlab.com/phoep/mozc/-/jobs/974830712/artifacts/file/ibus-mozc.tar.gz"
 subpackages=""
+
 # mozc tests require a running X server
 options="check"
 
