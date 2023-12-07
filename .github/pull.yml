@@ -1,0 +1,17 @@
+version: "1"
+rules:
+  - base: master
+    upstream: google:master
+    mergeMethod: hardreset
+  - base: debian
+    upstream: master
+    mergeMethod: merge
+  - base: ubuntu
+    upstream: master
+    mergeMethod: merge
+  - base: fcitx
+    upstream: fcitx:fcitx
+    mergeMethod: hardreset
+  - base: main
+    upstream: master
+    mergeMethod: merge
