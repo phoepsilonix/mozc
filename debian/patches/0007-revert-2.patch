@@ -1,0 +1,214 @@
+diff --git a/src/data_manager/BUILD.bazel b/src/data_manager/BUILD.bazel
+index ef019eec8..319c41af7 100644
+--- a/src/data_manager/BUILD.bazel
++++ b/src/data_manager/BUILD.bazel
+@@ -290,7 +290,6 @@ mozc_cc_library(
+         "//base:logging",
+         "//base/container:serialized_string_array",
+         "//dictionary:user_pos_interface",
+-        "@com_google_absl//absl/strings",
+     ],
+ )
+ 
+diff --git a/src/data_manager/pos_list_provider.cc b/src/data_manager/pos_list_provider.cc
+index e6fc97c85..869eb0f10 100644
+--- a/src/data_manager/pos_list_provider.cc
++++ b/src/data_manager/pos_list_provider.cc
+@@ -36,8 +36,6 @@
+ #include "base/embedded_file.h"
+ #include "base/logging.h"
+ 
+-#include "absl/strings/string_view.h"
+-
+ namespace mozc {
+ namespace {
+ 
+@@ -51,16 +49,13 @@ namespace {
+ 
+ }  // namespace
+ 
+-std::vector<std::string> PosListProvider::GetPosList() const {
+-
++void PosListProvider::GetPosList(std::vector<std::string> *pos_list) const {
+   SerializedStringArray array;
+   CHECK(array.Init(LoadEmbeddedFile(kPosArray)));
+-
+-  std::vector<std::string> pos_list(array.size());
+-  for (absl::string_view pos : array) {
+-    pos_list.push_back({pos.data(), pos.size()});
++  pos_list->resize(array.size());
++  for (size_t i = 0; i < array.size(); ++i) {
++    (*pos_list)[i].assign(array[i].begin(), array[i].end());
+   }
+-  return pos_list;
+ }
+ 
+ }  // namespace mozc
+diff --git a/src/data_manager/pos_list_provider.h b/src/data_manager/pos_list_provider.h
+index 6b61be826..38477ef37 100644
+--- a/src/data_manager/pos_list_provider.h
++++ b/src/data_manager/pos_list_provider.h
+@@ -39,7 +39,7 @@ namespace mozc {
+ 
+ class PosListProvider : public PosListProviderInterface {
+  public:
+-  std::vector<std::string> GetPosList() const override;
++  void GetPosList(std::vector<std::string> *pos_list) const override;
+ };
+ 
+ }  // namespace mozc
+diff --git a/src/dictionary/user_dictionary.cc b/src/dictionary/user_dictionary.cc
+index b46bbfbdc..88043feb5 100644
+--- a/src/dictionary/user_dictionary.cc
++++ b/src/dictionary/user_dictionary.cc
+@@ -584,7 +584,9 @@ bool UserDictionary::Load(
+ }
+ 
+ std::vector<std::string> UserDictionary::GetPosList() const {
+-  return user_pos_->GetPosList();
++  std::vector<std::string> pos_list;
++  user_pos_->GetPosList(&pos_list);
++  return pos_list;
+ }
+ 
+ void UserDictionary::SetUserDictionaryName(const absl::string_view filename) {
+diff --git a/src/dictionary/user_dictionary_test.cc b/src/dictionary/user_dictionary_test.cc
+index a3eb6c4bc..1098f7569 100644
+--- a/src/dictionary/user_dictionary_test.cc
++++ b/src/dictionary/user_dictionary_test.cc
+@@ -172,9 +172,7 @@ class UserPosMock : public UserPosInterface {
+     }
+   }
+ 
+-  std::vector<std::string> GetPosList() const override {
+-    return {};
+-  }
++  void GetPosList(std::vector<std::string> *pos_list) const override {}
+ 
+   bool GetPosIds(absl::string_view pos, uint16_t *id) const override {
+     return false;
+diff --git a/src/dictionary/user_pos.cc b/src/dictionary/user_pos.cc
+index de098c947..31d6ecc9c 100644
+--- a/src/dictionary/user_pos.cc
++++ b/src/dictionary/user_pos.cc
+@@ -57,17 +57,16 @@ UserPos::UserPos(absl::string_view token_array_data,
+   string_array_.Set(string_array_data);
+ }
+ 
+-std::vector<std::string> UserPos::GetPosList() const {
+-  std::vector<std::string> pos_list;
++void UserPos::GetPosList(std::vector<std::string> *pos_list) const {
++  pos_list->clear();
+   absl::flat_hash_set<uint16_t> seen;
+   for (auto iter = begin(); iter != end(); ++iter) {
+     if (!seen.insert(iter.pos_index()).second) {
+       continue;
+     }
+     const absl::string_view pos = string_array_[iter.pos_index()];
+-    pos_list.emplace_back(pos.data(), pos.size());
++    pos_list->emplace_back(pos.data(), pos.size());
+   }
+-  return pos_list;
+ }
+ 
+ bool UserPos::IsValidPos(absl::string_view pos) const {
+diff --git a/src/dictionary/user_pos.h b/src/dictionary/user_pos.h
+index fd68f871d..f79cbb7c3 100644
+--- a/src/dictionary/user_pos.h
++++ b/src/dictionary/user_pos.h
+@@ -185,7 +185,7 @@ class UserPos : public UserPosInterface {
+   UserPos &operator=(const UserPos &) = delete;
+ 
+   // Implementation of UserPosInterface.
+-  std::vector<std::string> GetPosList() const override;
++  void GetPosList(std::vector<std::string> *pos_list) const override;
+   bool IsValidPos(absl::string_view pos) const override;
+   bool GetPosIds(absl::string_view pos, uint16_t *id) const override;
+   bool GetTokens(absl::string_view key, absl::string_view value,
+diff --git a/src/dictionary/user_pos_interface.h b/src/dictionary/user_pos_interface.h
+index d9f39a2c3..d841a341d 100644
+--- a/src/dictionary/user_pos_interface.h
++++ b/src/dictionary/user_pos_interface.h
+@@ -47,8 +47,8 @@ class PosListProviderInterface {
+  public:
+   virtual ~PosListProviderInterface() = default;
+ 
+-  // Gets possible list of POS which Mozc can handle.
+-  virtual std::vector<std::string> GetPosList() const = 0;
++  // Sets possible list of POS which Mozc can handle.
++  virtual void GetPosList(std::vector<std::string> *pos_list) const = 0;
+ };
+ 
+ // Interface of the helper class used by POS.
+diff --git a/src/dictionary/user_pos_test.cc b/src/dictionary/user_pos_test.cc
+index f4e75e564..557b5178c 100644
+--- a/src/dictionary/user_pos_test.cc
++++ b/src/dictionary/user_pos_test.cc
+@@ -63,7 +63,8 @@ class UserPosTest : public ::testing::Test {
+ };
+ 
+ TEST_F(UserPosTest, UserPosBasicTest) {
+-  const std::vector<std::string> pos_list = user_pos_->GetPosList();
++  std::vector<std::string> pos_list;
++  user_pos_->GetPosList(&pos_list);
+   EXPECT_FALSE(pos_list.empty());
+   // test contains
+   EXPECT_TRUE(std::find(pos_list.begin(), pos_list.end(), "名詞サ変") !=
+@@ -85,7 +86,8 @@ TEST_F(UserPosTest, UserPosBasicTest) {
+ }
+ 
+ TEST_F(UserPosTest, UserPosGetTokensTest) {
+-  const std::vector<std::string> pos_list = user_pos_->GetPosList();
++  std::vector<std::string> pos_list;
++  user_pos_->GetPosList(&pos_list);
+ 
+   std::vector<UserPos::Token> tokens;
+   EXPECT_FALSE(user_pos_->GetTokens("", "test", pos_list[0], &tokens));
+@@ -134,7 +136,8 @@ TEST_F(UserPosTest, UserPosGetTokensWithAttributesTest) {
+ }
+ 
+ TEST_F(UserPosTest, UserPosGetTokensWithLocaleTest) {
+-  const std::vector<std::string> pos_list = user_pos_->GetPosList();
++  std::vector<std::string> pos_list;
++  user_pos_->GetPosList(&pos_list);
+ 
+   std::vector<UserPos::Token> tokens, tokens_ja, tokens_en;
+   EXPECT_TRUE(user_pos_->GetTokens("あか", "赤", "形容詞", "", &tokens));
+diff --git a/src/gui/dictionary_tool/dictionary_tool.cc b/src/gui/dictionary_tool/dictionary_tool.cc
+index 0cb9451ec..76f483eca 100644
+--- a/src/gui/dictionary_tool/dictionary_tool.cc
++++ b/src/gui/dictionary_tool/dictionary_tool.cc
+@@ -414,7 +414,8 @@ DictionaryTool::DictionaryTool(QWidget *parent)
+       GetTableHeight(dic_content_));
+ 
+   // Get a list of POS and set a custom delagate that holds the list.
+-  const std::vector<std::string> tmp_pos_vec = pos_list_provider_->GetPosList();
++  std::vector<std::string> tmp_pos_vec;
++  pos_list_provider_->GetPosList(&tmp_pos_vec);
+   QStringList pos_list;
+   for (size_t i = 0; i < tmp_pos_vec.size(); ++i) {
+     pos_list.append(QUtf8(tmp_pos_vec[i]));
+@@ -1317,7 +1318,8 @@ void DictionaryTool::OnContextMenuRequestedForContent(const QPoint &pos) {
+ 
+   menu->addSeparator();
+   QMenu *change_category_to = menu->addMenu(tr("Change category to"));
+-  const std::vector<std::string> pos_list = pos_list_provider_->GetPosList();
++  std::vector<std::string> pos_list;
++  pos_list_provider_->GetPosList(&pos_list);
+   std::vector<QAction *> change_pos_actions(pos_list.size());
+   for (size_t i = 0; i < pos_list.size(); ++i) {
+     change_pos_actions[i] = change_category_to->addAction(QUtf8(pos_list[i]));
+diff --git a/src/gui/word_register_dialog/word_register_dialog.cc b/src/gui/word_register_dialog/word_register_dialog.cc
+index ca50cce9c..5429fbf12 100644
+--- a/src/gui/word_register_dialog/word_register_dialog.cc
++++ b/src/gui/word_register_dialog/word_register_dialog.cc
+@@ -156,7 +156,8 @@ WordRegisterDialog::WordRegisterDialog()
+ #endif  // !ENABLE_CLOUD_SYNC
+ 
+   // Initialize ComboBox
+-  const std::vector<std::string> pos_set = pos_list_provider_->GetPosList();
++  std::vector<std::string> pos_set;
++  pos_list_provider_->GetPosList(&pos_set);
+   CHECK(!pos_set.empty());
+ 
+   for (const std::string &pos : pos_set) {
