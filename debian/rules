@@ -2,6 +2,10 @@
 # -*- makefile -*-
 #
 
+ifeq ($(shell dpkg-vendor --derives-from Ubuntu && echo yes), yes)
+    export DEB_BUILD_MAINT_OPTIONS += optimize=-lto
+endif
+
 CPPFLAGS:=$(shell dpkg-buildflags --get CPPFLAGS)
 CFLAGS:=$(shell dpkg-buildflags --get CFLAGS) $(CPPFLAGS) -fPIE -gdwarf-4 -fPIC
 CXXFLAGS:=$(shell dpkg-buildflags --get CXXFLAGS) $(CPPFLAGS) -fPIE -gdwarf-4 -fPIC
