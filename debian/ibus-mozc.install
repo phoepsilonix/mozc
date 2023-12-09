@@ -3,7 +3,6 @@
 src/bazel-bin/unix/ibus/ibus_mozc => usr/lib/ibus-mozc/ibus-engine-mozc
 # config files
 src/bazel-bin/unix/ibus/mozc.xml usr/share/ibus/component/
-src/bazel-bin/renderer/qt/mozc_renderer usr/lib/mozc/
 
 # autostart
 #
