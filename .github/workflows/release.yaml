@@ -1,0 +1,53 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    container:
+      image: debian:bookworm
+    steps:
+      - name: install build tools (Linux)
+        run: |
+          apt update
+          apt install -y sudo apt-utils
+          sudo sed 's/Types: deb/Types: deb deb-src/' -i /etc/apt/sources.list.d/debian.sources
+          apt update
+          sudo apt build-dep -y mozc
+          sudo apt install -y build-essential dpkg-dev make git qt6ct qt6-base-dev libfcitx5-qt6-dev curl unzip
+      - name: Install bazel
+        run: |
+           curl -LO https://github.com/bazelbuild/bazel/releases/download/6.4.0/bazel-6.4.0-installer-linux-x86_64.sh
+           bash bazel-6.4.0-installer-linux-x86_64.sh --user
+      - name: Install mold linker
+        uses: rui314/setup-mold@staging
+        with:
+          mold-version: 2.3.3
+          make-default: true
+      - uses: actions/checkout@v4
+        with:
+          ref: debian
+          submodules: 'recursive'
+          path: source
+      - name: Build
+        shell: bash
+        run: |
+          export PATH=$HOME/bin:$PATH
+          source ~/.bazel/bin/bazel-complete.bash
+          cd source
+          dpkg-buildpackage -b --no-sign
+          cd ..
+          mkdir -p release
+          mv *deb mozc_* release/
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          omitBody: true
+          artifacts: 'release/*'
+          token: ${{ secrets.GITHUB_TOKEN }}
+

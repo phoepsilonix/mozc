@@ -79,7 +79,7 @@ override_dh_auto_clean:
 	-rm -rf src/chrome/skk/skk_util_all_test.target.mk
 	-rm -rf src/chrome/skk/skk_util_test.target.mk
 	cd src ; \
-	bazel clean && bazel shutdown
+	bazel clean
 
 	-rm -f src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml
 	dh_auto_clean
