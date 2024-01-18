@@ -27,30 +27,42 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef MOZC_BASE_VLOG_H_
-#define MOZC_BASE_VLOG_H_
+#ifndef MOZC_COMPOSER_QUERY_H_
+#define MOZC_COMPOSER_QUERY_H_
 
-#include "base/logging.h"
+#include <cstdint>
+#include <string>
 
-namespace mozc::internal {
+namespace mozc::composer {
 
-// Returns the current verbose log level, which is the maximum of --v flag and
-// `verbose_level` in the config.
-int GetVLogLevel();
+struct TypeCorrectedQuery {
+  // Bit field of correction type.
+  enum CorrectionType {
+    NO_CORRECTION = 0,
+    CORRECTION = 1,                    // Normal typing correction.
+    COMPLETION = 2,                    // complete the rest of words/phrases.
+    KANA_MODIFIER_INSENTIVE_ONLY = 4,  // Pure katukou conversion.
+  };
 
-// Updates the (mirror of) `verbose_level` in the config.
-//
-// To avoid dependency on the config from logging library, vlog holds a copy of
-// the `verbose_level` internally, and config handlers are expected to call this
-// setter accordingly.
-void SetConfigVLogLevel(int v);
+  std::string correction;
 
-}  // namespace mozc::internal
+  uint8_t type = NO_CORRECTION;
 
-#define MOZC_VLOG_IS_ON(severity) (mozc::internal::GetVLogLevel() >= severity)
+  // `score` is the score diff against identity score.
+  // score = hyp_score - identity_score.
+  // `score` can be used to determine the triggering condition.
+  float score = 0.0;
 
-#define MOZC_VLOG(severity) LOG_IF(INFO, MOZC_VLOG_IS_ON(severity))
+  // `bias` is the score diff against the base score.
+  // bias = hyp_score - base_score.
+  // `bias` is used to calculate the penalty/bonus of the correction cost.
+  // base_score is usually the same as the identity_score, but  We consider that
+  // pure kana modifier insensitive correction is not an actual typing
+  // correction. So when the top is a pure kana modifier insensitive correction,
+  // uses the top score as the base score.
+  float bias = 0.0;
+};
 
-#define MOZC_DVLOG(severity) DLOG_IF(INFO, MOZC_VLOG_IS_ON(severity))
+}  // namespace mozc::composer
 
-#endif  // MOZC_BASE_VLOG_H_
+#endif  // MOZC_COMPOSER_QUERY_H_

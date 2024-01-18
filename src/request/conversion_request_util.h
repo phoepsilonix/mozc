@@ -27,30 +27,27 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef MOZC_BASE_VLOG_H_
-#define MOZC_BASE_VLOG_H_
+#ifndef MOZC_REQUEST_CONVERSION_REQUEST_UTIL_H_
+#define MOZC_REQUEST_CONVERSION_REQUEST_UTIL_H_
 
-#include "base/logging.h"
+#include "composer/composer.h"
+#include "protocol/commands.pb.h"
+#include "request/conversion_request.h"
 
-namespace mozc::internal {
+namespace mozc {
 
-// Returns the current verbose log level, which is the maximum of --v flag and
-// `verbose_level` in the config.
-int GetVLogLevel();
+class ConversionRequestUtil {
+ public:
+  ConversionRequestUtil() = delete;
+  ConversionRequestUtil(const ConversionRequestUtil &) = delete;
+  ConversionRequestUtil &operator=(const ConversionRequestUtil &) = delete;
 
-// Updates the (mirror of) `verbose_level` in the config.
-//
-// To avoid dependency on the config from logging library, vlog holds a copy of
-// the `verbose_level` internally, and config handlers are expected to call this
-// setter accordingly.
-void SetConfigVLogLevel(int v);
+  static bool IsHandwriting(const ConversionRequest &request) {
+    return !request.request().mixed_conversion() && request.has_composer() &&
+           !request.composer().GetHandwritingCompositions().empty();
+  }
+};
 
-}  // namespace mozc::internal
+}  // namespace mozc
 
-#define MOZC_VLOG_IS_ON(severity) (mozc::internal::GetVLogLevel() >= severity)
-
-#define MOZC_VLOG(severity) LOG_IF(INFO, MOZC_VLOG_IS_ON(severity))
-
-#define MOZC_DVLOG(severity) DLOG_IF(INFO, MOZC_VLOG_IS_ON(severity))
-
-#endif  // MOZC_BASE_VLOG_H_
+#endif  // MOZC_REQUEST_CONVERSION_REQUEST_UTIL_H_
