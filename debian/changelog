@@ -1,3 +1,9 @@
+mozc (2.29.5346.102+dfsg-2.2build1) unstable; urgency=medium
+
+  * git src.
+
+ -- Masato TOYOSHIMA <phoepsilonix@phoepsilonix.love>  Thu, 25 Jan 2024 16:33:00 +0900
+
 mozc (2.29.5291.102+dfsg-2.2build1) unstable; urgency=medium
 
   * git src.
