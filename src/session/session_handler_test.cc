@@ -39,7 +39,6 @@
 #include <utility>
 #include <vector>
 
-#include "spelling/spellchecker_service_interface.h"
 #include "absl/flags/declare.h"
 #include "absl/flags/flag.h"
 #include "absl/random/random.h"
@@ -66,6 +65,7 @@
 #include "testing/gmock.h"
 #include "testing/gunit.h"
 #include "usage_stats/usage_stats_testing_util.h"
+
 
 ABSL_DECLARE_FLAG(int32_t, max_session_size);
 ABSL_DECLARE_FLAG(int32_t, create_session_min_interval);
@@ -613,8 +613,9 @@ TEST_F(SessionHandlerTest, SyncDataTest) {
 TEST_F(SessionHandlerTest, EngineReloadSuccessfulScenarioTest) {
   MockEngineBuilder *engine_builder = new MockEngineBuilder();
 
-  auto new_engine = std::make_unique<EngineStub>();
-  const auto *new_engine_ptr = new_engine.get();
+  auto new_engine = std::make_unique<MockEngine>();
+  const MockEngine *new_engine_ptr = new_engine.get();
+
 
   EXPECT_CALL(*engine_builder, RegisterRequest(_)).WillRepeatedly(Return(1));
   EXPECT_CALL(*engine_builder, Build(1))
@@ -857,5 +858,6 @@ TEST_F(SessionHandlerTest, EngineReloadSessionExistsTest) {
   ASSERT_TRUE(CreateSession(&handler, &id3));
   EXPECT_EQ(new_engine_ptr, &handler.engine());
 }
+
 
 }  // namespace mozc
