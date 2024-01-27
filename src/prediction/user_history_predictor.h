@@ -188,6 +188,7 @@ class UserHistoryPredictor : public PredictorInterface {
   FRIEND_TEST(UserHistoryPredictorTest, GetScore);
   FRIEND_TEST(UserHistoryPredictorTest, IsValidEntry);
   FRIEND_TEST(UserHistoryPredictorTest, IsValidSuggestion);
+  FRIEND_TEST(UserHistoryPredictorTest, IsValidSuggestionForMixedConversion);
   FRIEND_TEST(UserHistoryPredictorTest, EntryPriorityQueueTest);
   FRIEND_TEST(UserHistoryPredictorTest, RomanFuzzyPrefixMatch);
   FRIEND_TEST(UserHistoryPredictorTest, MaybeRomanMisspelledKey);
@@ -241,6 +242,13 @@ class UserHistoryPredictor : public PredictorInterface {
     NOT_FOUND,
   };
 
+  // Result type for IsValidCandidate() check.
+  enum ResultType {
+    GOOD_RESULT,
+    BAD_RESULT,
+    STOP_ENUMERATION,  // Do not insert and stop enumerations
+  };
+
   // Returns true if this predictor should return results for the input.
   bool ShouldPredict(RequestType request_type, const ConversionRequest &request,
                      const Segments &segments) const;
@@ -286,6 +294,16 @@ class UserHistoryPredictor : public PredictorInterface {
   // a valid result if the length of user input is |prefix_len|.
   static bool IsValidSuggestion(RequestType request_type, uint32_t prefix_len,
                                 const Entry &entry);
+
+  // IsValidSuggestion used in mixed conversion (mobile).
+  static bool IsValidSuggestionForMixedConversion(
+      const ConversionRequest &request, uint32_t prefix_len,
+      const Entry &entry);
+
+  static ResultType GetResultType(const ConversionRequest &request,
+                                  RequestType request_type,
+                                  bool is_top_candidate, uint32_t input_key_len,
+                                  const Entry &entry);
 
   // Returns true if entry is DEFAULT_ENTRY, satisfies certain conditions, and
   // doesn't have removed flag.

@@ -48,7 +48,6 @@
 #include "converter/segmenter.h"
 #include "converter/segments.h"
 #include "data_manager/data_manager_interface.h"
-#include "dictionary/dictionary_interface.h"
 #include "dictionary/pos_matcher.h"
 #include "dictionary/single_kanji_dictionary.h"
 #include "engine/modules.h"
@@ -99,22 +98,12 @@ class DictionaryPredictor : public PredictorInterface {
   // 1151 = 500 * log(10)
   static constexpr int kKeyExpansionPenalty = 1151;
 
-  DictionaryPredictor(const DataManagerInterface &data_manager,
-                      const ConverterInterface *converter,
-                      const ImmutableConverterInterface *immutable_converter,
-                      const engine::Modules &modules);
-
   // Initializes a predictor with given references to submodules. Note that
   // pointers are not owned by the class and to be deleted by the caller.
   DictionaryPredictor(const DataManagerInterface &data_manager,
                       const ConverterInterface *converter,
                       const ImmutableConverterInterface *immutable_converter,
-                      const dictionary::DictionaryInterface *dictionary,
-                      const dictionary::DictionaryInterface *suffix_dictionary,
-                      const Connector &connector, const Segmenter *segmenter,
-                      dictionary::PosMatcher pos_matcher,
-                      const SuggestionFilter &suggestion_filter,
-                      const prediction::RescorerInterface *rescorer = nullptr);
+                      const engine::Modules &modules);
 
   DictionaryPredictor(const DictionaryPredictor &) = delete;
   DictionaryPredictor &operator=(const DictionaryPredictor &) = delete;
@@ -147,6 +136,7 @@ class DictionaryPredictor : public PredictorInterface {
     const dictionary::PosMatcher pos_matcher_;
     const SuggestionFilter &suggestion_filter_;
     const bool is_mixed_conversion_;
+    const bool auto_partial_suggestion_;
     const bool include_exact_key_;
     const bool filter_number_;
 
@@ -177,10 +167,7 @@ class DictionaryPredictor : public PredictorInterface {
           aggregator,
       const DataManagerInterface &data_manager,
       const ImmutableConverterInterface *immutable_converter,
-      const Connector &connector, const Segmenter *segmenter,
-      dictionary::PosMatcher pos_matcher,
-      const SuggestionFilter &suggestion_filter,
-      const prediction::RescorerInterface *rescorer = nullptr);
+      const engine::Modules &modules);
 
   static void ApplyPenaltyForKeyExpansion(const ConversionRequest &request,
                                           const Segments &segments,
@@ -319,7 +306,7 @@ class DictionaryPredictor : public PredictorInterface {
       const TypingCorrectionMixingParams &typing_correction_mixing_params,
       Segments *segments);
 
-  static void MaybeApplyHomonymCorrection(const ConversionRequest &request,
+  static void MaybeApplyHomonymCorrection(const engine::Modules &modules,
                                           Segments *segments);
 
   void MaybeRescoreResults(const ConversionRequest &request,
@@ -342,6 +329,7 @@ class DictionaryPredictor : public PredictorInterface {
   const uint16_t general_symbol_id_;
   const std::string predictor_name_;
   const prediction::RescorerInterface *rescorer_ = nullptr;
+  const engine::Modules &modules_;
 };
 
 }  // namespace mozc::prediction
