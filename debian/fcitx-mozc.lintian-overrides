@@ -1,2 +1,0 @@
-fcitx-mozc: shared-library-lacks-version usr/lib/x86_64-linux-gnu/fcitx-mozc.so fcitx-mozc.so
-fcitx-mozc: lacks-ldconfig-trigger usr/lib/x86_64-linux-gnu/fcitx-mozc.so
