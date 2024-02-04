@@ -9,9 +9,9 @@ rules:
   - base: ubuntu
     upstream: master
     mergeMethod: merge
-  - base: fcitx
-    upstream: fcitx:fcitx
-    mergeMethod: hardreset
   - base: main
     upstream: master
     mergeMethod: merge
+  - base: fcitx
+    upstream: fcitx:fcitx
+    mergeMethod: hardreset
