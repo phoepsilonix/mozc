@@ -45,18 +45,18 @@ jobs:
           curl -LO "http://sudachi.s3-website-ap-northeast-1.amazonaws.com/sudachidict-raw/${_sudachidict_date}/small_lex.zip"
           curl -LO "http://sudachi.s3-website-ap-northeast-1.amazonaws.com/sudachidict-raw/${_sudachidict_date}/core_lex.zip"
           curl -LO "http://sudachi.s3-website-ap-northeast-1.amazonaws.com/sudachidict-raw/${_sudachidict_date}/notcore_lex.zip"
-          curl -LO "https://github.com/neologd/mecab-ipadic-neologd/raw/master/seed/mecab-user-dict-seed.20200910.csv.xz"
+          #curl -LO "https://github.com/neologd/mecab-ipadic-neologd/raw/master/seed/mecab-user-dict-seed.20200910.csv.xz"
           unzip small_lex.zip
           unzip core_lex.zip
           unzip notcore_lex.zip
           cat small_lex.csv core_lex.csv notcore_lex.csv > sudachi.csv
           rm *lex.csv
-          xz -d mecab-user-dict-seed.20200910.csv.xz
+          #xz -d mecab-user-dict-seed.20200910.csv.xz
           rustup update stable
           rustup target list --installed | grep $(rustc -vV | sed -e 's|host: ||' -e 's|-gnu||p' -n) | grep musl && TARGET=$(rustup target list --installed | grep $(rustc -vV | sed -e 's|host: ||' -e 's|-gnu||p' -n)|grep musl|head -n1) || TARGET=$(rustup target list --installed | grep $(rustc -vV | sed -e 's|host: ||' -e 's|-gnu||p' -n)|grep -v musl|head -n1)
           cargo build --release --target $TARGET
           ./target/$TARGET/release/dict-to-mozc -s -i ../../source/src/data/dictionary_oss/id.def -f sudachi.csv > ./all-dict.txt
-          ./target/$TARGET/release/dict-to-mozc -n -i ../../source/src/data/dictionary_oss/id.def -f mecab-user-dict-seed.20200910.csv >> ./all-dict.txt
+          #./target/$TARGET/release/dict-to-mozc -n -i ../../source/src/data/dictionary_oss/id.def -f mecab-user-dict-seed.20200910.csv >> ./all-dict.txt
           awk -f dup.awk all-dict.txt > finish-dict.txt
           cat finish-dict.txt >> ../../source/src/data/dictionary_oss/dictionary00.txt
           rm all-dict.txt finish-dict.txt
