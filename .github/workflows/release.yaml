@@ -33,7 +33,7 @@ jobs:
           make-default: true
       - uses: actions/checkout@v4
         with:
-          ref: debian
+          ref: f71800c8b34d0969e20b4805b20603773e7a28d5
           submodules: 'recursive'
           path: source
       - name: added dictionary
