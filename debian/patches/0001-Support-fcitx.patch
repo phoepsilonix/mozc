@@ -244,10 +244,10 @@ index 000000000..978dc8e64
 +
 +mv unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in{.new,}
 diff --git a/src/WORKSPACE.bazel b/src/WORKSPACE.bazel
-index faae4c388..4cc53489d 100644
+index d7448832f..664ba1553 100644
 --- a/src/WORKSPACE.bazel
 +++ b/src/WORKSPACE.bazel
-@@ -122,6 +122,18 @@ pkg_config_repository(
+@@ -140,6 +140,18 @@ pkg_config_repository(
    packages = ["glib-2.0", "gobject-2.0", "ibus-1.0"],
  )
  
@@ -267,7 +267,7 @@ index faae4c388..4cc53489d 100644
  new_local_repository(
      name = "ja_usage_dict",
 diff --git a/src/build_mozc.py b/src/build_mozc.py
-index 3e82a064d..d4ad03f05 100755
+index fe30f3fc9..e3a7f4611 100755
 --- a/src/build_mozc.py
 +++ b/src/build_mozc.py
 @@ -163,6 +163,8 @@ def GetGypFileNames(options):
@@ -281,10 +281,10 @@ index 3e82a064d..d4ad03f05 100755
  
 diff --git a/src/unix/fcitx/BUILD b/src/unix/fcitx/BUILD
 new file mode 100644
-index 000000000..1cf3fa2e5
+index 000000000..2f90b3e15
 --- /dev/null
 +++ b/src/unix/fcitx/BUILD
-@@ -0,0 +1,95 @@
+@@ -0,0 +1,99 @@
 +load(
 +    "//:build_defs.bzl",
 +    "mozc_cc_binary",
@@ -302,6 +302,7 @@ index 000000000..1cf3fa2e5
 +        ":surrounding_text_util",
 +        "//base:port",
 +        "//base:util",
++        "//base:vlog",
 +        "//client:client",
 +        "//protocol:commands_cc_proto",
 +    ]
@@ -325,6 +326,7 @@ index 000000000..1cf3fa2e5
 +        "//base:process",
 +        "//base:run_level",
 +        "//base:util",
++        "//base:vlog",
 +        "//protocol:commands_cc_proto",
 +        "//client:client_interface",
 +    ],
@@ -343,6 +345,7 @@ index 000000000..1cf3fa2e5
 +    deps = [
 +        "//base:logging",
 +        "//base:port",
++        "//base:vlog",
 +        "//protocol:config_cc_proto",
 +        "//protocol:commands_cc_proto",
 +        "@fcitx//:fcitx",
@@ -361,6 +364,7 @@ index 000000000..1cf3fa2e5
 +        "//base:util",
 +        "//base:logging",
 +        "//base:port",
++        "//base:vlog",
 +        "@fcitx//:fcitx",
 +    ],
 +)
@@ -796,10 +800,10 @@ index 000000000..7fedaa043
 +}
 diff --git a/src/unix/fcitx/fcitx_key_event_handler.cc b/src/unix/fcitx/fcitx_key_event_handler.cc
 new file mode 100644
-index 000000000..44f0242d6
+index 000000000..61cbe92e9
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_key_event_handler.cc
-@@ -0,0 +1,243 @@
+@@ -0,0 +1,244 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -835,6 +839,7 @@ index 000000000..44f0242d6
 +#include <map>
 +
 +#include "base/logging.h"
++#include "base/vlog.h"
 +#include "base/singleton.h"
 +
 +namespace mozc {
@@ -1130,10 +1135,10 @@ index 000000000..d11a440f2
 +#endif  // MOZC_UNIX_FCITX_KEY_EVENT_HANDLER_H_
 diff --git a/src/unix/fcitx/fcitx_key_translator.cc b/src/unix/fcitx/fcitx_key_translator.cc
 new file mode 100644
-index 000000000..75948058a
+index 000000000..775adaca2
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_key_translator.cc
-@@ -0,0 +1,420 @@
+@@ -0,0 +1,421 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -1171,6 +1176,7 @@ index 000000000..75948058a
 +#include <string>
 +
 +#include "base/logging.h"
++#include "base/vlog.h"
 +
 +namespace mozc {
 +namespace {
@@ -1477,7 +1483,7 @@ index 000000000..75948058a
 +             it != kSpecialKeyMap->end()) {
 +    out_event->set_special_key(it->second);
 +  } else {
-+    VLOG(1) << "Unknown keyval: " << keyval;
++    MOZC_VLOG(1) << "Unknown keyval: " << keyval;
 +    return false;
 +  }
 +
@@ -1655,10 +1661,10 @@ index 000000000..ca9089592
 +#endif  // MOZC_UNIX_FCITX_FCITX_KEY_TRANSLATOR_H_
 diff --git a/src/unix/fcitx/fcitx_mozc.cc b/src/unix/fcitx/fcitx_mozc.cc
 new file mode 100644
-index 000000000..db10e8f0b
+index 000000000..351d2e124
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_mozc.cc
-@@ -0,0 +1,552 @@
+@@ -0,0 +1,553 @@
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
 +//
@@ -1701,6 +1707,7 @@ index 000000000..db10e8f0b
 +
 +#include "base/const.h"
 +#include "base/logging.h"
++#include "base/vlog.h"
 +#include "base/process.h"
 +#include "base/util.h"
 +#include "base/file_util.h"
@@ -1791,7 +1798,7 @@ index 000000000..db10e8f0b
 +        composition_mode_ ( mozc::commands::HIRAGANA )
 +{
 +    // mozc::Logging::SetVerboseLevel(1);
-+    VLOG ( 1 ) << "FcitxMozc created.";
++    MOZC_VLOG ( 1 ) << "FcitxMozc created.";
 +    const bool is_vertical = true;
 +    parser_->set_use_annotation ( is_vertical );
 +    InitializeBar();
@@ -1801,7 +1808,7 @@ index 000000000..db10e8f0b
 +
 +FcitxMozc::~FcitxMozc()
 +{
-+    VLOG ( 1 ) << "FcitxMozc destroyed.";
++    MOZC_VLOG ( 1 ) << "FcitxMozc destroyed.";
 +}
 +
 +// This function is called from SCIM framework when users press or release a
@@ -1831,7 +1838,7 @@ index 000000000..db10e8f0b
 +        LOG ( ERROR ) << "The clicked candidate doesn't have unique ID.";
 +        return;
 +    }
-+    VLOG ( 1 ) << "select_candidate, id=" << *id;
++    MOZC_VLOG ( 1 ) << "select_candidate, id=" << *id;
 +
 +    std::string error;
 +    mozc::commands::Output raw_response;
@@ -1850,7 +1857,7 @@ index 000000000..db10e8f0b
 +// This function is called from SCIM framework.
 +void FcitxMozc::resetim()
 +{
-+    VLOG ( 1 ) << "resetim";
++    MOZC_VLOG ( 1 ) << "resetim";
 +    std::string error;
 +    mozc::commands::Output raw_response;
 +    if ( connection_->TrySendCommand (
@@ -1879,7 +1886,7 @@ index 000000000..db10e8f0b
 +
 +bool FcitxMozc::paging(bool prev)
 +{
-+    VLOG ( 1 ) << "paging";
++    MOZC_VLOG ( 1 ) << "paging";
 +    std::string error;
 +    mozc::commands::SessionCommand::CommandType command =
 +        prev ? mozc::commands::SessionCommand::CONVERT_PREV_PAGE
@@ -1897,7 +1904,7 @@ index 000000000..db10e8f0b
 +// This function is called from SCIM framework when the ic gets focus.
 +void FcitxMozc::init()
 +{
-+    VLOG ( 1 ) << "init";
++    MOZC_VLOG ( 1 ) << "init";
 +    boolean flag = true;
 +    FcitxInstanceSetContext(instance, CONTEXT_DISABLE_AUTOENG, &flag);
 +    FcitxInstanceSetContext(instance, CONTEXT_DISABLE_FULLWIDTH, &flag);
@@ -1912,7 +1919,7 @@ index 000000000..db10e8f0b
 +// This function is called when the ic loses focus.
 +void FcitxMozc::focus_out()
 +{
-+    VLOG ( 1 ) << "focus_out";
++    MOZC_VLOG ( 1 ) << "focus_out";
 +    std::string error;
 +    mozc::commands::Output raw_response;
 +    if ( connection_->TrySendCommand (
@@ -1932,7 +1939,7 @@ index 000000000..db10e8f0b
 +    const bool consumed = parser_->ParseResponse ( raw_response, this );
 +    if ( !consumed )
 +    {
-+        VLOG ( 1 ) << "The input was not consumed by Mozc.";
++        MOZC_VLOG ( 1 ) << "The input was not consumed by Mozc.";
 +    }
 +    OpenUrl();
 +    DrawAll();
@@ -1999,7 +2006,7 @@ index 000000000..db10e8f0b
 +    FcitxMessagesSetMessageCount(clientpreedit, 0);
 +    if ( preedit_info_.get() )
 +    {
-+        VLOG ( 1 ) << "DrawPreeditInfo: cursor=" << preedit_info_->cursor_pos;
++        MOZC_VLOG ( 1 ) << "DrawPreeditInfo: cursor=" << preedit_info_->cursor_pos;
 +
 +        FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
 +        boolean supportPreedit = FcitxInstanceICSupportPreedit(instance, ic);
@@ -2063,7 +2070,7 @@ index 000000000..db10e8f0b
 +
 +void FcitxMozc::InitializeBar()
 +{
-+    VLOG ( 1 ) << "Registering properties";
++    MOZC_VLOG ( 1 ) << "Registering properties";
 +
 +    FcitxUIRegisterComplexStatus(instance, this,
 +        "mozc-composition-mode",
@@ -2424,10 +2431,10 @@ index 000000000..ad1923032
 +Parent=fcitx-mozc
 diff --git a/src/unix/fcitx/mozc_connection.cc b/src/unix/fcitx/mozc_connection.cc
 new file mode 100755
-index 000000000..48e51d750
+index 000000000..251650a5e
 --- /dev/null
 +++ b/src/unix/fcitx/mozc_connection.cc
-@@ -0,0 +1,208 @@
+@@ -0,0 +1,209 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -2463,6 +2470,7 @@ index 000000000..48e51d750
 +#include <string>
 +
 +#include "base/logging.h"
++#include "base/vlog.h"
 +#include "base/util.h"
 +#include "client/client.h"
 +#include "ipc/ipc.h"
@@ -2490,7 +2498,7 @@ index 000000000..48e51d750
 +    : handler_(new KeyEventHandler),
 +      preedit_method_(mozc::config::Config::ROMAN),
 +      client_factory_(client_factory) {
-+  VLOG(1) << "MozcConnection is created";
++  MOZC_VLOG(1) << "MozcConnection is created";
 +  auto client = CreateAndConfigureClient();
 +  client->SetIPCClientFactory(client_factory_.get());
 +  client_ = std::move(client);
@@ -2498,14 +2506,14 @@ index 000000000..48e51d750
 +  if (client_->EnsureConnection()) {
 +    UpdatePreeditMethod();
 +  }
-+  VLOG(1)
++  MOZC_VLOG(1)
 +      << "Current preedit method is "
 +      << (preedit_method_ == mozc::config::Config::ROMAN ? "Roman" : "Kana");
 +}
 +
 +MozcConnection::~MozcConnection() {
 +  client_->SyncData();
-+  VLOG(1) << "MozcConnection is destroyed";
++  MOZC_VLOG(1) << "MozcConnection is destroyed";
 +}
 +
 +void MozcConnection::UpdatePreeditMethod() {
@@ -2533,7 +2541,7 @@ index 000000000..48e51d750
 +  // to establish the server connection.
 +  if (!client_->EnsureConnection()) {
 +    *out_error = "EnsureConnection failed";
-+    VLOG(1) << "EnsureConnection failed";
++    MOZC_VLOG(1) << "EnsureConnection failed";
 +    return false;
 +  }
 +
@@ -2543,7 +2551,7 @@ index 000000000..48e51d750
 +
 +  if ((composition_mode == mozc::commands::DIRECT) &&
 +      !client_->IsDirectModeCommand(event)) {
-+    VLOG(1) << "In DIRECT mode. Not consumed.";
++    MOZC_VLOG(1) << "In DIRECT mode. Not consumed.";
 +    return false;  // not consumed.
 +  }
 +
@@ -2555,13 +2563,13 @@ index 000000000..48e51d750
 +    context.set_following_text(surrounding_text_info.following_text);
 +  }
 +
-+  VLOG(1) << "TrySendKeyEvent: " << std::endl << event.DebugString();
++  MOZC_VLOG(1) << "TrySendKeyEvent: " << std::endl << event.DebugString();
 +  if (!client_->SendKeyWithContext(event, context, out)) {
 +    *out_error = "SendKey failed";
-+    VLOG(1) << "ERROR";
++    MOZC_VLOG(1) << "ERROR";
 +    return false;
 +  }
-+  VLOG(1) << "OK: " << std::endl << out->DebugString();
++  MOZC_VLOG(1) << "OK: " << std::endl << out->DebugString();
 +  return true;
 +}
 +
@@ -2614,13 +2622,13 @@ index 000000000..48e51d750
 +    const mozc::commands::SessionCommand& command,
 +    mozc::commands::Output *out,
 +    std::string *out_error) const {
-+  VLOG(1) << "TrySendRawCommand: " << std::endl << command.DebugString();
++  MOZC_VLOG(1) << "TrySendRawCommand: " << std::endl << command.DebugString();
 +  if (!client_->SendCommand(command, out)) {
 +    *out_error = "SendCommand failed";
-+    VLOG(1) << "ERROR";
++    MOZC_VLOG(1) << "ERROR";
 +    return false;
 +  }
-+  VLOG(1) << "OK: " << std::endl << out->DebugString();
++  MOZC_VLOG(1) << "OK: " << std::endl << out->DebugString();
 +  return true;
 +}
 +
@@ -2796,10 +2804,10 @@ index 000000000..741757576
 +#endif  // MOZC_UNIX_SCIM_MOZC_CONNECTION_H_
 diff --git a/src/unix/fcitx/mozc_response_parser.cc b/src/unix/fcitx/mozc_response_parser.cc
 new file mode 100755
-index 000000000..6f8cf26b9
+index 000000000..d11589e8a
 --- /dev/null
 +++ b/src/unix/fcitx/mozc_response_parser.cc
-@@ -0,0 +1,447 @@
+@@ -0,0 +1,448 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -2836,6 +2844,7 @@ index 000000000..6f8cf26b9
 +#include <vector>
 +
 +#include "base/logging.h"
++#include "base/vlog.h"
 +#include "base/util.h"
 +#include "protocol/commands.pb.h"
 +#include "unix/fcitx/fcitx_mozc.h"
@@ -2964,7 +2973,7 @@ index 000000000..6f8cf26b9
 +        range->set_length(abs(surrounding_text_info.relative_selected_length));
 +    }
 +
-+    VLOG(1) << "New output" << new_output.DebugString();
++    MOZC_VLOG(1) << "New output" << new_output.DebugString();
 +
 +    ParseResponse(new_output, fcitx_mozc);
 +}
@@ -4190,10 +4199,10 @@ index 000000000..2c83dfe69
 +msgstr "按下 Ctrl+Alt+H 顯示用法。"
 diff --git a/src/unix/fcitx/surrounding_text_util.cc b/src/unix/fcitx/surrounding_text_util.cc
 new file mode 100644
-index 000000000..76357cdef
+index 000000000..a4dc7d29a
 --- /dev/null
 +++ b/src/unix/fcitx/surrounding_text_util.cc
-@@ -0,0 +1,243 @@
+@@ -0,0 +1,244 @@
 +// Copyright 2010-2013, Google Inc.
 +// All rights reserved.
 +//
@@ -4236,6 +4245,7 @@ index 000000000..76357cdef
 +
 +#include "base/port.h"
 +#include "base/logging.h"
++#include "base/vlog.h"
 +#include "base/util.h"
 +
 +namespace mozc {
@@ -4534,10 +4544,10 @@ index 000000000..ce54291c0
 +#endif  // MOZC_UNIX_FCITX_SURROUNDING_TEXT_URIL_H_
 diff --git a/src/unix/fcitx5/BUILD b/src/unix/fcitx5/BUILD
 new file mode 100644
-index 000000000..00f1b0d74
+index 000000000..14295aa20
 --- /dev/null
 +++ b/src/unix/fcitx5/BUILD
-@@ -0,0 +1,110 @@
+@@ -0,0 +1,115 @@
 +load(
 +    "//:build_defs.bzl",
 +    "mozc_cc_binary",
@@ -4555,6 +4565,7 @@ index 000000000..00f1b0d74
 +        ":surrounding_text_util",
 +        "//base:port",
 +        "//base:util",
++        "//base:vlog",
 +        "//client:client",
 +        "//protocol:commands_cc_proto",
 +    ]
@@ -4595,6 +4606,7 @@ index 000000000..00f1b0d74
 +        "//base:process",
 +        "//base:run_level",
 +        "//base:util",
++        "//base:vlog",
 +        "//protocol:commands_cc_proto",
 +        "//client:client_interface",
 +        "@fcitx5//:fcitx5",
@@ -4614,6 +4626,8 @@ index 000000000..00f1b0d74
 +    deps = [
 +        "//base:logging",
 +        "//base:port",
++        "//base:vlog",
++        "//base:singleton",
 +        "//protocol:config_cc_proto",
 +        "//protocol:commands_cc_proto",
 +        "@fcitx5//:fcitx5",
@@ -4632,6 +4646,7 @@ index 000000000..00f1b0d74
 +        "//base:util",
 +        "//base:logging",
 +        "//base:port",
++        "//base:vlog",
 +        "@fcitx5//:fcitx5",
 +    ],
 +)
@@ -4783,10 +4798,10 @@ index 000000000..58d9a6602
 +}
 diff --git a/src/unix/fcitx5/fcitx_key_event_handler.cc b/src/unix/fcitx5/fcitx_key_event_handler.cc
 new file mode 100644
-index 000000000..6b2c2b551
+index 000000000..119a57fca
 --- /dev/null
 +++ b/src/unix/fcitx5/fcitx_key_event_handler.cc
-@@ -0,0 +1,244 @@
+@@ -0,0 +1,245 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012-2017, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -4822,6 +4837,7 @@ index 000000000..6b2c2b551
 +#include <map>
 +
 +#include "base/logging.h"
++#include "base/vlog.h"
 +#include "base/singleton.h"
 +
 +namespace fcitx {
@@ -5117,10 +5133,10 @@ index 000000000..1ba2655a8
 +#endif  // UNIX_FCITX5_FCITX_KEY_EVENT_HANDLER_H_
 diff --git a/src/unix/fcitx5/fcitx_key_translator.cc b/src/unix/fcitx5/fcitx_key_translator.cc
 new file mode 100644
-index 000000000..80cb195bb
+index 000000000..fe5992ff6
 --- /dev/null
 +++ b/src/unix/fcitx5/fcitx_key_translator.cc
-@@ -0,0 +1,416 @@
+@@ -0,0 +1,417 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012-2017, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -5154,6 +5170,7 @@ index 000000000..80cb195bb
 +#include "unix/fcitx5/fcitx_key_translator.h"
 +
 +#include "base/logging.h"
++#include "base/vlog.h"
 +
 +namespace fcitx {
 +using namespace mozc;
@@ -5460,7 +5477,7 @@ index 000000000..80cb195bb
 +             it != kSpecialKeyMap->end()) {
 +    out_event->set_special_key(it->second);
 +  } else {
-+    VLOG(1) << "Unknown keyval: " << keyval;
++    MOZC_VLOG(1) << "Unknown keyval: " << keyval;
 +    return false;
 +  }
 +
@@ -5866,10 +5883,10 @@ index 000000000..3b6eaa3bd
 \ No newline at end of file
 diff --git a/src/unix/fcitx5/mozc_connection.cc b/src/unix/fcitx5/mozc_connection.cc
 new file mode 100644
-index 000000000..127873b85
+index 000000000..85ceda43e
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_connection.cc
-@@ -0,0 +1,66 @@
+@@ -0,0 +1,67 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -5905,6 +5922,7 @@ index 000000000..127873b85
 +#include <string>
 +
 +#include "base/logging.h"
++#include "base/vlog.h"
 +#include "base/util.h"
 +#include "client/client.h"
 +#include "ipc/ipc.h"
@@ -5924,10 +5942,10 @@ index 000000000..127873b85
 +
 +MozcConnection::MozcConnection()
 +    : client_factory_(mozc::IPCClientFactory::GetIPCClientFactory()) {
-+  VLOG(1) << "MozcConnection is created";
++  MOZC_VLOG(1) << "MozcConnection is created";
 +}
 +
-+MozcConnection::~MozcConnection() { VLOG(1) << "MozcConnection is destroyed"; }
++MozcConnection::~MozcConnection() { MOZC_VLOG(1) << "MozcConnection is destroyed"; }
 +
 +std::unique_ptr<mozc::client::ClientInterface> MozcConnection::CreateClient() {
 +  auto client = CreateAndConfigureClient();
@@ -6605,10 +6623,10 @@ index 000000000..dc8316e4b
 +FCITX_ADDON_FACTORY(fcitx::MozcEngineFactory)
 diff --git a/src/unix/fcitx5/mozc_response_parser.cc b/src/unix/fcitx5/mozc_response_parser.cc
 new file mode 100644
-index 000000000..df30cbc25
+index 000000000..a0536eb57
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_response_parser.cc
-@@ -0,0 +1,483 @@
+@@ -0,0 +1,484 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -6651,6 +6669,7 @@ index 000000000..df30cbc25
 +#include <vector>
 +
 +#include "base/logging.h"
++#include "base/vlog.h"
 +#include "base/process.h"
 +#include "base/util.h"
 +#include "protocol/commands.pb.h"
@@ -6952,7 +6971,7 @@ index 000000000..df30cbc25
 +    range->set_length(abs(surrounding_text_info.relative_selected_length));
 +  }
 +
-+  VLOG(1) << "New output" << new_output.DebugString();
++  MOZC_VLOG(1) << "New output" << new_output.DebugString();
 +
 +  ParseResponse(new_output, ic);
 +}
@@ -7189,10 +7208,10 @@ index 000000000..2deca5000
 +#endif  // MOZC_UNIX_FCITX_MOZC_RESPONSE_PARSER_H_
 diff --git a/src/unix/fcitx5/mozc_state.cc b/src/unix/fcitx5/mozc_state.cc
 new file mode 100644
-index 000000000..812d50b45
+index 000000000..b00b2071d
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_state.cc
-@@ -0,0 +1,440 @@
+@@ -0,0 +1,441 @@
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
 +//
@@ -7235,6 +7254,7 @@ index 000000000..812d50b45
 +#include "base/const.h"
 +#include "base/file_util.h"
 +#include "base/logging.h"
++#include "base/vlog.h"
 +#include "base/process.h"
 +#include "base/system_util.h"
 +#include "base/util.h"
@@ -7250,7 +7270,7 @@ index 000000000..812d50b45
 +MozcState::MozcState(InputContext* ic, MozcEngine* engine)
 +    : ic_(ic), engine_(engine), handler_(std::make_unique<KeyEventHandler>()) {
 +  // mozc::Logging::SetVerboseLevel(1);
-+  VLOG(1) << "MozcState created.";
++  MOZC_VLOG(1) << "MozcState created.";
 +
 +  if (GetClient()->EnsureConnection()) {
 +    UpdatePreeditMethod();
@@ -7267,7 +7287,7 @@ index 000000000..812d50b45
 +}
 +
 +MozcState::~MozcState() {
-+  VLOG(1) << "MozcState destroyed.";
++  MOZC_VLOG(1) << "MozcState destroyed.";
 +}
 +
 +void MozcState::UpdatePreeditMethod() {
@@ -7309,7 +7329,7 @@ index 000000000..812d50b45
 +  auto* client = GetClient();
 +  if (!client->EnsureConnection()) {
 +    *out_error = "EnsureConnection failed";
-+    VLOG(1) << "EnsureConnection failed";
++    MOZC_VLOG(1) << "EnsureConnection failed";
 +    return false;
 +  }
 +
@@ -7320,7 +7340,7 @@ index 000000000..812d50b45
 +
 +  if ((composition_mode == mozc::commands::DIRECT) &&
 +      !client->IsDirectModeCommand(event)) {
-+    VLOG(1) << "In DIRECT mode. Not consumed.";
++    MOZC_VLOG(1) << "In DIRECT mode. Not consumed.";
 +    return false;  // not consumed.
 +  }
 +
@@ -7332,13 +7352,13 @@ index 000000000..812d50b45
 +    context.set_following_text(surrounding_text_info.following_text);
 +  }
 +
-+  VLOG(1) << "TrySendKeyEvent: " << std::endl << event.DebugString();
++  MOZC_VLOG(1) << "TrySendKeyEvent: " << std::endl << event.DebugString();
 +  if (!client->SendKeyWithContext(event, context, out)) {
 +    *out_error = "SendKey failed";
-+    VLOG(1) << "ERROR";
++    MOZC_VLOG(1) << "ERROR";
 +    return false;
 +  }
-+  VLOG(1) << "OK: " << std::endl << out->DebugString();
++  MOZC_VLOG(1) << "OK: " << std::endl << out->DebugString();
 +  return true;
 +}
 +
@@ -7384,13 +7404,13 @@ index 000000000..812d50b45
 +bool MozcState::TrySendRawCommand(const mozc::commands::SessionCommand& command,
 +                                  mozc::commands::Output* out,
 +                                  std::string* out_error) const {
-+  VLOG(1) << "TrySendRawCommand: " << std::endl << command.DebugString();
++  MOZC_VLOG(1) << "TrySendRawCommand: " << std::endl << command.DebugString();
 +  if (!GetClient()->SendCommand(command, out)) {
 +    *out_error = "SendCommand failed";
-+    VLOG(1) << "ERROR";
++    MOZC_VLOG(1) << "ERROR";
 +    return false;
 +  }
-+  VLOG(1) << "OK: " << std::endl << out->DebugString();
++  MOZC_VLOG(1) << "OK: " << std::endl << out->DebugString();
 +  return true;
 +}
 +
@@ -7437,7 +7457,7 @@ index 000000000..812d50b45
 +    LOG(ERROR) << "The clicked candidate doesn't have unique ID.";
 +    return;
 +  }
-+  VLOG(1) << "select_candidate, id=" << id;
++  MOZC_VLOG(1) << "select_candidate, id=" << id;
 +
 +  std::string error;
 +  mozc::commands::Output raw_response;
@@ -7452,7 +7472,7 @@ index 000000000..812d50b45
 +
 +// This function is called from SCIM framework.
 +void MozcState::Reset() {
-+  VLOG(1) << "resetim";
++  MOZC_VLOG(1) << "resetim";
 +  std::string error;
 +  mozc::commands::Output raw_response;
 +  if (TrySendCommand(mozc::commands::SessionCommand::REVERT, &raw_response,
@@ -7464,7 +7484,7 @@ index 000000000..812d50b45
 +}
 +
 +bool MozcState::Paging(bool prev) {
-+  VLOG(1) << "paging";
++  MOZC_VLOG(1) << "paging";
 +  std::string error;
 +  mozc::commands::SessionCommand::CommandType command =
 +      prev ? mozc::commands::SessionCommand::CONVERT_PREV_PAGE
@@ -7479,7 +7499,7 @@ index 000000000..812d50b45
 +
 +// This function is called when the ic gets focus.
 +void MozcState::FocusIn() {
-+  VLOG(1) << "MozcState::FocusIn()";
++  MOZC_VLOG(1) << "MozcState::FocusIn()";
 +
 +  UpdatePreeditMethod();
 +  DrawAll();
@@ -7487,7 +7507,7 @@ index 000000000..812d50b45
 +
 +// This function is called when the ic loses focus.
 +void MozcState::FocusOut(const InputContextEvent& event) {
-+  VLOG(1) << "MozcState::FocusOut()";
++  MOZC_VLOG(1) << "MozcState::FocusOut()";
 +  std::string error;
 +  mozc::commands::Output raw_response;
 +
@@ -7508,7 +7528,7 @@ index 000000000..812d50b45
 +  ClearAll();
 +  const bool consumed = engine_->parser()->ParseResponse(raw_response, ic_);
 +  if (!consumed) {
-+    VLOG(1) << "The input was not consumed by Mozc.";
++    MOZC_VLOG(1) << "The input was not consumed by Mozc.";
 +  }
 +  OpenUrl();
 +  DrawAll();
@@ -7810,10 +7830,10 @@ index 000000000..5df755193
 +#endif  // MOZC_UNIX_FCITX_FCITX_MOZC_H_
 diff --git a/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in b/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in
 new file mode 100644
-index 000000000..b987bffd0
+index 000000000..6f2c6b9c3
 --- /dev/null
 +++ b/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in
-@@ -0,0 +1,17 @@
+@@ -0,0 +1,20 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<component type="addon">
 +  <id>org.fcitx.Fcitx5.Addon.Mozc</id>
@@ -7826,6 +7846,9 @@ index 000000000..b987bffd0
 +  <url type="bugtracker">https://github.com/fcitx/mozc/issues</url>
 +  <project_group>Fcitx</project_group>
 +  <releases>
++    <release version="2.29.5374.102" date="2024-02-09"></release>
++    <release version="2.29.5372.102" date="2024-02-07"></release>
++    <release version="2.29.5346.102" date="2024-01-22"></release>
 +    <release version="2.29.5291.102" date="2023-12-04"></release>
 +    <release version="2.26.4220.106.1" date="2021-01-16"></release>
 +    <release version="2.25.4150.102.1" date="2020-11-10"></release>
@@ -9457,10 +9480,10 @@ index 000000000..e667890f3
 +msgstr "垂直候選字列表"
 diff --git a/src/unix/fcitx5/surrounding_text_util.cc b/src/unix/fcitx5/surrounding_text_util.cc
 new file mode 100644
-index 000000000..9c6d6d71f
+index 000000000..7cfe7234b
 --- /dev/null
 +++ b/src/unix/fcitx5/surrounding_text_util.cc
-@@ -0,0 +1,222 @@
+@@ -0,0 +1,223 @@
 +// Copyright 2010-2013, Google Inc.
 +// All rights reserved.
 +//
@@ -9499,6 +9522,7 @@ index 000000000..9c6d6d71f
 +#include <string>
 +
 +#include "base/logging.h"
++#include "base/vlog.h"
 +#include "base/port.h"
 +#include "base/util.h"
 +

@@ -31,7 +31,7 @@ jobs:
           make-default: true
       - uses: actions/checkout@v4
         with:
-          ref: 10a8c0edbca4f32f34815529c5352a0dc8b2d935
+          ref: ubuntu
           submodules: 'recursive'
           path: source
       - name: Build
