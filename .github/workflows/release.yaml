@@ -15,7 +15,7 @@ jobs:
       - name: install build tools (Linux)
         run: |
           apt update
-          apt install -y sudo apt-utils
+          apt install -y sudo apt-utils wget
           sudo sed 's/Types: deb/Types: deb deb-src/' -i /etc/apt/sources.list.d/debian.sources
           apt update
           sudo apt build-dep -y mozc
