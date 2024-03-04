@@ -29,7 +29,7 @@ jobs:
       - name: Install mold linker
         uses: rui314/setup-mold@staging
         with:
-          mold-version: 2.4.0
+          mold-version: 2.4.1
           make-default: true
       - uses: actions/checkout@v4
         with:
