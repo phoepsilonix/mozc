@@ -70,10 +70,18 @@ jobs:
           cd ..
           mkdir -p release
           mv *deb mozc_* release/
+      - name: Generate release note
+        id: release_note
+        run: |
+          {
+          echo "release_note<<EOF"
+          echo "Added [SudachiDict](https://github.com/WorksApplications/SudachiDict) to the system dictionary."
+          echo "EOF"
+          } >> $GITHUB_OUTPUT
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
-          omitBody: true
           artifacts: 'release/*'
           token: ${{ secrets.GITHUB_TOKEN }}
+          body: "${{ steps.release_note.outputs.release_note }}"
 
