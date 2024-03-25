@@ -51,6 +51,41 @@ index 000000000..1b574d5e8
 @@ -0,0 +1,2 @@
 +#!/bin/sh
 +find unix/fcitx5  -name '*.h' -o -name '*.cc'  | xargs clang-format -style=Google -i
+diff --git a/scripts/collect_flatpak_bazel_deps b/scripts/collect_flatpak_bazel_deps
+new file mode 100755
+index 000000000..23f34c92f
+--- /dev/null
++++ b/scripts/collect_flatpak_bazel_deps
+@@ -0,0 +1,29 @@
++#!/bin/bash
++
++set -e
++
++rm -rf $HOME/.cache/bazel
++
++_MOZC_BAZEL_CACHE=/tmp/mozc_cache
++
++rm -rf $_MOZC_BAZEL_CACHE
++for target in unix/fcitx5:fcitx5-mozc.so server:mozc_server gui/tool:mozc_tool; do
++    # Only cquery accepts --config and it can also trigger the cache update
++    bazel cquery --repository_cache="$_MOZC_BAZEL_CACHE" --config oss_linux $target
++done
++
++BASE=$PWD
++pushd .
++cd $_MOZC_BAZEL_CACHE
++for f in `find -name 'id*' | sort` ; do
++    echo "- type: file"
++    echo -n "  url: "
++    awk '{print $1}' $f
++    echo "  dest: bazel-deps"
++    sha=`dirname $f`
++    sha=`basename $sha`
++    echo "  sha256: $sha"
++done > $BASE/mozc-deps.yaml
++popd
++
++rm -r $_MOZC_BAZEL_CACHE
 diff --git a/scripts/configure b/scripts/configure
 new file mode 100755
 index 000000000..1775d81ae
@@ -267,7 +302,7 @@ index d7448832f..664ba1553 100644
  new_local_repository(
      name = "ja_usage_dict",
 diff --git a/src/build_mozc.py b/src/build_mozc.py
-index fe30f3fc9..e3a7f4611 100755
+index 21b2b46b3..39f7318c9 100755
 --- a/src/build_mozc.py
 +++ b/src/build_mozc.py
 @@ -163,6 +163,8 @@ def GetGypFileNames(options):
@@ -7830,10 +7865,10 @@ index 000000000..5df755193
 +#endif  // MOZC_UNIX_FCITX_FCITX_MOZC_H_
 diff --git a/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in b/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in
 new file mode 100644
-index 000000000..6f2c6b9c3
+index 000000000..845716100
 --- /dev/null
 +++ b/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,25 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<component type="addon">
 +  <id>org.fcitx.Fcitx5.Addon.Mozc</id>
@@ -7842,10 +7877,15 @@ index 000000000..6f2c6b9c3
 +  <project_license>GPL-2.0+</project_license>
 +  <name>Mozc for Fcitx 5</name>
 +  <summary>Japanese input method based on Mozc</summary>
++  <developer id="org.fcitx-im">
++      <name>The Fcitx Team</name>
++  </developer>
 +  <url type="homepage">https://fcitx-im.org</url>
 +  <url type="bugtracker">https://github.com/fcitx/mozc/issues</url>
++  <url type="vcs-browser">https://github.com/fcitx/mozc</url>
 +  <project_group>Fcitx</project_group>
 +  <releases>
++    <release version="2.29.5400.102" date="2024-03-07"></release>
 +    <release version="2.29.5374.102" date="2024-02-09"></release>
 +    <release version="2.29.5372.102" date="2024-02-07"></release>
 +    <release version="2.29.5346.102" date="2024-01-22"></release>
@@ -8450,7 +8490,7 @@ index 000000000..71339973c
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/he.po b/src/unix/fcitx5/po/he.po
 new file mode 100644
-index 000000000..c5d433f5c
+index 000000000..a81ecb2da
 --- /dev/null
 +++ b/src/unix/fcitx5/po/he.po
 @@ -0,0 +1,141 @@
@@ -8465,7 +8505,7 @@ index 000000000..c5d433f5c
 +msgstr ""
 +"Project-Id-Version: fcitx5-mozc\n"
 +"Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-+"POT-Creation-Date: 2023-09-20 20:24+0000\n"
++"POT-Creation-Date: 2024-02-28 20:24+0000\n"
 +"PO-Revision-Date: 2017-11-23 05:28+0000\n"
 +"Last-Translator: 63f334ffc0709ba0fc2361b80bf3c0f0_00ffd1e "
 +"<ab96c93ca0ac55ba7fa06385427e60dd_878890>, 2021\n"
@@ -8474,8 +8514,8 @@ index 000000000..c5d433f5c
 +"MIME-Version: 1.0\n"
 +"Content-Type: text/plain; charset=UTF-8\n"
 +"Content-Transfer-Encoding: 8bit\n"
-+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % "
-+"1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;\n"
++"Plural-Forms: nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % "
++"1 == 0) ? 1: 2;\n"
 +
 +#: mozc_engine.h:94 mozc_engine.cc:198
 +msgid "About Mozc"
@@ -8575,7 +8615,7 @@ index 000000000..c5d433f5c
 +
 +#. We don't have a good library option for this, just do the simple
 +#. replace. absl's runtime parsed format string is too copmlex.
-+#: mozc_response_parser.cc:175
++#: mozc_response_parser.cc:176
 +#, c-format
 +msgid "Press %s to show usages."
 +msgstr ""
