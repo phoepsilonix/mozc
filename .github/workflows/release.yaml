@@ -24,8 +24,8 @@ jobs:
           sh rustup-init.sh -y
       - name: Install bazel
         run: |
-           curl -LO https://github.com/bazelbuild/bazel/releases/download/6.4.0/bazel-6.4.0-installer-linux-x86_64.sh
-           bash bazel-6.4.0-installer-linux-x86_64.sh --user
+           curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.0/bazel-7.1.0-installer-linux-x86_64.sh
+           bash bazel-7.1.0-installer-linux-x86_64.sh --user
       - name: Install mold linker
         uses: rui314/setup-mold@staging
         with:
