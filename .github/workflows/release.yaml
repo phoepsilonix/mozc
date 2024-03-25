@@ -16,7 +16,7 @@ jobs:
         run: |
           apt update
           apt install -y sudo apt-utils wget
-          sudo sed 's/Types: deb/Types: deb deb-src/' -i /etc/apt/sources.list.d/debian.sources
+          sudo sed 's/Types: deb *$/Types: deb deb-src/' -i /etc/apt/sources.list.d/debian.sources
           apt update
           sudo apt build-dep -y mozc
           sudo apt install -y build-essential dpkg-dev make git qt6ct qt6-base-dev libfcitx5-qt6-dev curl unzip
