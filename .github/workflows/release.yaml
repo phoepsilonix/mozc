@@ -10,7 +10,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:mantic
+      image: ubuntu:lunar
     steps:
       - name: install build tools (Linux)
         run: |
@@ -33,7 +33,7 @@ jobs:
           make-default: true
       - uses: actions/checkout@v4
         with:
-          ref: ubuntu
+          ref: ubuntu-lunar
           submodules: 'recursive'
           path: source
       - name: added dictionary
