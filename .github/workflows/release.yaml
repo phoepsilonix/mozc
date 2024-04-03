@@ -29,7 +29,7 @@ jobs:
       - name: Install mold linker
         uses: rui314/setup-mold@staging
         with:
-          mold-version: 2.4.1
+          mold-version: 2.30.0
           make-default: true
       - uses: actions/checkout@v4
         with:
@@ -66,6 +66,7 @@ jobs:
           export PATH=$HOME/bin:$PATH
           source ~/.bazel/bin/bazel-complete.bash
           cd source
+          sed "s/^\(LDFLAGS:=.*\)/\1 -fuse-ld=mold/" debian/rules -i
           dpkg-buildpackage -b --no-sign
           cd ..
           mkdir -p release
