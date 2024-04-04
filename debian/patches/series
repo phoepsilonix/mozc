@@ -1,5 +1,4 @@
 0001-Support-fcitx.patch
 0002-fcitx5-icon.patch
-0003-Zombie-Process-Prevention.patch
-0004-libc++.patch
-0005-nm-options.patch
+0003-libc++.patch
+0004-nm-options.patch
