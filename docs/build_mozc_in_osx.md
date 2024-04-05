@@ -9,10 +9,13 @@ If you are not sure what the following commands do, please check the description
 and make sure the operations before running them.
 
 ```
-python3 -m pip install requests
-
 git clone https://github.com/google/mozc.git
 cd mozc/src
+
+export PYTHON_VENV_ROOT=${PWD}/python-venv
+python3 -m venv ${PYTHON_VENV_ROOT}
+source ${PYTHON_VENV_ROOT}/bin/activate
+python3 -m pip install requests
 
 python3 build_tools/update_deps.py
 
@@ -62,6 +65,19 @@ cd mozc/src
 
 Hereafter you can do all the operations without changing directory.
 
+### Set up and enable Python virtual environment
+
+The following commands set up Python virtual environment under `mozc/src/python-venv`.
+
+```
+export PYTHON_VENV_ROOT=${PWD}/python-venv
+python3 -m venv ${PYTHON_VENV_ROOT}
+source ${PYTHON_VENV_ROOT}/bin/activate
+python3 -m pip install requests
+```
+
+Using `mozc/src/python-venv` as the virtual environment location is not mandatory. Any other location should also work.
+
 ### Check out additional build dependencies
 
 ```
@@ -71,7 +87,7 @@ python build_tools/update_deps.py
 In this step, additional build dependencies will be downloaded.
 
   * [Ninja 1.11.0](https://github.com/ninja-build/ninja/releases/download/v1.11.0/ninja-mac.zip)
-  * [Qt 6.6.2](https://download.qt.io/archive/qt/6.6/6.6.2/submodules/qtbase-everywhere-src-6.6.2.tar.xz)
+  * [Qt 6.6.3](https://download.qt.io/archive/qt/6.6/6.6.3/submodules/qtbase-everywhere-src-6.6.3.tar.xz)
   * [git submodules](../.gitmodules)
 
 You can specify `--noqt` option if you would like to use your own Qt binaries.

@@ -86,8 +86,7 @@ using ::testing::Return;
 
 class MockDataLoader : public DataLoader {
  public:
-  MOCK_METHOD(std::unique_ptr<ResponseFuture>, Build, (uint64_t),
-              (const override));
+  MOCK_METHOD(ResponseFuture, Build, (uint64_t), (const override));
 };
 
 EngineReloadResponse::Status SendMockEngineReloadRequest(
@@ -577,8 +576,7 @@ TEST_F(SessionHandlerTest, VerifySyncIsCalledTest) {
   for (size_t i = 0; i < std::size(command_types); ++i) {
     MockUserDataManager mock_user_data_manager;
     auto engine = std::make_unique<MockEngine>();
-    EXPECT_CALL(*engine, GetUserDataManager())
-        .WillRepeatedly(Return(&mock_user_data_manager));
+    EXPECT_CALL(*engine, Sync()).WillOnce(Return(true));
 
     // Set up a session handler and a input command.
     SessionHandler handler(std::move(engine));
@@ -586,7 +584,6 @@ TEST_F(SessionHandlerTest, VerifySyncIsCalledTest) {
     command.mutable_input()->set_id(0);
     command.mutable_input()->set_type(command_types[i]);
 
-    EXPECT_CALL(mock_user_data_manager, Sync()).WillOnce(Return(true));
     handler.EvalCommand(&command);
   }
 }
@@ -594,8 +591,8 @@ TEST_F(SessionHandlerTest, VerifySyncIsCalledTest) {
 TEST_F(SessionHandlerTest, SyncDataTest) {
   MockUserDataManager mock_user_data_manager;
   auto engine = std::make_unique<MockEngine>();
-  EXPECT_CALL(*engine, GetUserDataManager())
-      .WillRepeatedly(Return(&mock_user_data_manager));
+  EXPECT_CALL(*engine, Sync()).WillOnce(Return(true));
+  EXPECT_CALL(*engine, Wait()).WillOnce(Return(true));
 
   // Set up a session handler and a input command.
   SessionHandler handler(std::move(engine));
@@ -603,8 +600,6 @@ TEST_F(SessionHandlerTest, SyncDataTest) {
   command.mutable_input()->set_id(0);
   command.mutable_input()->set_type(commands::Input::SYNC_DATA);
 
-  EXPECT_CALL(mock_user_data_manager, Sync()).WillOnce(Return(true));
-  EXPECT_CALL(mock_user_data_manager, Wait()).WillOnce(Return(true));
   handler.EvalCommand(&command);
 }
 
@@ -627,16 +622,15 @@ TEST_F(SessionHandlerTest, EngineReloadSuccessfulScenarioTest) {
   const uint64_t data_id = data_loader->GetRequestId(request);
 
   EXPECT_CALL(*data_loader, Build(data_id))
-      .WillOnce(Return(
-          std::make_unique<BackgroundFuture<DataLoader::Response>>([&]() {
-            // takes 0.1 seconds to make engine.
-            absl::SleepFor(absl::Milliseconds(100));
-            DataLoader::Response result;
-            result.id = data_id;
-            result.response.set_status(EngineReloadResponse::RELOAD_READY);
-            result.modules = std::move(modules);
-            return result;
-          })));
+      .WillOnce(Return(BackgroundFuture<DataLoader::Response>([&]() {
+        // takes 0.1 seconds to make engine.
+        absl::SleepFor(absl::Milliseconds(100));
+        DataLoader::Response result;
+        result.id = data_id;
+        result.response.set_status(EngineReloadResponse::RELOAD_READY);
+        result.modules = std::move(modules);
+        return result;
+      })));
 
   absl::StatusOr<std::unique_ptr<Engine>> engine_status =
       Engine::CreateMobileEngine(std::make_unique<testing::MockDataManager>());
@@ -704,15 +698,14 @@ TEST_F(SessionHandlerTest, EngineUpdateSuccessfulScenarioTest) {
   const uint64_t data_id2 = data_loader->GetRequestId(request2);
 
   EXPECT_CALL(*data_loader, Build(data_id1))
-      .WillOnce(Return(
-          std::make_unique<BackgroundFuture<DataLoader::Response>>([&]() {
-            absl::SleepFor(absl::Milliseconds(100));
-            DataLoader::Response result;
-            result.id = data_id1;
-            result.response.set_status(EngineReloadResponse::RELOAD_READY);
-            result.modules = std::move(modules1);
-            return result;
-          })));
+      .WillOnce(Return(BackgroundFuture<DataLoader::Response>([&]() {
+        absl::SleepFor(absl::Milliseconds(100));
+        DataLoader::Response result;
+        result.id = data_id1;
+        result.response.set_status(EngineReloadResponse::RELOAD_READY);
+        result.modules = std::move(modules1);
+        return result;
+      })));
 
   absl::StatusOr<std::unique_ptr<Engine>> engine_status =
       Engine::CreateMobileEngine(std::make_unique<testing::MockDataManager>());
@@ -732,15 +725,14 @@ TEST_F(SessionHandlerTest, EngineUpdateSuccessfulScenarioTest) {
 
   // Use data_loader_ptr after std::move(engine_build).
   EXPECT_CALL(*data_loader_ptr, Build(data_id2))
-      .WillOnce(Return(
-          std::make_unique<BackgroundFuture<DataLoader::Response>>([&]() {
-            absl::SleepFor(absl::Milliseconds(100));
-            DataLoader::Response result;
-            result.id = data_id2;
-            result.response.set_status(EngineReloadResponse::RELOAD_READY);
-            result.modules = std::move(modules2);
-            return result;
-          })));
+      .WillOnce(Return(BackgroundFuture<DataLoader::Response>([&]() {
+        absl::SleepFor(absl::Milliseconds(100));
+        DataLoader::Response result;
+        result.id = data_id2;
+        result.response.set_status(EngineReloadResponse::RELOAD_READY);
+        result.modules = std::move(modules2);
+        return result;
+      })));
 
   // engine_id = 2
   ASSERT_EQ(SendMockEngineReloadRequest(&handler, request2),
@@ -775,14 +767,13 @@ TEST_F(SessionHandlerTest, EngineReloadInvalidDataTest) {
             EngineReloadResponse::ACCEPTED);
 
   EXPECT_CALL(*data_loader_ptr, Build(data_id))
-      .WillOnce(Return(
-          std::make_unique<BackgroundFuture<DataLoader::Response>>([&]() {
-            absl::SleepFor(absl::Milliseconds(100));
-            DataLoader::Response result;
-            result.id = data_id;
-            result.response.set_status(EngineReloadResponse::DATA_BROKEN);
-            return result;
-          })));
+      .WillOnce(Return(BackgroundFuture<DataLoader::Response>([&]() {
+        absl::SleepFor(absl::Milliseconds(100));
+        DataLoader::Response result;
+        result.id = data_id;
+        result.response.set_status(EngineReloadResponse::DATA_BROKEN);
+        return result;
+      })));
 
   // Build() is called, but it returns invalid data, so new data is not used.
   EXPECT_EQ(&handler.engine(), old_engine_ptr);
@@ -854,33 +845,30 @@ TEST_F(SessionHandlerTest, EngineRollbackDataTest) {
 
   // Rollback as 3 -> 2 -> 1.  1 is only valid engine.
   EXPECT_CALL(*data_loader_ptr, Build(data_id3))
-      .WillOnce(Return(
-          std::make_unique<BackgroundFuture<DataLoader::Response>>([&]() {
-            absl::SleepFor(absl::Milliseconds(100));
-            DataLoader::Response result;
-            result.id = data_id3;
-            result.response.set_status(EngineReloadResponse::DATA_BROKEN);
-            return result;
-          })));
+      .WillOnce(Return(BackgroundFuture<DataLoader::Response>([&]() {
+        absl::SleepFor(absl::Milliseconds(100));
+        DataLoader::Response result;
+        result.id = data_id3;
+        result.response.set_status(EngineReloadResponse::DATA_BROKEN);
+        return result;
+      })));
   EXPECT_CALL(*data_loader_ptr, Build(data_id2))
-      .WillOnce(Return(
-          std::make_unique<BackgroundFuture<DataLoader::Response>>([&]() {
-            absl::SleepFor(absl::Milliseconds(100));
-            DataLoader::Response result;
-            result.id = data_id2;
-            result.response.set_status(EngineReloadResponse::DATA_BROKEN);
-            return result;
-          })));
+      .WillOnce(Return(BackgroundFuture<DataLoader::Response>([&]() {
+        absl::SleepFor(absl::Milliseconds(100));
+        DataLoader::Response result;
+        result.id = data_id2;
+        result.response.set_status(EngineReloadResponse::DATA_BROKEN);
+        return result;
+      })));
   EXPECT_CALL(*data_loader_ptr, Build(data_id1))
-      .WillOnce(Return(
-          std::make_unique<BackgroundFuture<DataLoader::Response>>([&]() {
-            absl::SleepFor(absl::Milliseconds(100));
-            DataLoader::Response result;
-            result.id = data_id1;
-            result.response.set_status(EngineReloadResponse::RELOAD_READY);
-            result.modules = std::move(modules);
-            return result;
-          })));
+      .WillOnce(Return(BackgroundFuture<DataLoader::Response>([&]() {
+        absl::SleepFor(absl::Milliseconds(100));
+        DataLoader::Response result;
+        result.id = data_id1;
+        result.response.set_status(EngineReloadResponse::RELOAD_READY);
+        result.modules = std::move(modules);
+        return result;
+      })));
 
   for (int eid = 3; eid >= 1; --eid) {
     // Engine of 3, and 2 are unregistered.
@@ -915,15 +903,14 @@ TEST_F(SessionHandlerTest, EngineReloadSessionExistsTest) {
   const uint64_t data_id = data_loader->GetRequestId(request);
 
   EXPECT_CALL(*data_loader, Build(data_id))
-      .WillOnce(Return(
-          std::make_unique<BackgroundFuture<DataLoader::Response>>([&]() {
-            absl::SleepFor(absl::Milliseconds(100));
-            DataLoader::Response result;
-            result.id = data_id;
-            result.response.set_status(EngineReloadResponse::RELOAD_READY);
-            result.modules = std::move(modules);
-            return result;
-          })));
+      .WillOnce(Return(BackgroundFuture<DataLoader::Response>([&]() {
+        absl::SleepFor(absl::Milliseconds(100));
+        DataLoader::Response result;
+        result.id = data_id;
+        result.response.set_status(EngineReloadResponse::RELOAD_READY);
+        result.modules = std::move(modules);
+        return result;
+      })));
 
   absl::StatusOr<std::unique_ptr<Engine>> engine_status =
       Engine::CreateMobileEngine(std::make_unique<testing::MockDataManager>());
@@ -992,17 +979,16 @@ TEST_F(SessionHandlerTest, ReloadFromMinimalEngine) {
   const uint64_t data_id = data_loader->GetRequestId(request);
 
   EXPECT_CALL(*data_loader, Build(data_id))
-      .WillOnce(Return(
-          std::make_unique<BackgroundFuture<DataLoader::Response>>([&]() {
-            absl::SleepFor(absl::Milliseconds(100));
-            DataLoader::Response result;
-            result.id = data_id;
-            result.response.mutable_request()->set_engine_type(
-                EngineReloadRequest::MOBILE);
-            result.response.set_status(EngineReloadResponse::RELOAD_READY);
-            result.modules = std::move(modules);
-            return result;
-          })));
+      .WillOnce(Return(BackgroundFuture<DataLoader::Response>([&]() {
+        absl::SleepFor(absl::Milliseconds(100));
+        DataLoader::Response result;
+        result.id = data_id;
+        result.response.mutable_request()->set_engine_type(
+            EngineReloadRequest::MOBILE);
+        result.response.set_status(EngineReloadResponse::RELOAD_READY);
+        result.modules = std::move(modules);
+        return result;
+      })));
   engine->SetDataLoaderForTesting(std::move(data_loader));
 
   SessionHandler handler(std::move(engine));
