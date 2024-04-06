@@ -9,6 +9,9 @@ rules:
   - base: ubuntu
     upstream: master
     mergeMethod: merge
+  - base: ubuntu-lunar
+    upstream: master
+    mergeMethod: merge
   - base: main
     upstream: master
     mergeMethod: merge
