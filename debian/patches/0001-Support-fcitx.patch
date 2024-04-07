@@ -302,7 +302,7 @@ index d7448832f..664ba1553 100644
  new_local_repository(
      name = "ja_usage_dict",
 diff --git a/src/build_mozc.py b/src/build_mozc.py
-index 21b2b46b3..39f7318c9 100755
+index 85fc5298e..8bc3a48d5 100755
 --- a/src/build_mozc.py
 +++ b/src/build_mozc.py
 @@ -163,6 +163,8 @@ def GetGypFileNames(options):
@@ -7865,10 +7865,10 @@ index 000000000..5df755193
 +#endif  // MOZC_UNIX_FCITX_FCITX_MOZC_H_
 diff --git a/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in b/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in
 new file mode 100644
-index 000000000..845716100
+index 000000000..eb2e055e8
 --- /dev/null
 +++ b/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in
-@@ -0,0 +1,25 @@
+@@ -0,0 +1,26 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<component type="addon">
 +  <id>org.fcitx.Fcitx5.Addon.Mozc</id>
@@ -7878,13 +7878,14 @@ index 000000000..845716100
 +  <name>Mozc for Fcitx 5</name>
 +  <summary>Japanese input method based on Mozc</summary>
 +  <developer id="org.fcitx-im">
-+      <name>The Fcitx Team</name>
++    <name>The Fcitx Team</name>
 +  </developer>
 +  <url type="homepage">https://fcitx-im.org</url>
 +  <url type="bugtracker">https://github.com/fcitx/mozc/issues</url>
 +  <url type="vcs-browser">https://github.com/fcitx/mozc</url>
 +  <project_group>Fcitx</project_group>
 +  <releases>
++    <release version="2.30.5432.102" date="2024-04-06"></release>
 +    <release version="2.29.5400.102" date="2024-03-07"></release>
 +    <release version="2.29.5374.102" date="2024-02-09"></release>
 +    <release version="2.29.5372.102" date="2024-02-07"></release>
