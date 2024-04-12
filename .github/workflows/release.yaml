@@ -79,8 +79,8 @@ jobs:
           sudo apt-get build-dep -y mozc
       - name: Install bazel
         run: |
-           curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.0/bazel-7.1.0-installer-linux-x86_64.sh
-           bash bazel-7.1.0-installer-linux-x86_64.sh --user
+           curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.1/bazel-7.1.1-installer-linux-x86_64.sh
+           bash bazel-7.1.1-installer-linux-x86_64.sh --user
       - name: Install mold linker
         uses: rui314/setup-mold@staging
         with:
