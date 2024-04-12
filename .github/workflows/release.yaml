@@ -15,13 +15,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: install build tools (Linux)
+        id: startup
         run: |
+          echo "container_name=ubuntu-mantic" > $GITHUB_OUTPUT
           apt-get update
           apt-get install -y sudo apt-utils wget
           sudo sed 's/^.*deb-src /deb-src /' -i /etc/apt/sources.list
           sudo apt-get update
           sudo apt-get build-dep -y mozc
           sudo apt-get install -y build-essential dpkg-dev make git qt6ct qt6-base-dev libfcitx5-qt6-dev curl unzip
+      - name: Mount bazel cache
+        uses: actions/cache@v4
+        with:
+          path: "/home/runner/.cache/bazel"
+          key: bazel-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
+          restore-keys: bazel-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
+      - name: Mount rustup cache
+        uses: actions/cache@v4
+        with:
+          path: "/home/runner/.rustup"
+          key: rustup-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
+          restore-keys: rustup-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
+
       - name: Install bazel
         run: |
            curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.0/bazel-7.1.0-installer-linux-x86_64.sh
