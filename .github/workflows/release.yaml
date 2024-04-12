@@ -24,8 +24,8 @@ jobs:
           sudo apt-get install -y build-essential dpkg-dev make git qt6ct qt6-base-dev libfcitx5-qt6-dev curl unzip
       - name: Install bazel
         run: |
-           curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.0/bazel-7.1.0-installer-linux-x86_64.sh
-           bash bazel-7.1.0-installer-linux-x86_64.sh --user
+           curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.1/bazel-7.1.1-installer-linux-x86_64.sh
+           bash bazel-7.1.1-installer-linux-x86_64.sh --user
       - name: Install mold linker
         uses: rui314/setup-mold@staging
         with:
