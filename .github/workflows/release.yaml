@@ -15,21 +15,13 @@ jobs:
       env:
         SCCACHE_GHA_ENABLED: "true"
         RUSTC_WRAPPER: "sccache"
-        SCCACHE_CACHE_SIZE: 1G
-        SCCACHE_DIR: /home/runner/.cache/sccache
         # SCCACHE_RECACHE: 1 # Uncomment this to clear 
     steps:
       - uses: actions/checkout@v4
-      - name: Run sccache-cache
-        uses: mozilla-actions/sccache-action@v0.0.4
-        with:
-          version: "v0.7.7"
-      - uses: Swatinem/rust-cache@v2
-        with:
-          shared-key: "dict-to-mozc"
       - name: install build tools (Linux)
+        id: startup
         run: |
-          echo "rustc_wrapper: " ${RUSTC_WRAPPER}
+          echo "container_name=debian-bookworm" > $GITHUB_OUTPUT
           apt-get update
           apt-get install -y sudo apt-utils wget
           sudo sed 's/Types: deb *$/Types: deb deb-src/' -i /etc/apt/sources.list.d/debian.sources
@@ -38,10 +30,30 @@ jobs:
           sudo apt-get install -y build-essential dpkg-dev make git qt6ct qt6-base-dev libfcitx5-qt6-dev curl unzip
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rustup-init.sh
           sh rustup-init.sh -y
+      - name: Mount bazel cache
+        uses: actions/cache@v4
+        with:
+          path: "/home/runner/.cache/bazel"
+          key: bazel-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
+          restore-keys: bazel-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
+      - name: Mount rustup cache
+        uses: actions/cache@v4
+        with:
+          path: "/home/runner/.rustup"
+          key: rustup-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
+          restore-keys: rustup-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
+      - name: Run sccache-cache
+        uses: mozilla-actions/sccache-action@v0.0.4
+        with:
+          version: "v0.7.7"
       - name: Install bazel
         run: |
            curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.0/bazel-7.1.0-installer-linux-x86_64.sh
            bash bazel-7.1.0-installer-linux-x86_64.sh --user
+      - uses: actions/checkout@v4
+        with:
+          ref: debian-with-jp-dict
+          path: with-jp-dict
       - name: Setup variables
         id: variables
         shell: bash
@@ -49,6 +61,7 @@ jobs:
           TAG=${GITHUB_REF##*/}
           if [[ "$TAG" =~ ^commit- ]]; then
             TAG=${TAG#commit-}
+            cd with-jp-dict
             git fetch --prune --unshallow --tags --no-recurse-submodules --filter=blob:none
             git tag ${GITHUB_REF##*/} -d
             git push origin ${GITHUB_REF##*/} -d
