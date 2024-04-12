@@ -14,24 +14,27 @@ jobs:
       image: ubuntu:lunar
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-      - name: Mount bazel cache
-        uses: actions/cache@v4
-        with:
-          path: "/home/runner/.cache/bazel"
-          key: bazel
-      - name: Mount rustup cache
-        uses: actions/cache@v4
-        with:
-          path: "/home/runner/.rustup"
-          key: rustup
       - name: apt-get update
+        id: startup
         run: |
+          echo "container_name=ubuntu-lunar" > $GITHUB_OUTPUT
           apt-get update
           apt-get install -y sudo apt-utils wget software-properties-common
           sudo add-apt-repository ppa:apt-fast/stable
           sudo apt-get update
           sudo apt-get -y install apt-fast
+      - name: Mount bazel cache
+        uses: actions/cache@v4
+        with:
+          path: "/home/runner/.cache/bazel"
+          key: bazel-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
+          restore-keys: bazel-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
+      - name: Mount rustup cache
+        uses: actions/cache@v4
+        with:
+          path: "/home/runner/.rustup"
+          key: rustup-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
+          restore-keys: rustup-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
       - name: install build tools
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
