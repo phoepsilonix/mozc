@@ -4,6 +4,7 @@ on:
   create:
     tags:
       - 'v*'
+      - 'commit-*'
 
 jobs:
   release:
@@ -34,6 +35,22 @@ jobs:
           ref: ubuntu-lunar
           submodules: 'recursive'
           path: source
+      - name: Setup variables
+        id: variables
+        shell: bash
+        run: |
+          cd source
+          TAG=${GITHUB_REF##*/}
+          if [[ "$TAG" =~ ^commit- ]]; then
+            TAG=${TAG#commit-}
+            cd with-jp-dict
+            git fetch --prune --unshallow --tags --no-recurse-submodules --filter=blob:none
+            git tag ${GITHUB_REF##*/} -d
+            git push origin ${GITHUB_REF##*/} -d
+          fi
+          echo ${TAG}
+          echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
+          echo "tag_name=$(git describe --tags --always ${TAG})"
       - name: Build
         shell: bash
         run: |
@@ -48,6 +65,7 @@ jobs:
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
+          name: ${{ steps.variables.outputs.tag_name }}
           omitBody: true
           artifacts: 'release/*'
           token: ${{ secrets.GITHUB_TOKEN }}
