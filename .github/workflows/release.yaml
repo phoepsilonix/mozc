@@ -13,6 +13,7 @@ jobs:
     container:
       image: ubuntu:mantic
     steps:
+      - uses: actions/checkout@v4
       - name: install build tools (Linux)
         run: |
           apt-get update
