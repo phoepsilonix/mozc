@@ -60,7 +60,7 @@ jobs:
           if [[ "$TAG" =~ ^commit- ]]; then
             TAG=${TAG#commit-}
             cd with-jp-dict
-            git fetch --prune --unshallow --tags --no-recurse-submodules --filter=blob:none
+            git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
             git tag ${GITHUB_REF##*/} -d
             git push origin ${GITHUB_REF##*/} -d
           fi
