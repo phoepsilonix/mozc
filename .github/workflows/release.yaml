@@ -93,7 +93,7 @@ jobs:
             git tag $TAG
             git push origin $TAG
             echo $TAG
-            echo "tag_name=\"${TAG}\"" >> $GITHUB_OUTPUT
+            echo "tag_name=${TAG}" >> $GITHUB_OUTPUT
             echo "tag_commit=$(git log -1 --pretty=%H $TAG)" >> $GITHUB_OUTPUT
           else
             echo "tag_name=$(git describe --tags --always $TAG)" >> $GITHUB_OUTPUT
