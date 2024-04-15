@@ -66,14 +66,13 @@ jobs:
           TAG=${GITHUB_REF##*/}
           if [[ "$TAG" =~ ^commit- ]]; then
             cd source
-            TAG=${TAG#commit-}
+            COMMIT=${TAG#commit-}
             git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
-            tag_name=$(git describe --tags --always ${TAG})
-            TAG=${GITHUB_REF##*/}
             git tag ${TAG} -d
             git push origin ${TAG} -d
-            git tag $tag_name
-            git push origin $tag_name
+            TAG=$(git describe --tags --always ${COMMIT})
+            git tag $TAG
+            git push origin $TAG
           fi
           echo ${TAG}
           echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
