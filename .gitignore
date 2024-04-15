@@ -69,3 +69,9 @@
 /src/android/resources/res
 /src/android/tests/AndroidManifest.xml
 /src/android/tests/libs/
+
+.github/workflows/android.yaml
+.github/workflows/linux.yaml
+.github/workflows/macos.yaml
+.github/workflows/windows.yaml
+
