@@ -44,7 +44,7 @@ jobs:
       - name: install build tools
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: build-essential dpkg-dev make qt6ct qt6-base-dev libfcitx5-qt6-dev curl unzip git
+          packages: build-essential dpkg-dev make qt6ct curl unzip git
           version: 1.0
       - name: install rust
         shell: bash
@@ -60,6 +60,11 @@ jobs:
           version: "v0.7.7"
       - uses: actions/checkout@v4
         with:
+          ref: ubuntu-lunar
+          submodules: 'recursive'
+          path: source
+      - uses: actions/checkout@v4
+        with:
           path: with-jp-dict
       - name: Setup variables
         id: variables
@@ -67,15 +72,25 @@ jobs:
         run: |
           TAG=${GITHUB_REF##*/}
           if [[ "$TAG" =~ ^commit- ]]; then
+            cd source
+            git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
             TAG=${TAG#commit-}
+            echo $TAG
+            base_tag=$(git describe --tags --abbrev=0 --always ${TAG})
+            version=$(git describe --tags --always ${TAG})
+            version=${version#$base_tag}
+            echo "tag_name=${base_tag}-with-jp-dict${version})" > $GITHUB_OUTPUT
+            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
+            cd ../with-jp-dict
+            TAG=${GITHUB_REF##*/}
+            git tag $TAG -d
+            git push origin $TAG -d
+          else
             cd with-jp-dict
             git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
-            git tag ${GITHUB_REF##*/} -d
-            git push origin ${GITHUB_REF##*/} -d
+            echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
+            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
           fi
-          echo ${TAG}
-          echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
-          echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
           echo "${{ steps.variables.outputs.tag_name }}"
           echo "${{ steps.variables.outputs.tag_commit }}"
       - name: install build dependency (Linux)
@@ -83,6 +98,7 @@ jobs:
           sudo sed 's/^.*deb-src /deb-src /' -i /etc/apt/sources.list
           sudo apt-get update
           sudo apt-get build-dep -y mozc
+          sudo apt-get install qt6-base-dev libfcitx5-qt6-dev
       - name: Install bazel
         run: |
            curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.1/bazel-7.1.1-installer-linux-x86_64.sh
@@ -92,11 +108,6 @@ jobs:
         with:
           mold-version: 2.30.0
           make-default: true
-      - uses: actions/checkout@v4
-        with:
-          ref: ubuntu-lunar
-          submodules: 'recursive'
-          path: source
       - name: added dictionary
         run: |
           git clone --depth 1 --single-branch https://github.com/phoepsilonix/mozcdict-ext.git
