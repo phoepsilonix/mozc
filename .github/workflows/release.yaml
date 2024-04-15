@@ -58,13 +58,13 @@ jobs:
           TAG=${GITHUB_REF##*/}
           if [[ "$TAG" =~ ^commit- ]]; then
             cd source
-            git tag $TAG -d
-            git push origin $TAG -d
-            TAG=${TAG#commit-}
+            COMMIT=${TAG#commit-}
             git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
-            tag_name=$(git describe --tags --always ${TAG})
-            git tag $tag_name
-            git push origin $tag_name
+            git tag ${TAG} -d
+            git push origin ${TAG} -d
+            TAG=$(git describe --tags --always ${COMMIT})
+            git tag $TAG
+            git push origin $TAG
           fi
           echo ${TAG}
           echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
@@ -84,6 +84,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: ${{ steps.variables.outputs.tag_name }}
+          tag: ${{ steps.variables.outputs.tag_name }}
           omitBody: true
           artifacts: 'release/*'
           token: ${{ secrets.GITHUB_TOKEN }}
