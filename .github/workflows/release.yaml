@@ -148,8 +148,6 @@ jobs:
           cd ..
           mkdir -p release
           mv *deb mozc_* release/
-          cd source/src
-          bazel shutdown
       - name: Generate release note
         id: release_note
         run: |
