@@ -63,29 +63,30 @@ jobs:
         id: variables
         shell: bash
         run: |
+          cd with-jp-dict
           TAG=${GITHUB_REF##*/}
+          git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
           if [[ "$TAG" =~ ^with-commit- ]]; then
-            cd source
-            git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
-            COMMIT=${TAG#with-commit-}
+            COMMIT=$(git log -1 ${TAG#with-commit-} --pretty=%h)
             echo $TAG
             git tag $TAG -d
             git push origin $TAG -d
-            base_tag=$(git describe --tags --abbrev --always ${COMMIT})
-            base_tag=${base_tag%-[^-]*-[^-]*}
+            base_tag=$(git describe --tags --abbrev=0 --always ${COMMIT})
             echo $base_tag
-            tag_version=$(git describe --tags --always ${COMMIT})
-            echo $tag_version
-            TAG=${base_tag}"-with-jp-dict"${tag_version#${base_tag}}
+            base_tag=${base_tag/debian-with-jp-dict*/}debian-with-jp-dict
+            echo $base_tag
+            COUNT=$(($(git rev-list --count $COMMIT)-$(git rev-list --count $base_tag)))
+            if [[ $COUNT != 0 ]];then
+              TAG=$base_tag-$COUNT-g$COMMIT
+            else
+              TAG=$base_tag
+            fi
             echo "tag_name=" $TAG
-            cd ../with-jp-dict
             git tag $TAG
             git push origin $TAG
             echo "tag_name=${TAG}" > $GITHUB_OUTPUT
             echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
           else
-            cd with-jp-dict
-            git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
             echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
             echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
           fi
