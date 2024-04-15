@@ -4,7 +4,7 @@ on:
   create:
     tags:
       - 'v*'
-      - 'commit-*'
+      - 'with-commit-*'
 
 jobs:
   release:
@@ -15,20 +15,20 @@ jobs:
       env:
         SCCACHE_GHA_ENABLED: "true"
         RUSTC_WRAPPER: "sccache"
-        # SCCACHE_RECACHE: 1 # Uncomment this to clear
+        # SCCACHE_RECACHE: 1 # Uncomment this to clear cache, then comment
     steps:
       - uses: actions/checkout@v4
-      - name: install build tools (Linux)
+      - name: Start up
+        id: startup
         run: |
           echo "container_name=ubuntu-mantic" > $GITHUB_OUTPUT
           apt-get update
-          apt-get install -y sudo apt-utils wget
-          sudo sed 's/^.*deb-src /deb-src /' -i /etc/apt/sources.list
+          apt-get install -y sudo apt-utils wget software-properties-common
+          sudo add-apt-repository ppa:apt-fast/stable
           sudo apt-get update
-          sudo apt-get build-dep -y mozc
-          sudo apt-get install -y build-essential dpkg-dev make git qt6ct qt6-base-dev libfcitx5-qt6-dev curl unzip
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rustup-init.sh
-          sh rustup-init.sh -y
+          sudo apt-get -y install apt-fast
+          mkdir -p /home/runner/.cache/bazel
+          mkdir -p /home/runner/.rustup
       - name: Mount bazel cache
         uses: actions/cache@v4
         with:
@@ -41,48 +41,84 @@ jobs:
           path: "/home/runner/.rustup"
           key: rustup-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
           restore-keys: rustup-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
+      - name: install build tools
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: build-essential dpkg-dev make qt6ct curl unzip git
+          version: 1.0
+      - name: install rust
+        shell: bash
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rustup-init.sh
+          sh rustup-init.sh -y
+          source "$HOME/.cargo/env"
+          export PATH=$PATH:$HOME/.cargo/bin/
+          rustc -Vv
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.4
         with:
           version: "v0.7.7"
-      - name: Install bazel
-        run: |
-           curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.0/bazel-7.1.0-installer-linux-x86_64.sh
-           bash bazel-7.1.0-installer-linux-x86_64.sh --user
       - uses: actions/checkout@v4
         with:
-          ref: ubuntu-with-jp-dict
+          ref: ubuntu
+          submodules: 'recursive'
+          path: source
+      - uses: actions/checkout@v4
+        with:
           path: with-jp-dict
       - name: Setup variables
         id: variables
         shell: bash
         run: |
           TAG=${GITHUB_REF##*/}
-          if [[ "$TAG" =~ ^commit- ]]; then
-            TAG=${TAG#commit-}
+          if [[ "$TAG" =~ ^with-commit- ]]; then
+            cd source
+            git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
+            COMMIT=${TAG#with-commit-}
+            echo $TAG
+            git tag $TAG -d
+            git push origin $TAG -d
+            base_tag=$(git describe --tags --abbrev=0 --always ${COMMIT})
+            base_tag=${base_tag%-[^-]*-[^-]*}
+            echo $base_tag
+            tag_version=$(git describe --tags --always ${COMMIT})
+            echo $tag_version
+            TAG=${base_tag}"-with-jp-dict"${tag_version#${base_tag}}
+            echo "tag_name=" $TAG
+            cd ../with-jp-dict
+            git tag $TAG
+            git push origin $TAG
+            echo "tag_name=${TAG}" > $GITHUB_OUTPUT
+            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
+          else
             cd with-jp-dict
             git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
-            git tag ${GITHUB_REF##*/} -d
-            git push origin ${GITHUB_REF##*/} -d
+            echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
+            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
           fi
-          echo ${TAG}
-          echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
-          echo "tag_name=$(git describe --tags --always ${TAG})"
+          echo "${{ steps.variables.outputs.tag_name }}"
+          echo "${{ steps.variables.outputs.tag_commit }}"
+      - name: install build dependency (Linux)
+        run: |
+          sudo sed 's/^.*deb-src /deb-src /' -i /etc/apt/sources.list
+          sudo apt-get update
+          sudo apt-get build-dep -y mozc
+          sudo apt-get install -y qt6-base-dev libfcitx5-qt6-dev
+      - name: Install bazel
+        run: |
+           curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.1/bazel-7.1.1-installer-linux-x86_64.sh
+           bash bazel-7.1.1-installer-linux-x86_64.sh --user
       - name: Install mold linker
         uses: rui314/setup-mold@staging
         with:
           mold-version: 2.30.0
           make-default: true
-      - uses: actions/checkout@v4
-        with:
-          ref: ubuntu
-          submodules: 'recursive'
-          path: source
       - name: added dictionary
         run: |
           git clone --depth 1 --single-branch https://github.com/phoepsilonix/mozcdict-ext.git
           cd mozcdict-ext/sudachi
           . "$HOME/.cargo/env"
+          rustup update stable
           _sudachidict_date=$(curl -s 'http://sudachi.s3-website-ap-northeast-1.amazonaws.com/sudachidict-raw/' | grep -o '<td>[0-9]*</td>' | grep -o '[0-9]*' | sort -n | tail -n 1)
           curl -LO "http://sudachi.s3-website-ap-northeast-1.amazonaws.com/sudachidict-raw/${_sudachidict_date}/small_lex.zip"
           curl -LO "http://sudachi.s3-website-ap-northeast-1.amazonaws.com/sudachidict-raw/${_sudachidict_date}/core_lex.zip"
@@ -94,7 +130,6 @@ jobs:
           cat small_lex.csv core_lex.csv notcore_lex.csv > sudachi.csv
           rm *lex.csv
           #xz -d mecab-user-dict-seed.20200910.csv.xz
-          rustup update stable
           rustup target list --installed | grep $(rustc -vV | sed -e 's|host: ||' -e 's|-gnu||p' -n) | grep musl && TARGET=$(rustup target list --installed | grep $(rustc -vV | sed -e 's|host: ||' -e 's|-gnu||p' -n)|grep musl|head -n1) || TARGET=$(rustup target list --installed | grep $(rustc -vV | sed -e 's|host: ||' -e 's|-gnu||p' -n)|grep -v musl|head -n1)
           cargo build --release --target $TARGET
           ./target/$TARGET/release/dict-to-mozc -s -i ../../source/src/data/dictionary_oss/id.def -f sudachi.csv > ./all-dict.txt
@@ -113,6 +148,8 @@ jobs:
           cd ..
           mkdir -p release
           mv *deb mozc_* release/
+          cd source/src
+          bazel shutdown
       - name: Generate release note
         id: release_note
         run: |
@@ -124,7 +161,8 @@ jobs:
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
-          name: ${{ steps.variables.outputs.tag_name }}
+          name: "${{ steps.variables.outputs.tag_name }}"
+          tag: "${{ steps.variables.outputs.tag_name }}"
           artifacts: 'release/*'
           token: ${{ secrets.GITHUB_TOKEN }}
           body: "${{ steps.release_note.outputs.release_note }}"
