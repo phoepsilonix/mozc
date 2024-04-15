@@ -14,16 +14,15 @@ jobs:
       image: ubuntu:mantic
     steps:
       - uses: actions/checkout@v4
-      - name: install build tools (Linux)
+      - name: apt-get update
         id: startup
         run: |
           echo "container_name=ubuntu-mantic" > $GITHUB_OUTPUT
           apt-get update
-          apt-get install -y sudo apt-utils wget
-          sudo sed 's/^.*deb-src /deb-src /' -i /etc/apt/sources.list
+          apt-get install -y sudo apt-utils wget software-properties-common
+          sudo add-apt-repository ppa:apt-fast/stable
           sudo apt-get update
-          sudo apt-get build-dep -y mozc
-          sudo apt-get install -y build-essential dpkg-dev make git qt6ct qt6-base-dev libfcitx5-qt6-dev curl unzip
+          sudo apt-get -y install apt-fast
       - name: Mount bazel cache
         uses: actions/cache@v4
         with:
@@ -36,11 +35,20 @@ jobs:
           path: "/home/runner/.rustup"
           key: rustup-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
           restore-keys: rustup-${{ runner.os }}-mozc-${{ steps.startup.outputs.container_name }}
-
+      - name: install build tools
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: build-essential dpkg-dev make qt6ct qt6-base-dev libfcitx5-qt6-dev curl unzip git
+          version: 1.0
+      - name: install build dependency
+        run: |
+          sudo sed 's/^.*deb-src /deb-src /' -i /etc/apt/sources.list
+          sudo apt-get update
+          sudo apt-get build-dep -y mozc
       - name: Install bazel
         run: |
-           curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.0/bazel-7.1.0-installer-linux-x86_64.sh
-           bash bazel-7.1.0-installer-linux-x86_64.sh --user
+           curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.1/bazel-7.1.1-installer-linux-x86_64.sh
+           bash bazel-7.1.1-installer-linux-x86_64.sh --user
       - name: Install mold linker
         uses: rui314/setup-mold@staging
         with:
@@ -55,14 +63,16 @@ jobs:
         id: variables
         shell: bash
         run: |
-          cd source
           TAG=${GITHUB_REF##*/}
           if [[ "$TAG" =~ ^commit- ]]; then
-            TAG=${TAG#commit-}
-            cd with-jp-dict
+            cd source
+            COMMIT=${TAG#commit-}
             git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
-            git tag ${GITHUB_REF##*/} -d
-            git push origin ${GITHUB_REF##*/} -d
+            git tag ${TAG} -d
+            git push origin ${TAG} -d
+            TAG=$(git describe --tags --always ${COMMIT})
+            git tag $TAG
+            git push origin $TAG
           fi
           echo ${TAG}
           echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
@@ -82,6 +92,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: ${{ steps.variables.outputs.tag_name }}
+          tag: ${{ steps.variables.outputs.tag_name }}
           omitBody: true
           artifacts: 'release/*'
           token: ${{ secrets.GITHUB_TOKEN }}
