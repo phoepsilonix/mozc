@@ -98,7 +98,7 @@ jobs:
           sudo sed 's/^.*deb-src /deb-src /' -i /etc/apt/sources.list
           sudo apt-get update
           sudo apt-get build-dep -y mozc
-          sudo apt-get install qt6-base-dev libfcitx5-qt6-dev
+          sudo apt-get install -y qt6-base-dev libfcitx5-qt6-dev
       - name: Install bazel
         run: |
            curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.1/bazel-7.1.1-installer-linux-x86_64.sh
