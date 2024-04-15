@@ -55,14 +55,16 @@ jobs:
         id: variables
         shell: bash
         run: |
-          cd source
           TAG=${GITHUB_REF##*/}
           if [[ "$TAG" =~ ^commit- ]]; then
+            cd source
+            git tag $TAG -d
+            git push origin $TAG -d
             TAG=${TAG#commit-}
-            cd with-jp-dict
             git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
-            git tag ${GITHUB_REF##*/} -d
-            git push origin ${GITHUB_REF##*/} -d
+            tag_name=$(git describe --tags --always ${TAG})
+            git tag $tag_name
+            git push origin $tag_name
           fi
           echo ${TAG}
           echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
