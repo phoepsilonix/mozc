@@ -142,8 +142,8 @@ jobs:
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
-          name: ${{ steps.variables.outputs.tag_name }}
-          tag: ${{ steps.variables.outputs.tag_name }}
+          name: "${{ steps.variables.outputs.tag_name }}"
+          tag: "${{ steps.variables.outputs.tag_name }}"
           artifacts: 'release/*'
           token: ${{ secrets.GITHUB_TOKEN }}
           body: "${{ steps.release_note.outputs.release_note }}"
