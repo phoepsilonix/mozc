@@ -71,7 +71,8 @@ jobs:
             echo $TAG
             git tag $TAG -d
             git push origin $TAG -d
-            base_tag=$(git describe --tags --abbrev=0 --always ${COMMIT})
+            base_tag=$(git describe --tags --abbrev --always ${COMMIT})
+            base_tag=${base_tag%-[^-]*-[^-]*}
             echo $base_tag
             tag_version=$(git describe --tags --always ${COMMIT})
             echo $tag_version
@@ -90,10 +91,6 @@ jobs:
           fi
           echo "${{ steps.variables.outputs.tag_name }}"
           echo "${{ steps.variables.outputs.tag_commit }}"
-      - name: install build dependency (Linux)
-        run: |
-          sudo sed 's/^.*deb-src /deb-src /' -i /etc/apt/sources.list
-          sudo apt-get update
       - name: Install mold linker
         uses: rui314/setup-mold@staging
         with:
