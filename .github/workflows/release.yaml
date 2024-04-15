@@ -4,7 +4,7 @@ on:
   create:
     tags:
       - 'v*'
-      - 'commit-*'
+      - 'with-commit-*'
 
 jobs:
   release:
@@ -71,18 +71,21 @@ jobs:
         shell: bash
         run: |
           TAG=${GITHUB_REF##*/}
-          if [[ "$TAG" =~ ^commit- ]]; then
+          if [[ "$TAG" =~ ^with-commit- ]]; then
             cd source
             git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
-            TAG=${TAG#commit-}
+            COMMIT=${TAG#with-commit-}
             echo $TAG
-            base_tag=$(git describe --tags --abbrev=0 --always ${TAG})
-            version=$(git describe --tags --always ${TAG})
+            base_tag=$(git describe --tags --abbrev=0 --always ${COMMIT})
+            version=$(git describe --tags --always ${COMMIT})
             version=${version#$base_tag}
-            echo "tag_name=${base_tag}-with-jp-dict${version})" > $GITHUB_OUTPUT
-            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
+            tag_name=${base_tag}-with-jp-dict${version}
             cd ../with-jp-dict
+            git tag $tag_name
+            git push origin $tag_name
+            echo "tag_name=${tag_name}" > $GITHUB_OUTPUT
             TAG=${GITHUB_REF##*/}
+            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
             git tag $TAG -d
             git push origin $TAG -d
           else
