@@ -21,7 +21,7 @@ jobs:
       - name: Start up
         id: startup
         run: |
-          echo "container_name=ubuntu-mantic" > $GITHUB_OUTPUT
+          echo "container_name=ubuntu-mantic" >> $GITHUB_OUTPUT
           apt-get update
           apt-get install -y sudo apt-utils wget software-properties-common
           sudo add-apt-repository ppa:apt-fast/stable
@@ -92,11 +92,11 @@ jobs:
             echo "tag_name=" $TAG
             git tag $TAG
             git push origin $TAG
-            echo "tag_name=${TAG}" > $GITHUB_OUTPUT
-            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
+            echo "tag_name=${TAG}" >> $GITHUB_OUTPUT
+            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" >> $GITHUB_OUTPUT
           else
-            echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
-            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
+            echo "tag_name=$(git describe --tags --always ${TAG})" >> $GITHUB_OUTPUT
+            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" >> $GITHUB_OUTPUT
           fi
           echo "${{ steps.variables.outputs.tag_name }}"
           echo "${{ steps.variables.outputs.tag_commit }}"
