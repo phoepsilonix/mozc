@@ -63,20 +63,35 @@ jobs:
         id: variables
         shell: bash
         run: |
+          cd source
           TAG=${GITHUB_REF##*/}
+          git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
           if [[ "$TAG" =~ ^commit- ]]; then
-            cd source
-            COMMIT=${TAG#commit-}
-            git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
-            git tag ${TAG} -d
-            git push origin ${TAG} -d
-            TAG=$(git describe --tags --always ${COMMIT})
+            COMMIT=$(git log -1 ${TAG#with-commit-} --pretty=%h)
+            echo $TAG
+            git tag $TAG -d
+            git push origin $TAG -d
+            base_tag=$(git describe --tags --abbrev=0 --always ${COMMIT})
+            echo $base_tag
+            base_tag=${base_tag/ubuntu-lunar*/}ubuntu-lunar
+            echo $base_tag
+            COUNT=$(($(git rev-list --count $COMMIT)-$(git rev-list --count $base_tag)))
+            if [[ $COUNT != 0 ]];then
+              TAG=$base_tag-$COUNT-g$COMMIT
+            else
+              TAG=$base_tag
+            fi
+            echo "tag_name=" $TAG
             git tag $TAG
             git push origin $TAG
+            echo "tag_name=${TAG}" > $GITHUB_OUTPUT
+            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
+          else
+            echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
+            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" > $GITHUB_OUTPUT
           fi
-          echo ${TAG}
-          echo "tag_name=$(git describe --tags --always ${TAG})" > $GITHUB_OUTPUT
-          echo "tag_name=$(git describe --tags --always ${TAG})"
+          echo "${{ steps.variables.outputs.tag_name }}"
+          echo "${{ steps.variables.outputs.tag_commit }}"
       - name: Build
         shell: bash
         run: |
