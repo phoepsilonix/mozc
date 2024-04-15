@@ -65,6 +65,7 @@ jobs:
           path: source
       - uses: actions/checkout@v4
         with:
+          ref: ubuntu-with-jp-dict
           path: with-jp-dict
       - name: Setup variables
         id: variables
