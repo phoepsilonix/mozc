@@ -4,7 +4,7 @@ on:
   create:
     tags:
       - 'v*'
-      - 'commit-*'
+      - 'with-commit-*'
 
 jobs:
   release:
@@ -48,8 +48,8 @@ jobs:
           version: "v0.7.7"
       - name: Install bazel
         run: |
-           curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.0/bazel-7.1.0-installer-linux-x86_64.sh
-           bash bazel-7.1.0-installer-linux-x86_64.sh --user
+           curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.1/bazel-7.1.1-installer-linux-x86_64.sh
+           bash bazel-7.1.1-installer-linux-x86_64.sh --user
       - uses: actions/checkout@v4
         with:
           ref: debian-with-jp-dict
@@ -126,6 +126,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: ${{ steps.variables.outputs.tag_name }}
+          tag: ${{ steps.variables.outputs.tag_name }}
           artifacts: 'release/*'
           token: ${{ secrets.GITHUB_TOKEN }}
           body: "${{ steps.release_note.outputs.release_note }}"
