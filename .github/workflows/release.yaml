@@ -75,7 +75,7 @@ jobs:
           TAG=${GITHUB_REF##*/}
           git fetch --prune --unshallow --tags --no-recurse-submodules --filter=tree:0
           if [[ "$TAG" =~ ^with-commit- ]]; then
-            COMMIT=${TAG#with-commit-}
+            COMMIT=$(git log -1 ${TAG#with-commit-} --pretty=%h)
             echo $TAG
             git tag $TAG -d
             git push origin $TAG -d
