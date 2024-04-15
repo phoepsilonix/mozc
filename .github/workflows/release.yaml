@@ -92,6 +92,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: ${{ steps.variables.outputs.tag_name }}
+          tag: ${{ steps.variables.outputs.tag_name }}
           omitBody: true
           artifacts: 'release/*'
           token: ${{ secrets.GITHUB_TOKEN }}
