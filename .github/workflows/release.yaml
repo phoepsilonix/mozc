@@ -79,6 +79,7 @@ jobs:
             git tag $TAG -d
             git push origin $TAG -d
             base_tag=$(git describe --tags --abbrev=0 --always ${COMMIT})
+            base_tag=${base_tag%-[^-]*-[^-]*}
             echo $base_tag
             tag_version=$(git describe --tags --always ${COMMIT})
             echo $tag_version
