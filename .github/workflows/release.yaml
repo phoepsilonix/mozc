@@ -81,13 +81,13 @@ jobs:
             git push origin $TAG -d
             base_tag=$(git describe --tags --abbrev=0 --always ${COMMIT})
             echo $base_tag
-            base_tag=${base_tag/ubuntu-lunar-with-jp-dict*/}ubuntu-lunar-with-jp-dict
+            base_tag=${base_tag/ubuntu-lunar*/}ubuntu-lunar
             echo $base_tag
             COUNT=$(($(git rev-list --count $COMMIT)-$(git rev-list --count $base_tag)))
             if [[ $COUNT != 0 ]];then
-              TAG=$base_tag-$COUNT-g$COMMIT
+              TAG=$base_tag-with-jp-dict-$COUNT-g$COMMIT
             else
-              TAG=$base_tag
+              TAG=$base_tag-with-jp-dict
             fi
             echo "tag_name=" $TAG
             git tag $TAG
