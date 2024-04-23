@@ -81,13 +81,13 @@ jobs:
             git push origin $TAG -d
             base_tag=$(git describe --tags --abbrev=0 --always ${COMMIT})
             echo $base_tag
-            base_tag=${base_tag/ubuntu-with-jp-dict*/}ubuntu-with-jp-dict
+            base_tag=${base_tag/ubuntu-mantic*/}ubuntu-mantic
             echo $base_tag
             COUNT=$(($(git rev-list --count $COMMIT)-$(git rev-list --count $base_tag)))
             if [[ $COUNT != 0 ]];then
-              TAG=$base_tag-$COUNT-g$COMMIT
+              TAG=$base_tag-with-jp-dict-$COUNT-g$COMMIT
             else
-              TAG=$base_tag
+              TAG=$base_tag-with-jp-dict
             fi
             echo "tag_name=" $TAG
             git tag $TAG
@@ -95,8 +95,11 @@ jobs:
             echo "tag_name=${TAG}" >> $GITHUB_OUTPUT
             echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" >> $GITHUB_OUTPUT
           else
-            echo "tag_name=$(git describe --tags --always ${TAG})" >> $GITHUB_OUTPUT
-            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" >> $GITHUB_OUTPUT
+            echo $TAG
+            COMMIT=$(git log -1 ${TAG} --pretty=%h)
+            echo $COMMIT
+            echo "tag_name=$(git describe --tags --always ${COMMIT})" >> $GITHUB_OUTPUT
+            echo "tag_commit=$(git log -1 --pretty=%H ${COMMIT})" >> $GITHUB_OUTPUT
           fi
           echo "${{ steps.variables.outputs.tag_name }}"
           echo "${{ steps.variables.outputs.tag_commit }}"
