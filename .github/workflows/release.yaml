@@ -38,13 +38,14 @@ jobs:
       - name: install build tools
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: build-essential dpkg-dev make qt6ct qt6-base-dev libfcitx5-qt6-dev curl unzip git
+          packages: build-essential dpkg-dev make qt6ct curl unzip git
           version: 1.0
       - name: install build dependency
         run: |
           sudo sed 's/^.*deb-src /deb-src /' -i /etc/apt/sources.list
           sudo apt-get update
           sudo apt-get build-dep -y mozc
+          sudo apt-get install -y qt6-base-dev libfcitx5-qt6-dev
       - name: Install bazel
         run: |
            curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.1/bazel-7.1.1-installer-linux-x86_64.sh
@@ -87,8 +88,11 @@ jobs:
             echo "tag_name=${TAG}" >> $GITHUB_OUTPUT
             echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" >> $GITHUB_OUTPUT
           else
-            echo "tag_name=$(git describe --tags --always ${TAG})" >> $GITHUB_OUTPUT
-            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" >> $GITHUB_OUTPUT
+            echo $TAG
+            COMMIT=$(git log -1 ${TAG} --pretty=%h)
+            echo $COMMIT
+            echo "tag_name=$(git describe --tags --always ${COMMIT})" >> $GITHUB_OUTPUT
+            echo "tag_commit=$(git log -1 --pretty=%H ${COMMIT})" >> $GITHUB_OUTPUT
           fi
           echo "${{ steps.variables.outputs.tag_name }}"
           echo "${{ steps.variables.outputs.tag_commit }}"
