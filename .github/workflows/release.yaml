@@ -45,7 +45,7 @@ jobs:
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.4
         with:
-          version: "v0.7.7"
+          version: "v0.8.0"
       - name: Install bazel
         run: |
            curl -LO https://github.com/bazelbuild/bazel/releases/download/7.1.1/bazel-7.1.1-installer-linux-x86_64.sh
@@ -87,9 +87,14 @@ jobs:
             echo "tag_name=${TAG}" >> $GITHUB_OUTPUT
             echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" >> $GITHUB_OUTPUT
           else
-            echo "tag_name=$(git describe --tags --always ${TAG})" >> $GITHUB_OUTPUT
-            echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" >> $GITHUB_OUTPUT
+            echo $TAG
+            COMMIT=$(git log -1 ${TAG} --pretty=%h)
+            echo $COMMIT
+            echo "tag_name=$(git describe --tags --always ${COMMIT})" >> $GITHUB_OUTPUT
+            echo "tag_commit=$(git log -1 --pretty=%H ${COMMIT})" >> $GITHUB_OUTPUT
           fi
+      - name: check variables
+        run: |
           echo "${{ steps.variables.outputs.tag_name }}"
           echo "${{ steps.variables.outputs.tag_commit }}"
       - name: Install mold linker
