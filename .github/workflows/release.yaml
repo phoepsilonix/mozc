@@ -11,7 +11,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:mantic
+      image: ubuntu:noble
       env:
         SCCACHE_GHA_ENABLED: "true"
         RUSTC_WRAPPER: "sccache"
@@ -21,7 +21,7 @@ jobs:
       - name: Start up
         id: startup
         run: |
-          echo "container_name=ubuntu-mantic" >> $GITHUB_OUTPUT
+          echo "container_name=ubuntu-noble" >> $GITHUB_OUTPUT
           apt-get update
           apt-get install -y sudo apt-utils wget software-properties-common
           sudo add-apt-repository ppa:apt-fast/stable
@@ -81,7 +81,7 @@ jobs:
             git push origin $TAG -d
             base_tag=$(git describe --tags --abbrev=0 --always ${COMMIT})
             echo $base_tag
-            base_tag=${base_tag/ubuntu-mantic*/}ubuntu-mantic
+            base_tag=${base_tag/ubuntu-noble*/}ubuntu-noble
             echo $base_tag
             COUNT=$(($(git rev-list --count $COMMIT)-$(git rev-list --count $base_tag)))
             if [[ $COUNT != 0 ]];then
