@@ -11,7 +11,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:mantic
+      image: ubuntu:noble
     steps:
       - uses: actions/checkout@v4
       - name: apt-get update
