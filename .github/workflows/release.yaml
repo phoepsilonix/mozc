@@ -82,6 +82,8 @@ jobs:
             echo "tag_name=$(git describe --tags --always ${TAG})" >> $GITHUB_OUTPUT
             echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" >> $GITHUB_OUTPUT
           fi
+      - name: check variables
+        run: |
           echo "${{ steps.variables.outputs.tag_name }}"
           echo "${{ steps.variables.outputs.tag_commit }}"
       - name: Build
