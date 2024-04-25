@@ -57,7 +57,7 @@ jobs:
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.4
         with:
-          version: "v0.7.7"
+          version: "v0.8.0"
       - uses: actions/checkout@v4
         with:
           ref: ubuntu
