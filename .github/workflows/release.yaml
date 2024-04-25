@@ -20,6 +20,7 @@ jobs:
           echo "container_name=ubuntu-mantic" >> $GITHUB_OUTPUT
           apt-get update
           apt-get install -y sudo apt-utils wget software-properties-common
+          sudo sed 's/Types: deb *$/Types: deb deb-src/' -i /etc/apt/sources.list.d/ubuntu.sources
           sudo add-apt-repository ppa:apt-fast/stable
           sudo apt-get update
           sudo apt-get -y install apt-fast
@@ -42,7 +43,6 @@ jobs:
           version: 1.0
       - name: install build dependency
         run: |
-          sudo sed 's/^.*deb-src /deb-src /' -i /etc/apt/sources.list
           sudo apt-get update
           sudo apt-get build-dep -y mozc
           sudo apt-get install -y qt6-base-dev libfcitx5-qt6-dev
