@@ -61,7 +61,7 @@ jobs:
           version: "v0.8.0"
       - uses: actions/checkout@v4
         with:
-          ref: ubuntu
+          ref: ubuntu-noble
           submodules: 'recursive'
           path: source
       - uses: actions/checkout@v4
