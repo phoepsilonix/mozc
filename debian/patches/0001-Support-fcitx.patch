@@ -1,6 +1,6 @@
 diff --git a/scripts/README.md b/scripts/README.md
 new file mode 100644
-index 0000000..599c6eb
+index 00000000..599c6eb6
 --- /dev/null
 +++ b/scripts/README.md
 @@ -0,0 +1,6 @@
@@ -12,7 +12,7 @@ index 0000000..599c6eb
 +There is no guranantee that these scripts work for everyone and everywhere.
 diff --git a/scripts/build b/scripts/build
 new file mode 100755
-index 0000000..b21022f
+index 00000000..b21022f8
 --- /dev/null
 +++ b/scripts/build
 @@ -0,0 +1,6 @@
@@ -24,7 +24,7 @@ index 0000000..b21022f
 +python build_mozc.py build ${TARGETS} -c ${_bldtype}
 diff --git a/scripts/build_fcitx5 b/scripts/build_fcitx5
 new file mode 100755
-index 0000000..829e5c6
+index 00000000..829e5c62
 --- /dev/null
 +++ b/scripts/build_fcitx5
 @@ -0,0 +1,6 @@
@@ -36,7 +36,7 @@ index 0000000..829e5c6
 +python build_mozc.py build ${_BUILD_TARGETS} -c ${_bldtype}
 diff --git a/scripts/build_fcitx5_bazel b/scripts/build_fcitx5_bazel
 new file mode 100755
-index 0000000..ec6b5ae
+index 00000000..ec6b5aee
 --- /dev/null
 +++ b/scripts/build_fcitx5_bazel
 @@ -0,0 +1,5 @@
@@ -47,7 +47,7 @@ index 0000000..ec6b5ae
 +bazel build -c opt --copt=-fPIC  --config oss_linux "$@" $_BUILD_TARGETS
 diff --git a/scripts/clang-format.sh b/scripts/clang-format.sh
 new file mode 100755
-index 0000000..1b574d5
+index 00000000..1b574d5e
 --- /dev/null
 +++ b/scripts/clang-format.sh
 @@ -0,0 +1,2 @@
@@ -55,7 +55,7 @@ index 0000000..1b574d5
 +find unix/fcitx5  -name '*.h' -o -name '*.cc'  | xargs clang-format -style=Google -i
 diff --git a/scripts/configure b/scripts/configure
 new file mode 100755
-index 0000000..1775d81
+index 00000000..1775d81a
 --- /dev/null
 +++ b/scripts/configure
 @@ -0,0 +1,2 @@
@@ -63,7 +63,7 @@ index 0000000..1775d81
 +python build_mozc.py gyp "$@"
 diff --git a/scripts/get_mozc_version b/scripts/get_mozc_version
 new file mode 100755
-index 0000000..bb71ac0
+index 00000000..bb71ac01
 --- /dev/null
 +++ b/scripts/get_mozc_version
 @@ -0,0 +1,4 @@
@@ -73,7 +73,7 @@ index 0000000..bb71ac0
 +python3 -c 'from build_tools.mozc_version import MozcVersion; print(MozcVersion("bazel-bin/base/mozc_version.txt").GetVersionString())'
 diff --git a/scripts/install_fcitx b/scripts/install_fcitx
 new file mode 100755
-index 0000000..493f1e1
+index 00000000..493f1e1c
 --- /dev/null
 +++ b/scripts/install_fcitx
 @@ -0,0 +1,27 @@
@@ -106,7 +106,7 @@ index 0000000..493f1e1
 +install -D -m 644 ../scripts/icons/ui-tool.png "${PREFIX}/share/fcitx/mozc/icon/mozc-tool.png"
 diff --git a/scripts/install_fcitx5 b/scripts/install_fcitx5
 new file mode 100755
-index 0000000..8d85f30
+index 00000000..8d85f300
 --- /dev/null
 +++ b/scripts/install_fcitx5
 @@ -0,0 +1,9 @@
@@ -121,7 +121,7 @@ index 0000000..8d85f30
 +PREFIX="${PREFIX}" ../scripts/install_fcitx5_icons
 diff --git a/scripts/install_fcitx5_bazel b/scripts/install_fcitx5_bazel
 new file mode 100755
-index 0000000..629bb75
+index 00000000..629bb751
 --- /dev/null
 +++ b/scripts/install_fcitx5_bazel
 @@ -0,0 +1,7 @@
@@ -134,7 +134,7 @@ index 0000000..629bb75
 +PREFIX="${PREFIX}" ../scripts/install_fcitx5_icons
 diff --git a/scripts/install_fcitx5_data b/scripts/install_fcitx5_data
 new file mode 100755
-index 0000000..aa05874
+index 00000000..aa05874b
 --- /dev/null
 +++ b/scripts/install_fcitx5_data
 @@ -0,0 +1,22 @@
@@ -162,7 +162,7 @@ index 0000000..aa05874
 +rm -f unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml
 diff --git a/scripts/install_fcitx5_icons b/scripts/install_fcitx5_icons
 new file mode 100755
-index 0000000..a3d45a0
+index 00000000..e8f101bc
 --- /dev/null
 +++ b/scripts/install_fcitx5_icons
 @@ -0,0 +1,27 @@
@@ -170,32 +170,32 @@ index 0000000..a3d45a0
 +
 +PREFIX="${PREFIX:-/usr}"
 +
-+install -D -m 644 data/images/product_icon_32bpp-128.png "${PREFIX}/share/icons/hicolor/128x128/apps/org.fcitx.Fcitx5.fcitx-mozc.png"
-+install -D -m 644 data/images/unix/ime_product_icon_opensource-32.png "${PREFIX}/share/icons/hicolor/32x32/apps/org.fcitx.Fcitx5.fcitx-mozc.png"
-+install -D -m 644 ../scripts/icons/ui-alpha_full.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx-mozc-alpha-full.png"
-+install -D -m 644 ../scripts/icons/ui-alpha_half.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx-mozc-alpha-half.png"
-+install -D -m 644 ../scripts/icons/ui-direct.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx-mozc-direct.png"
-+install -D -m 644 ../scripts/icons/ui-hiragana.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx-mozc-hiragana.png"
-+install -D -m 644 ../scripts/icons/ui-katakana_full.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx-mozc-katakana-full.png"
-+install -D -m 644 ../scripts/icons/ui-katakana_half.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx-mozc-katakana-half.png"
-+install -D -m 644 ../scripts/icons/ui-dictionary.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx-mozc-dictionary.png"
-+install -D -m 644 ../scripts/icons/ui-properties.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx-mozc-properties.png"
-+install -D -m 644 ../scripts/icons/ui-tool.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx-mozc-tool.png"
++install -D -m 644 data/images/product_icon_32bpp-128.png "${PREFIX}/share/icons/hicolor/128x128/apps/org.fcitx.Fcitx5.fcitx_mozc.png"
++install -D -m 644 data/images/unix/ime_product_icon_opensource-32.png "${PREFIX}/share/icons/hicolor/32x32/apps/org.fcitx.Fcitx5.fcitx_mozc.png"
++install -D -m 644 ../scripts/icons/ui-alpha_full.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx_mozc_alpha_full.png"
++install -D -m 644 ../scripts/icons/ui-alpha_half.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx_mozc_alpha_half.png"
++install -D -m 644 ../scripts/icons/ui-direct.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx_mozc_direct.png"
++install -D -m 644 ../scripts/icons/ui-hiragana.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx_mozc_hiragana.png"
++install -D -m 644 ../scripts/icons/ui-katakana_full.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx_mozc_katakana_full.png"
++install -D -m 644 ../scripts/icons/ui-katakana_half.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx_mozc_katakana_half.png"
++install -D -m 644 ../scripts/icons/ui-dictionary.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx_mozc_dictionary.png"
++install -D -m 644 ../scripts/icons/ui-properties.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx_mozc_properties.png"
++install -D -m 644 ../scripts/icons/ui-tool.png "${PREFIX}/share/icons/hicolor/48x48/apps/org.fcitx.Fcitx5.fcitx_mozc_tool.png"
 +
-+ln -sf org.fcitx.Fcitx5.fcitx-mozc.png "${PREFIX}/share/icons/hicolor/128x128/apps/fcitx-mozc.png"
-+ln -sf org.fcitx.Fcitx5.fcitx-mozc.png "${PREFIX}/share/icons/hicolor/32x32/apps/fcitx-mozc.png"
-+ln -sf org.fcitx.Fcitx5.fcitx-mozc-alpha-full.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx-mozc-alpha-full.png"
-+ln -sf org.fcitx.Fcitx5.fcitx-mozc-alpha-half.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx-mozc-alpha-half.png"
-+ln -sf org.fcitx.Fcitx5.fcitx-mozc-direct.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx-mozc-direct.png"
-+ln -sf org.fcitx.Fcitx5.fcitx-mozc-hiragana.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx-mozc-hiragana.png"
-+ln -sf org.fcitx.Fcitx5.fcitx-mozc-katakana-full.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx-mozc-katakana-full.png"
-+ln -sf org.fcitx.Fcitx5.fcitx-mozc-katakana-half.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx-mozc-katakana-half.png"
-+ln -sf org.fcitx.Fcitx5.fcitx-mozc-dictionary.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx-mozc-dictionary.png"
-+ln -sf org.fcitx.Fcitx5.fcitx-mozc-properties.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx-mozc-properties.png"
-+ln -sf org.fcitx.Fcitx5.fcitx-mozc-tool.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx-mozc-tool.png"
++ln -sf org.fcitx.Fcitx5.fcitx_mozc.png "${PREFIX}/share/icons/hicolor/128x128/apps/fcitx_mozc.png"
++ln -sf org.fcitx.Fcitx5.fcitx_mozc.png "${PREFIX}/share/icons/hicolor/32x32/apps/fcitx_mozc.png"
++ln -sf org.fcitx.Fcitx5.fcitx_mozc_alpha_full.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx_mozc_alpha_full.png"
++ln -sf org.fcitx.Fcitx5.fcitx_mozc_alpha_half.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx_mozc_alpha_half.png"
++ln -sf org.fcitx.Fcitx5.fcitx_mozc_direct.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx_mozc_direct.png"
++ln -sf org.fcitx.Fcitx5.fcitx_mozc_hiragana.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx_mozc_hiragana.png"
++ln -sf org.fcitx.Fcitx5.fcitx_mozc_katakana_full.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx_mozc_katakana_full.png"
++ln -sf org.fcitx.Fcitx5.fcitx_mozc_katakana_half.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx_mozc_katakana_half.png"
++ln -sf org.fcitx.Fcitx5.fcitx_mozc_dictionary.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx_mozc_dictionary.png"
++ln -sf org.fcitx.Fcitx5.fcitx_mozc_properties.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx_mozc_properties.png"
++ln -sf org.fcitx.Fcitx5.fcitx_mozc_tool.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx_mozc_tool.png"
 diff --git a/scripts/install_server b/scripts/install_server
 new file mode 100755
-index 0000000..726a42f
+index 00000000..726a42f5
 --- /dev/null
 +++ b/scripts/install_server
 @@ -0,0 +1,9 @@
@@ -210,7 +210,7 @@ index 0000000..726a42f
 +install -m 644 data/installer/*.html "${PREFIX}/share/doc/mozc/"
 diff --git a/scripts/install_server_bazel b/scripts/install_server_bazel
 new file mode 100755
-index 0000000..c567825
+index 00000000..c567825d
 --- /dev/null
 +++ b/scripts/install_server_bazel
 @@ -0,0 +1,8 @@
@@ -224,7 +224,7 @@ index 0000000..c567825
 +install -m 644 data/installer/*.html "${PREFIX}/share/doc/mozc/"
 diff --git a/scripts/update_fcitx5_metainfo b/scripts/update_fcitx5_metainfo
 new file mode 100755
-index 0000000..978dc8e
+index 00000000..978dc8e6
 --- /dev/null
 +++ b/scripts/update_fcitx5_metainfo
 @@ -0,0 +1,17 @@
@@ -246,7 +246,7 @@ index 0000000..978dc8e
 +
 +mv unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in{.new,}
 diff --git a/src/WORKSPACE.bazel b/src/WORKSPACE.bazel
-index d744883..664ba15 100644
+index d7448832..664ba155 100644
 --- a/src/WORKSPACE.bazel
 +++ b/src/WORKSPACE.bazel
 @@ -140,6 +140,18 @@ pkg_config_repository(
@@ -269,10 +269,10 @@ index d744883..664ba15 100644
  new_local_repository(
      name = "ja_usage_dict",
 diff --git a/src/build_mozc.py b/src/build_mozc.py
-index 7439408..ba255a9 100755
+index f3f55e9d..c38a2b63 100755
 --- a/src/build_mozc.py
 +++ b/src/build_mozc.py
-@@ -163,6 +163,8 @@ def GetGypFileNames(options):
+@@ -164,6 +164,8 @@ def GetGypFileNames(options):
      gyp_file_names.extend(glob.glob('%s/win32/*/*.gyp' % OSS_SRC_DIR))
    elif options.target_platform == 'Linux':
      gyp_file_names.extend(glob.glob('%s/unix/emacs/*.gyp' % OSS_SRC_DIR))
@@ -283,7 +283,7 @@ index 7439408..ba255a9 100755
  
 diff --git a/src/unix/fcitx/BUILD b/src/unix/fcitx/BUILD
 new file mode 100644
-index 0000000..2f90b3e
+index 00000000..2f90b3e1
 --- /dev/null
 +++ b/src/unix/fcitx/BUILD
 @@ -0,0 +1,99 @@
@@ -388,7 +388,7 @@ index 0000000..2f90b3e
 +
 diff --git a/src/unix/fcitx/eim.cc b/src/unix/fcitx/eim.cc
 new file mode 100644
-index 0000000..b063c52
+index 00000000..b063c521
 --- /dev/null
 +++ b/src/unix/fcitx/eim.cc
 @@ -0,0 +1,275 @@
@@ -669,7 +669,7 @@ index 0000000..b063c52
 +}
 diff --git a/src/unix/fcitx/fcitx-mozc.conf b/src/unix/fcitx/fcitx-mozc.conf
 new file mode 100644
-index 0000000..65d0e11
+index 00000000..65d0e113
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx-mozc.conf
 @@ -0,0 +1,11 @@
@@ -686,7 +686,7 @@ index 0000000..65d0e11
 +LoadLocal=True
 diff --git a/src/unix/fcitx/fcitx.gyp b/src/unix/fcitx/fcitx.gyp
 new file mode 100644
-index 0000000..7fedaa0
+index 00000000..7fedaa04
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx.gyp
 @@ -0,0 +1,110 @@
@@ -802,7 +802,7 @@ index 0000000..7fedaa0
 +}
 diff --git a/src/unix/fcitx/fcitx_key_event_handler.cc b/src/unix/fcitx/fcitx_key_event_handler.cc
 new file mode 100644
-index 0000000..61cbe92
+index 00000000..61cbe92e
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_key_event_handler.cc
 @@ -0,0 +1,244 @@
@@ -1052,7 +1052,7 @@ index 0000000..61cbe92
 +}  // namespace mozc
 diff --git a/src/unix/fcitx/fcitx_key_event_handler.h b/src/unix/fcitx/fcitx_key_event_handler.h
 new file mode 100644
-index 0000000..d11a440
+index 00000000..d11a440f
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_key_event_handler.h
 @@ -0,0 +1,79 @@
@@ -1137,7 +1137,7 @@ index 0000000..d11a440
 +#endif  // MOZC_UNIX_FCITX_KEY_EVENT_HANDLER_H_
 diff --git a/src/unix/fcitx/fcitx_key_translator.cc b/src/unix/fcitx/fcitx_key_translator.cc
 new file mode 100644
-index 0000000..775adac
+index 00000000..775adaca
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_key_translator.cc
 @@ -0,0 +1,421 @@
@@ -1564,7 +1564,7 @@ index 0000000..775adac
 +}  // namespace mozc
 diff --git a/src/unix/fcitx/fcitx_key_translator.h b/src/unix/fcitx/fcitx_key_translator.h
 new file mode 100644
-index 0000000..ca90895
+index 00000000..ca908959
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_key_translator.h
 @@ -0,0 +1,93 @@
@@ -1663,7 +1663,7 @@ index 0000000..ca90895
 +#endif  // MOZC_UNIX_FCITX_FCITX_KEY_TRANSLATOR_H_
 diff --git a/src/unix/fcitx/fcitx_mozc.cc b/src/unix/fcitx/fcitx_mozc.cc
 new file mode 100644
-index 0000000..351d2e1
+index 00000000..351d2e12
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_mozc.cc
 @@ -0,0 +1,553 @@
@@ -2222,7 +2222,7 @@ index 0000000..351d2e1
 +}  // namespace mozc_unix_scim
 diff --git a/src/unix/fcitx/fcitx_mozc.h b/src/unix/fcitx/fcitx_mozc.h
 new file mode 100644
-index 0000000..1bef6b3
+index 00000000..1bef6b30
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_mozc.h
 @@ -0,0 +1,176 @@
@@ -2404,7 +2404,7 @@ index 0000000..1bef6b3
 +
 diff --git a/src/unix/fcitx/gen_fcitx_mozc_i18n.sh b/src/unix/fcitx/gen_fcitx_mozc_i18n.sh
 new file mode 100755
-index 0000000..97ff4a4
+index 00000000..97ff4a49
 --- /dev/null
 +++ b/src/unix/fcitx/gen_fcitx_mozc_i18n.sh
 @@ -0,0 +1,10 @@
@@ -2420,7 +2420,7 @@ index 0000000..97ff4a4
 +done
 diff --git a/src/unix/fcitx/mozc.conf b/src/unix/fcitx/mozc.conf
 new file mode 100644
-index 0000000..ad19230
+index 00000000..ad192303
 --- /dev/null
 +++ b/src/unix/fcitx/mozc.conf
 @@ -0,0 +1,7 @@
@@ -2433,7 +2433,7 @@ index 0000000..ad19230
 +Parent=fcitx-mozc
 diff --git a/src/unix/fcitx/mozc_connection.cc b/src/unix/fcitx/mozc_connection.cc
 new file mode 100755
-index 0000000..251650a
+index 00000000..251650a5
 --- /dev/null
 +++ b/src/unix/fcitx/mozc_connection.cc
 @@ -0,0 +1,209 @@
@@ -2648,7 +2648,7 @@ index 0000000..251650a
 +}  // namespace mozc
 diff --git a/src/unix/fcitx/mozc_connection.h b/src/unix/fcitx/mozc_connection.h
 new file mode 100755
-index 0000000..7417575
+index 00000000..74175757
 --- /dev/null
 +++ b/src/unix/fcitx/mozc_connection.h
 @@ -0,0 +1,152 @@
@@ -2806,7 +2806,7 @@ index 0000000..7417575
 +#endif  // MOZC_UNIX_SCIM_MOZC_CONNECTION_H_
 diff --git a/src/unix/fcitx/mozc_response_parser.cc b/src/unix/fcitx/mozc_response_parser.cc
 new file mode 100755
-index 0000000..d11589e
+index 00000000..d11589e8
 --- /dev/null
 +++ b/src/unix/fcitx/mozc_response_parser.cc
 @@ -0,0 +1,448 @@
@@ -3260,7 +3260,7 @@ index 0000000..d11589e
 +}  // namespace mozc
 diff --git a/src/unix/fcitx/mozc_response_parser.h b/src/unix/fcitx/mozc_response_parser.h
 new file mode 100755
-index 0000000..9e51056
+index 00000000..9e510562
 --- /dev/null
 +++ b/src/unix/fcitx/mozc_response_parser.h
 @@ -0,0 +1,97 @@
@@ -3363,7 +3363,7 @@ index 0000000..9e51056
 +#endif  // MOZC_UNIX_FCITX_MOZC_RESPONSE_PARSER_H_
 diff --git a/src/unix/fcitx/po/Messages.sh b/src/unix/fcitx/po/Messages.sh
 new file mode 100755
-index 0000000..be34171
+index 00000000..be341716
 --- /dev/null
 +++ b/src/unix/fcitx/po/Messages.sh
 @@ -0,0 +1,33 @@
@@ -3402,7 +3402,7 @@ index 0000000..be34171
 +echo "Done"
 diff --git a/src/unix/fcitx/po/ca.po b/src/unix/fcitx/po/ca.po
 new file mode 100644
-index 0000000..ef743e2
+index 00000000..ef743e28
 --- /dev/null
 +++ b/src/unix/fcitx/po/ca.po
 @@ -0,0 +1,80 @@
@@ -3488,7 +3488,7 @@ index 0000000..ef743e2
 +msgstr "Premeu Ctrl+Alt+H per mostrar els usos."
 diff --git a/src/unix/fcitx/po/da.po b/src/unix/fcitx/po/da.po
 new file mode 100644
-index 0000000..e67d77c
+index 00000000..e67d77ce
 --- /dev/null
 +++ b/src/unix/fcitx/po/da.po
 @@ -0,0 +1,80 @@
@@ -3574,7 +3574,7 @@ index 0000000..e67d77c
 +msgstr "Tryk på Ctrl+Alt+H for at vise anvendelser."
 diff --git a/src/unix/fcitx/po/de.po b/src/unix/fcitx/po/de.po
 new file mode 100644
-index 0000000..c1c17b1
+index 00000000..c1c17b15
 --- /dev/null
 +++ b/src/unix/fcitx/po/de.po
 @@ -0,0 +1,86 @@
@@ -3666,7 +3666,7 @@ index 0000000..c1c17b1
 +msgstr "Ctrl+Alt+H um die Hilfe anzuzeigen"
 diff --git a/src/unix/fcitx/po/fcitx-mozc.pot b/src/unix/fcitx/po/fcitx-mozc.pot
 new file mode 100644
-index 0000000..56f6c24
+index 00000000..56f6c247
 --- /dev/null
 +++ b/src/unix/fcitx/po/fcitx-mozc.pot
 @@ -0,0 +1,78 @@
@@ -3750,7 +3750,7 @@ index 0000000..56f6c24
 +msgstr ""
 diff --git a/src/unix/fcitx/po/ja.po b/src/unix/fcitx/po/ja.po
 new file mode 100644
-index 0000000..6de66d8
+index 00000000..6de66d8a
 --- /dev/null
 +++ b/src/unix/fcitx/po/ja.po
 @@ -0,0 +1,87 @@
@@ -3843,7 +3843,7 @@ index 0000000..6de66d8
 +msgstr "Ctrl+Alt+H キーを押して用例を表示"
 diff --git a/src/unix/fcitx/po/ko.po b/src/unix/fcitx/po/ko.po
 new file mode 100644
-index 0000000..8ff2e9b
+index 00000000..8ff2e9be
 --- /dev/null
 +++ b/src/unix/fcitx/po/ko.po
 @@ -0,0 +1,82 @@
@@ -3931,7 +3931,7 @@ index 0000000..8ff2e9b
 +msgstr "사용법을 보려면 Ctrl+Alt+H를 누릅니다."
 diff --git a/src/unix/fcitx/po/ru.po b/src/unix/fcitx/po/ru.po
 new file mode 100644
-index 0000000..20bf325
+index 00000000..20bf3251
 --- /dev/null
 +++ b/src/unix/fcitx/po/ru.po
 @@ -0,0 +1,83 @@
@@ -4020,7 +4020,7 @@ index 0000000..20bf325
 +msgstr "Нажмите Ctrl+Alt+H, чтобы показать использование."
 diff --git a/src/unix/fcitx/po/zh_CN.po b/src/unix/fcitx/po/zh_CN.po
 new file mode 100644
-index 0000000..799ee99
+index 00000000..799ee998
 --- /dev/null
 +++ b/src/unix/fcitx/po/zh_CN.po
 @@ -0,0 +1,85 @@
@@ -4111,7 +4111,7 @@ index 0000000..799ee99
 +msgstr "按下 Ctrl+Alt+H 显示用法。"
 diff --git a/src/unix/fcitx/po/zh_TW.po b/src/unix/fcitx/po/zh_TW.po
 new file mode 100644
-index 0000000..2c83dfe
+index 00000000..2c83dfe6
 --- /dev/null
 +++ b/src/unix/fcitx/po/zh_TW.po
 @@ -0,0 +1,84 @@
@@ -4201,7 +4201,7 @@ index 0000000..2c83dfe
 +msgstr "按下 Ctrl+Alt+H 顯示用法。"
 diff --git a/src/unix/fcitx/surrounding_text_util.cc b/src/unix/fcitx/surrounding_text_util.cc
 new file mode 100644
-index 0000000..a4dc7d2
+index 00000000..a4dc7d29
 --- /dev/null
 +++ b/src/unix/fcitx/surrounding_text_util.cc
 @@ -0,0 +1,244 @@
@@ -4451,7 +4451,7 @@ index 0000000..a4dc7d2
 +}  // namespace mozc
 diff --git a/src/unix/fcitx/surrounding_text_util.h b/src/unix/fcitx/surrounding_text_util.h
 new file mode 100644
-index 0000000..ce54291
+index 00000000..ce54291c
 --- /dev/null
 +++ b/src/unix/fcitx/surrounding_text_util.h
 @@ -0,0 +1,89 @@
@@ -4546,7 +4546,7 @@ index 0000000..ce54291
 +#endif  // MOZC_UNIX_FCITX_SURROUNDING_TEXT_URIL_H_
 diff --git a/src/unix/fcitx5/BUILD b/src/unix/fcitx5/BUILD
 new file mode 100644
-index 0000000..14295aa
+index 00000000..14295aa2
 --- /dev/null
 +++ b/src/unix/fcitx5/BUILD
 @@ -0,0 +1,115 @@
@@ -4667,7 +4667,7 @@ index 0000000..14295aa
 +
 diff --git a/src/unix/fcitx5/Messages.sh b/src/unix/fcitx5/Messages.sh
 new file mode 100755
-index 0000000..e705349
+index 00000000..e705349b
 --- /dev/null
 +++ b/src/unix/fcitx5/Messages.sh
 @@ -0,0 +1,3 @@
@@ -4676,7 +4676,7 @@ index 0000000..e705349
 +gen_pot cxx:desktop:appdata fcitx5-mozc po .
 diff --git a/src/unix/fcitx5/fcitx5.gyp b/src/unix/fcitx5/fcitx5.gyp
 new file mode 100644
-index 0000000..58d9a66
+index 00000000..58d9a660
 --- /dev/null
 +++ b/src/unix/fcitx5/fcitx5.gyp
 @@ -0,0 +1,118 @@
@@ -4800,7 +4800,7 @@ index 0000000..58d9a66
 +}
 diff --git a/src/unix/fcitx5/fcitx_key_event_handler.cc b/src/unix/fcitx5/fcitx_key_event_handler.cc
 new file mode 100644
-index 0000000..119a57f
+index 00000000..7777753b
 --- /dev/null
 +++ b/src/unix/fcitx5/fcitx_key_event_handler.cc
 @@ -0,0 +1,245 @@
@@ -4839,8 +4839,8 @@ index 0000000..119a57f
 +#include <map>
 +
 +#include "base/logging.h"
-+#include "base/vlog.h"
 +#include "base/singleton.h"
++#include "base/vlog.h"
 +
 +namespace fcitx {
 +
@@ -5051,7 +5051,7 @@ index 0000000..119a57f
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/fcitx_key_event_handler.h b/src/unix/fcitx5/fcitx_key_event_handler.h
 new file mode 100644
-index 0000000..1ba2655
+index 00000000..1ba2655a
 --- /dev/null
 +++ b/src/unix/fcitx5/fcitx_key_event_handler.h
 @@ -0,0 +1,78 @@
@@ -5135,7 +5135,7 @@ index 0000000..1ba2655
 +#endif  // UNIX_FCITX5_FCITX_KEY_EVENT_HANDLER_H_
 diff --git a/src/unix/fcitx5/fcitx_key_translator.cc b/src/unix/fcitx5/fcitx_key_translator.cc
 new file mode 100644
-index 0000000..fe5992f
+index 00000000..fe5992ff
 --- /dev/null
 +++ b/src/unix/fcitx5/fcitx_key_translator.cc
 @@ -0,0 +1,417 @@
@@ -5558,7 +5558,7 @@ index 0000000..fe5992f
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/fcitx_key_translator.h b/src/unix/fcitx5/fcitx_key_translator.h
 new file mode 100644
-index 0000000..65c513d
+index 00000000..65c513da
 --- /dev/null
 +++ b/src/unix/fcitx5/fcitx_key_translator.h
 @@ -0,0 +1,78 @@
@@ -5642,7 +5642,7 @@ index 0000000..65c513d
 +#endif  // MOZC_UNIX_FCITX_FCITX_KEY_TRANSLATOR_H_
 diff --git a/src/unix/fcitx5/mozc-addon.conf b/src/unix/fcitx5/mozc-addon.conf
 new file mode 100644
-index 0000000..88fbc11
+index 00000000..88fbc11b
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc-addon.conf
 @@ -0,0 +1,10 @@
@@ -5658,20 +5658,20 @@ index 0000000..88fbc11
 +0=clipboard
 diff --git a/src/unix/fcitx5/mozc.conf b/src/unix/fcitx5/mozc.conf
 new file mode 100644
-index 0000000..e87064e
+index 00000000..40725d7d
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc.conf
 @@ -0,0 +1,7 @@
 +[InputMethod]
 +Name=Mozc
-+Icon=fcitx-mozc
++Icon=fcitx_mozc
 +Label=あ
 +LangCode=ja
 +Addon=mozc
 +Configurable=True
 diff --git a/src/unix/fcitx5/mozc_client_pool.cc b/src/unix/fcitx5/mozc_client_pool.cc
 new file mode 100644
-index 0000000..d3894a0
+index 00000000..d3894a0d
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_client_pool.cc
 @@ -0,0 +1,114 @@
@@ -5791,7 +5791,7 @@ index 0000000..d3894a0
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/mozc_client_pool.h b/src/unix/fcitx5/mozc_client_pool.h
 new file mode 100644
-index 0000000..3b6eaa3
+index 00000000..3b6eaa3b
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_client_pool.h
 @@ -0,0 +1,87 @@
@@ -5885,10 +5885,10 @@ index 0000000..3b6eaa3
 \ No newline at end of file
 diff --git a/src/unix/fcitx5/mozc_connection.cc b/src/unix/fcitx5/mozc_connection.cc
 new file mode 100644
-index 0000000..85ceda4
+index 00000000..3f281e44
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_connection.cc
-@@ -0,0 +1,67 @@
+@@ -0,0 +1,69 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -5924,8 +5924,8 @@ index 0000000..85ceda4
 +#include <string>
 +
 +#include "base/logging.h"
-+#include "base/vlog.h"
 +#include "base/util.h"
++#include "base/vlog.h"
 +#include "client/client.h"
 +#include "ipc/ipc.h"
 +#include "protocol/commands.pb.h"
@@ -5947,7 +5947,9 @@ index 0000000..85ceda4
 +  MOZC_VLOG(1) << "MozcConnection is created";
 +}
 +
-+MozcConnection::~MozcConnection() { MOZC_VLOG(1) << "MozcConnection is destroyed"; }
++MozcConnection::~MozcConnection() {
++  MOZC_VLOG(1) << "MozcConnection is destroyed";
++}
 +
 +std::unique_ptr<mozc::client::ClientInterface> MozcConnection::CreateClient() {
 +  auto client = CreateAndConfigureClient();
@@ -5958,7 +5960,7 @@ index 0000000..85ceda4
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/mozc_connection.h b/src/unix/fcitx5/mozc_connection.h
 new file mode 100644
-index 0000000..4d5e0ee
+index 00000000..4d5e0eee
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_connection.h
 @@ -0,0 +1,70 @@
@@ -6034,7 +6036,7 @@ index 0000000..4d5e0ee
 +#endif  // MOZC_UNIX_FCITX5_MOZC_CONNECTION_H_
 diff --git a/src/unix/fcitx5/mozc_engine.cc b/src/unix/fcitx5/mozc_engine.cc
 new file mode 100644
-index 0000000..7e3e78d
+index 00000000..d00d3114
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_engine.cc
 @@ -0,0 +1,331 @@
@@ -6089,21 +6091,21 @@ index 0000000..7e3e78d
 +} kPropCompositionModes[] = {
 +    {
 +        "mozc-mode-direct",
-+        "fcitx-mozc-direct",
++        "fcitx_mozc_direct",
 +        "A",
 +        N_("Direct"),
 +        mozc::commands::DIRECT,
 +    },
 +    {
 +        "mozc-mode-hiragana",
-+        "fcitx-mozc-hiragana",
++        "fcitx_mozc_hiragana",
 +        "\xe3\x81\x82",  // Hiragana letter A in UTF-8.
 +        N_("Hiragana"),
 +        mozc::commands::HIRAGANA,
 +    },
 +    {
 +        "mozc-mode-katakana_full",
-+        "fcitx-mozc-katakana-full",
++        "fcitx_mozc_katakana_full",
 +        "\xe3\x82\xa2",  // Katakana letter A.
 +        N_("Full Katakana"),
 +        mozc::commands::FULL_KATAKANA,
@@ -6111,7 +6113,7 @@ index 0000000..7e3e78d
 +    {
 +
 +        "mozc-mode-alpha_half",
-+        "fcitx-mozc-alpha-half",
++        "fcitx_mozc_alpha_half",
 +        "A",
 +        N_("Half ASCII"),
 +        mozc::commands::HALF_ASCII,
@@ -6119,14 +6121,14 @@ index 0000000..7e3e78d
 +    {
 +
 +        "mozc-mode-alpha_full",
-+        "fcitx-mozc-alpha-full",
++        "fcitx_mozc_alpha_full",
 +        "\xef\xbc\xa1",  // Full width ASCII letter A.
 +        N_("Full ASCII"),
 +        mozc::commands::FULL_ASCII,
 +    },
 +    {
 +        "mozc-mode-katakana_half",
-+        "fcitx-mozc-katakana-half",
++        "fcitx_mozc_katakana_half",
 +        "\xef\xbd\xb1",  // Half width Katakana letter A.
 +        N_("Half Katakana"),
 +        mozc::commands::HALF_KATAKANA,
@@ -6186,7 +6188,7 @@ index 0000000..7e3e78d
 +  instance_->userInterfaceManager().registerAction("mozc-tool", &toolAction_);
 +  toolAction_.setShortText(_("Mozc Settings"));
 +  toolAction_.setLongText(_("Mozc Settings"));
-+  toolAction_.setIcon("fcitx-mozc-tool");
++  toolAction_.setIcon("fcitx_mozc_tool");
 +
 +  int i = 0;
 +  for (auto &modeAction : modeActions_) {
@@ -6213,7 +6215,7 @@ index 0000000..7e3e78d
 +  instance_->userInterfaceManager().registerAction("mozc-tool-config",
 +                                                   &configToolAction_);
 +  configToolAction_.setShortText(_("Configuration Tool"));
-+  configToolAction_.setIcon("fcitx-mozc-tool");
++  configToolAction_.setIcon("fcitx_mozc_tool");
 +  configToolAction_.connect<SimpleAction::Activated>([](InputContext *) {
 +    mozc::Process::SpawnMozcProcess("mozc_tool", "--mode=config_dialog");
 +  });
@@ -6221,7 +6223,7 @@ index 0000000..7e3e78d
 +  instance_->userInterfaceManager().registerAction("mozc-tool-dict",
 +                                                   &dictionaryToolAction_);
 +  dictionaryToolAction_.setShortText(_("Dictionary Tool"));
-+  dictionaryToolAction_.setIcon("fcitx-mozc-dictionary");
++  dictionaryToolAction_.setIcon("fcitx_mozc_dictionary");
 +  dictionaryToolAction_.connect<SimpleAction::Activated>([](InputContext *) {
 +    mozc::Process::SpawnMozcProcess("mozc_tool", "--mode=dictionary_tool");
 +  });
@@ -6371,7 +6373,7 @@ index 0000000..7e3e78d
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/mozc_engine.h b/src/unix/fcitx5/mozc_engine.h
 new file mode 100644
-index 0000000..21b41e0
+index 00000000..21b41e0c
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_engine.h
 @@ -0,0 +1,169 @@
@@ -6546,7 +6548,7 @@ index 0000000..21b41e0
 +#endif  // _FCITX_UNIX_FCITX5_MOZC_ENGINE_H_
 diff --git a/src/unix/fcitx5/mozc_engine_factory.cc b/src/unix/fcitx5/mozc_engine_factory.cc
 new file mode 100644
-index 0000000..dc8316e
+index 00000000..dc8316e4
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_engine_factory.cc
 @@ -0,0 +1,73 @@
@@ -6625,7 +6627,7 @@ index 0000000..dc8316e
 +FCITX_ADDON_FACTORY(fcitx::MozcEngineFactory)
 diff --git a/src/unix/fcitx5/mozc_response_parser.cc b/src/unix/fcitx5/mozc_response_parser.cc
 new file mode 100644
-index 0000000..a0536eb
+index 00000000..ec0224c6
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_response_parser.cc
 @@ -0,0 +1,484 @@
@@ -6671,9 +6673,9 @@ index 0000000..a0536eb
 +#include <vector>
 +
 +#include "base/logging.h"
-+#include "base/vlog.h"
 +#include "base/process.h"
 +#include "base/util.h"
++#include "base/vlog.h"
 +#include "protocol/commands.pb.h"
 +#include "unix/fcitx5/mozc_engine.h"
 +#include "unix/fcitx5/surrounding_text_util.h"
@@ -7115,7 +7117,7 @@ index 0000000..a0536eb
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/mozc_response_parser.h b/src/unix/fcitx5/mozc_response_parser.h
 new file mode 100644
-index 0000000..2deca50
+index 00000000..2deca500
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_response_parser.h
 @@ -0,0 +1,89 @@
@@ -7210,10 +7212,10 @@ index 0000000..2deca50
 +#endif  // MOZC_UNIX_FCITX_MOZC_RESPONSE_PARSER_H_
 diff --git a/src/unix/fcitx5/mozc_state.cc b/src/unix/fcitx5/mozc_state.cc
 new file mode 100644
-index 0000000..b00b207
+index 00000000..e438d1d4
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_state.cc
-@@ -0,0 +1,441 @@
+@@ -0,0 +1,439 @@
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
 +//
@@ -7256,10 +7258,10 @@ index 0000000..b00b207
 +#include "base/const.h"
 +#include "base/file_util.h"
 +#include "base/logging.h"
-+#include "base/vlog.h"
 +#include "base/process.h"
 +#include "base/system_util.h"
 +#include "base/util.h"
++#include "base/vlog.h"
 +#include "client/client_interface.h"
 +#include "unix/fcitx5/fcitx_key_event_handler.h"
 +#include "unix/fcitx5/mozc_connection.h"
@@ -7288,9 +7290,7 @@ index 0000000..b00b207
 +  }
 +}
 +
-+MozcState::~MozcState() {
-+  MOZC_VLOG(1) << "MozcState destroyed.";
-+}
++MozcState::~MozcState() { MOZC_VLOG(1) << "MozcState destroyed."; }
 +
 +void MozcState::UpdatePreeditMethod() {
 +  mozc::config::Config config;
@@ -7657,7 +7657,7 @@ index 0000000..b00b207
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/mozc_state.h b/src/unix/fcitx5/mozc_state.h
 new file mode 100644
-index 0000000..5df7551
+index 00000000..5df75519
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_state.h
 @@ -0,0 +1,169 @@
@@ -7832,10 +7832,10 @@ index 0000000..5df7551
 +#endif  // MOZC_UNIX_FCITX_FCITX_MOZC_H_
 diff --git a/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in b/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in
 new file mode 100644
-index 0000000..eb2e055
+index 00000000..1d70ff0f
 --- /dev/null
 +++ b/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,27 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<component type="addon">
 +  <id>org.fcitx.Fcitx5.Addon.Mozc</id>
@@ -7852,6 +7852,7 @@ index 0000000..eb2e055
 +  <url type="vcs-browser">https://github.com/fcitx/mozc</url>
 +  <project_group>Fcitx</project_group>
 +  <releases>
++    <release version="2.30.5448.102" date="2024-04-25"></release>
 +    <release version="2.30.5432.102" date="2024-04-06"></release>
 +    <release version="2.29.5400.102" date="2024-03-07"></release>
 +    <release version="2.29.5374.102" date="2024-02-09"></release>
@@ -7864,7 +7865,7 @@ index 0000000..eb2e055
 +</component>
 diff --git a/src/unix/fcitx5/po/LINGUAS b/src/unix/fcitx5/po/LINGUAS
 new file mode 100644
-index 0000000..f7c759a
+index 00000000..f7c759ac
 --- /dev/null
 +++ b/src/unix/fcitx5/po/LINGUAS
 @@ -0,0 +1,11 @@
@@ -7881,7 +7882,7 @@ index 0000000..f7c759a
 +zh_TW
 diff --git a/src/unix/fcitx5/po/ca.po b/src/unix/fcitx5/po/ca.po
 new file mode 100644
-index 0000000..d26bd40
+index 00000000..d26bd401
 --- /dev/null
 +++ b/src/unix/fcitx5/po/ca.po
 @@ -0,0 +1,139 @@
@@ -8026,7 +8027,7 @@ index 0000000..d26bd40
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/da.po b/src/unix/fcitx5/po/da.po
 new file mode 100644
-index 0000000..2ed5dc2
+index 00000000..2ed5dc29
 --- /dev/null
 +++ b/src/unix/fcitx5/po/da.po
 @@ -0,0 +1,139 @@
@@ -8171,7 +8172,7 @@ index 0000000..2ed5dc2
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/de.po b/src/unix/fcitx5/po/de.po
 new file mode 100644
-index 0000000..059c7a6
+index 00000000..059c7a62
 --- /dev/null
 +++ b/src/unix/fcitx5/po/de.po
 @@ -0,0 +1,140 @@
@@ -8317,7 +8318,7 @@ index 0000000..059c7a6
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/fcitx5-mozc.pot b/src/unix/fcitx5/po/fcitx5-mozc.pot
 new file mode 100644
-index 0000000..7133997
+index 00000000..71339973
 --- /dev/null
 +++ b/src/unix/fcitx5/po/fcitx5-mozc.pot
 @@ -0,0 +1,135 @@
@@ -8458,7 +8459,7 @@ index 0000000..7133997
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/he.po b/src/unix/fcitx5/po/he.po
 new file mode 100644
-index 0000000..a81ecb2
+index 00000000..a81ecb2d
 --- /dev/null
 +++ b/src/unix/fcitx5/po/he.po
 @@ -0,0 +1,141 @@
@@ -8605,7 +8606,7 @@ index 0000000..a81ecb2
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/ja.po b/src/unix/fcitx5/po/ja.po
 new file mode 100644
-index 0000000..f1ae1b8
+index 00000000..f1ae1b88
 --- /dev/null
 +++ b/src/unix/fcitx5/po/ja.po
 @@ -0,0 +1,140 @@
@@ -8751,7 +8752,7 @@ index 0000000..f1ae1b8
 +msgstr "候補を縦に並べる"
 diff --git a/src/unix/fcitx5/po/ko.po b/src/unix/fcitx5/po/ko.po
 new file mode 100644
-index 0000000..246dbc5
+index 00000000..246dbc58
 --- /dev/null
 +++ b/src/unix/fcitx5/po/ko.po
 @@ -0,0 +1,141 @@
@@ -8898,7 +8899,7 @@ index 0000000..246dbc5
 +msgstr "세로 후보 목록"
 diff --git a/src/unix/fcitx5/po/ru.po b/src/unix/fcitx5/po/ru.po
 new file mode 100644
-index 0000000..64b7072
+index 00000000..64b70727
 --- /dev/null
 +++ b/src/unix/fcitx5/po/ru.po
 @@ -0,0 +1,143 @@
@@ -9047,7 +9048,7 @@ index 0000000..64b7072
 +msgstr "Вертикальный список кандидатов"
 diff --git a/src/unix/fcitx5/po/tr.po b/src/unix/fcitx5/po/tr.po
 new file mode 100644
-index 0000000..83fbc98
+index 00000000..83fbc984
 --- /dev/null
 +++ b/src/unix/fcitx5/po/tr.po
 @@ -0,0 +1,139 @@
@@ -9192,7 +9193,7 @@ index 0000000..83fbc98
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/zh_CN.po b/src/unix/fcitx5/po/zh_CN.po
 new file mode 100644
-index 0000000..9c5bcab
+index 00000000..9c5bcab0
 --- /dev/null
 +++ b/src/unix/fcitx5/po/zh_CN.po
 @@ -0,0 +1,140 @@
@@ -9338,7 +9339,7 @@ index 0000000..9c5bcab
 +msgstr "垂直候选列表"
 diff --git a/src/unix/fcitx5/po/zh_TW.po b/src/unix/fcitx5/po/zh_TW.po
 new file mode 100644
-index 0000000..e667890
+index 00000000..e667890f
 --- /dev/null
 +++ b/src/unix/fcitx5/po/zh_TW.po
 @@ -0,0 +1,144 @@
@@ -9488,7 +9489,7 @@ index 0000000..e667890
 +msgstr "垂直候選字列表"
 diff --git a/src/unix/fcitx5/surrounding_text_util.cc b/src/unix/fcitx5/surrounding_text_util.cc
 new file mode 100644
-index 0000000..7cfe723
+index 00000000..f4b88120
 --- /dev/null
 +++ b/src/unix/fcitx5/surrounding_text_util.cc
 @@ -0,0 +1,223 @@
@@ -9530,9 +9531,9 @@ index 0000000..7cfe723
 +#include <string>
 +
 +#include "base/logging.h"
-+#include "base/vlog.h"
 +#include "base/port.h"
 +#include "base/util.h"
++#include "base/vlog.h"
 +
 +namespace fcitx {
 +
@@ -9717,7 +9718,7 @@ index 0000000..7cfe723
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/surrounding_text_util.h b/src/unix/fcitx5/surrounding_text_util.h
 new file mode 100644
-index 0000000..77885ee
+index 00000000..77885ee5
 --- /dev/null
 +++ b/src/unix/fcitx5/surrounding_text_util.h
 @@ -0,0 +1,86 @@
