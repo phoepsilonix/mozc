@@ -12,6 +12,9 @@ rules:
   - base: ubuntu-lunar
     upstream: master
     mergeMethod: merge
+  - base: ubuntu-noble
+    upstream: master
+    mergeMethod: merge
   - base: main
     upstream: master
     mergeMethod: merge
