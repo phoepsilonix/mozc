@@ -1,6 +1,6 @@
 diff --git a/scripts/README.md b/scripts/README.md
 new file mode 100644
-index 00000000..599c6eb6
+index 000000000..599c6eb65
 --- /dev/null
 +++ b/scripts/README.md
 @@ -0,0 +1,6 @@
@@ -12,7 +12,7 @@ index 00000000..599c6eb6
 +There is no guranantee that these scripts work for everyone and everywhere.
 diff --git a/scripts/build b/scripts/build
 new file mode 100755
-index 00000000..b21022f8
+index 000000000..b21022f8b
 --- /dev/null
 +++ b/scripts/build
 @@ -0,0 +1,6 @@
@@ -24,7 +24,7 @@ index 00000000..b21022f8
 +python build_mozc.py build ${TARGETS} -c ${_bldtype}
 diff --git a/scripts/build_fcitx5 b/scripts/build_fcitx5
 new file mode 100755
-index 00000000..829e5c62
+index 000000000..829e5c62a
 --- /dev/null
 +++ b/scripts/build_fcitx5
 @@ -0,0 +1,6 @@
@@ -36,7 +36,7 @@ index 00000000..829e5c62
 +python build_mozc.py build ${_BUILD_TARGETS} -c ${_bldtype}
 diff --git a/scripts/build_fcitx5_bazel b/scripts/build_fcitx5_bazel
 new file mode 100755
-index 00000000..ec6b5aee
+index 000000000..ec6b5aee0
 --- /dev/null
 +++ b/scripts/build_fcitx5_bazel
 @@ -0,0 +1,5 @@
@@ -47,7 +47,7 @@ index 00000000..ec6b5aee
 +bazel build -c opt --copt=-fPIC  --config oss_linux "$@" $_BUILD_TARGETS
 diff --git a/scripts/clang-format.sh b/scripts/clang-format.sh
 new file mode 100755
-index 00000000..1b574d5e
+index 000000000..1b574d5e8
 --- /dev/null
 +++ b/scripts/clang-format.sh
 @@ -0,0 +1,2 @@
@@ -55,7 +55,7 @@ index 00000000..1b574d5e
 +find unix/fcitx5  -name '*.h' -o -name '*.cc'  | xargs clang-format -style=Google -i
 diff --git a/scripts/configure b/scripts/configure
 new file mode 100755
-index 00000000..1775d81a
+index 000000000..1775d81ae
 --- /dev/null
 +++ b/scripts/configure
 @@ -0,0 +1,2 @@
@@ -63,7 +63,7 @@ index 00000000..1775d81a
 +python build_mozc.py gyp "$@"
 diff --git a/scripts/get_mozc_version b/scripts/get_mozc_version
 new file mode 100755
-index 00000000..bb71ac01
+index 000000000..bb71ac012
 --- /dev/null
 +++ b/scripts/get_mozc_version
 @@ -0,0 +1,4 @@
@@ -73,7 +73,7 @@ index 00000000..bb71ac01
 +python3 -c 'from build_tools.mozc_version import MozcVersion; print(MozcVersion("bazel-bin/base/mozc_version.txt").GetVersionString())'
 diff --git a/scripts/install_fcitx b/scripts/install_fcitx
 new file mode 100755
-index 00000000..493f1e1c
+index 000000000..493f1e1c3
 --- /dev/null
 +++ b/scripts/install_fcitx
 @@ -0,0 +1,27 @@
@@ -106,7 +106,7 @@ index 00000000..493f1e1c
 +install -D -m 644 ../scripts/icons/ui-tool.png "${PREFIX}/share/fcitx/mozc/icon/mozc-tool.png"
 diff --git a/scripts/install_fcitx5 b/scripts/install_fcitx5
 new file mode 100755
-index 00000000..8d85f300
+index 000000000..8d85f3004
 --- /dev/null
 +++ b/scripts/install_fcitx5
 @@ -0,0 +1,9 @@
@@ -121,7 +121,7 @@ index 00000000..8d85f300
 +PREFIX="${PREFIX}" ../scripts/install_fcitx5_icons
 diff --git a/scripts/install_fcitx5_bazel b/scripts/install_fcitx5_bazel
 new file mode 100755
-index 00000000..629bb751
+index 000000000..629bb7512
 --- /dev/null
 +++ b/scripts/install_fcitx5_bazel
 @@ -0,0 +1,7 @@
@@ -134,7 +134,7 @@ index 00000000..629bb751
 +PREFIX="${PREFIX}" ../scripts/install_fcitx5_icons
 diff --git a/scripts/install_fcitx5_data b/scripts/install_fcitx5_data
 new file mode 100755
-index 00000000..aa05874b
+index 000000000..aa05874ba
 --- /dev/null
 +++ b/scripts/install_fcitx5_data
 @@ -0,0 +1,22 @@
@@ -162,7 +162,7 @@ index 00000000..aa05874b
 +rm -f unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml
 diff --git a/scripts/install_fcitx5_icons b/scripts/install_fcitx5_icons
 new file mode 100755
-index 00000000..e8f101bc
+index 000000000..e8f101bc2
 --- /dev/null
 +++ b/scripts/install_fcitx5_icons
 @@ -0,0 +1,27 @@
@@ -195,7 +195,7 @@ index 00000000..e8f101bc
 +ln -sf org.fcitx.Fcitx5.fcitx_mozc_tool.png "${PREFIX}/share/icons/hicolor/48x48/apps/fcitx_mozc_tool.png"
 diff --git a/scripts/install_server b/scripts/install_server
 new file mode 100755
-index 00000000..726a42f5
+index 000000000..726a42f5d
 --- /dev/null
 +++ b/scripts/install_server
 @@ -0,0 +1,9 @@
@@ -210,7 +210,7 @@ index 00000000..726a42f5
 +install -m 644 data/installer/*.html "${PREFIX}/share/doc/mozc/"
 diff --git a/scripts/install_server_bazel b/scripts/install_server_bazel
 new file mode 100755
-index 00000000..c567825d
+index 000000000..c567825d2
 --- /dev/null
 +++ b/scripts/install_server_bazel
 @@ -0,0 +1,8 @@
@@ -224,7 +224,7 @@ index 00000000..c567825d
 +install -m 644 data/installer/*.html "${PREFIX}/share/doc/mozc/"
 diff --git a/scripts/update_fcitx5_metainfo b/scripts/update_fcitx5_metainfo
 new file mode 100755
-index 00000000..978dc8e6
+index 000000000..978dc8e64
 --- /dev/null
 +++ b/scripts/update_fcitx5_metainfo
 @@ -0,0 +1,17 @@
@@ -246,10 +246,10 @@ index 00000000..978dc8e6
 +
 +mv unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in{.new,}
 diff --git a/src/WORKSPACE.bazel b/src/WORKSPACE.bazel
-index d7448832..664ba155 100644
+index d5138907f..af9a80bc8 100644
 --- a/src/WORKSPACE.bazel
 +++ b/src/WORKSPACE.bazel
-@@ -140,6 +140,18 @@ pkg_config_repository(
+@@ -169,6 +169,18 @@ pkg_config_repository(
    packages = ["glib-2.0", "gobject-2.0", "ibus-1.0"],
  )
  
@@ -269,7 +269,7 @@ index d7448832..664ba155 100644
  new_local_repository(
      name = "ja_usage_dict",
 diff --git a/src/build_mozc.py b/src/build_mozc.py
-index f3f55e9d..c38a2b63 100755
+index f3f55e9dc..c38a2b632 100755
 --- a/src/build_mozc.py
 +++ b/src/build_mozc.py
 @@ -164,6 +164,8 @@ def GetGypFileNames(options):
@@ -283,7 +283,7 @@ index f3f55e9d..c38a2b63 100755
  
 diff --git a/src/unix/fcitx/BUILD b/src/unix/fcitx/BUILD
 new file mode 100644
-index 00000000..2f90b3e1
+index 000000000..2f90b3e15
 --- /dev/null
 +++ b/src/unix/fcitx/BUILD
 @@ -0,0 +1,99 @@
@@ -388,7 +388,7 @@ index 00000000..2f90b3e1
 +
 diff --git a/src/unix/fcitx/eim.cc b/src/unix/fcitx/eim.cc
 new file mode 100644
-index 00000000..b063c521
+index 000000000..b063c5218
 --- /dev/null
 +++ b/src/unix/fcitx/eim.cc
 @@ -0,0 +1,275 @@
@@ -669,7 +669,7 @@ index 00000000..b063c521
 +}
 diff --git a/src/unix/fcitx/fcitx-mozc.conf b/src/unix/fcitx/fcitx-mozc.conf
 new file mode 100644
-index 00000000..65d0e113
+index 000000000..65d0e1133
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx-mozc.conf
 @@ -0,0 +1,11 @@
@@ -686,7 +686,7 @@ index 00000000..65d0e113
 +LoadLocal=True
 diff --git a/src/unix/fcitx/fcitx.gyp b/src/unix/fcitx/fcitx.gyp
 new file mode 100644
-index 00000000..7fedaa04
+index 000000000..7fedaa043
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx.gyp
 @@ -0,0 +1,110 @@
@@ -802,7 +802,7 @@ index 00000000..7fedaa04
 +}
 diff --git a/src/unix/fcitx/fcitx_key_event_handler.cc b/src/unix/fcitx/fcitx_key_event_handler.cc
 new file mode 100644
-index 00000000..61cbe92e
+index 000000000..61cbe92e9
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_key_event_handler.cc
 @@ -0,0 +1,244 @@
@@ -1052,7 +1052,7 @@ index 00000000..61cbe92e
 +}  // namespace mozc
 diff --git a/src/unix/fcitx/fcitx_key_event_handler.h b/src/unix/fcitx/fcitx_key_event_handler.h
 new file mode 100644
-index 00000000..d11a440f
+index 000000000..d11a440f2
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_key_event_handler.h
 @@ -0,0 +1,79 @@
@@ -1137,7 +1137,7 @@ index 00000000..d11a440f
 +#endif  // MOZC_UNIX_FCITX_KEY_EVENT_HANDLER_H_
 diff --git a/src/unix/fcitx/fcitx_key_translator.cc b/src/unix/fcitx/fcitx_key_translator.cc
 new file mode 100644
-index 00000000..775adaca
+index 000000000..775adaca2
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_key_translator.cc
 @@ -0,0 +1,421 @@
@@ -1564,7 +1564,7 @@ index 00000000..775adaca
 +}  // namespace mozc
 diff --git a/src/unix/fcitx/fcitx_key_translator.h b/src/unix/fcitx/fcitx_key_translator.h
 new file mode 100644
-index 00000000..ca908959
+index 000000000..ca9089592
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_key_translator.h
 @@ -0,0 +1,93 @@
@@ -1663,7 +1663,7 @@ index 00000000..ca908959
 +#endif  // MOZC_UNIX_FCITX_FCITX_KEY_TRANSLATOR_H_
 diff --git a/src/unix/fcitx/fcitx_mozc.cc b/src/unix/fcitx/fcitx_mozc.cc
 new file mode 100644
-index 00000000..351d2e12
+index 000000000..351d2e124
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_mozc.cc
 @@ -0,0 +1,553 @@
@@ -2222,7 +2222,7 @@ index 00000000..351d2e12
 +}  // namespace mozc_unix_scim
 diff --git a/src/unix/fcitx/fcitx_mozc.h b/src/unix/fcitx/fcitx_mozc.h
 new file mode 100644
-index 00000000..1bef6b30
+index 000000000..1bef6b303
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_mozc.h
 @@ -0,0 +1,176 @@
@@ -2404,7 +2404,7 @@ index 00000000..1bef6b30
 +
 diff --git a/src/unix/fcitx/gen_fcitx_mozc_i18n.sh b/src/unix/fcitx/gen_fcitx_mozc_i18n.sh
 new file mode 100755
-index 00000000..97ff4a49
+index 000000000..97ff4a496
 --- /dev/null
 +++ b/src/unix/fcitx/gen_fcitx_mozc_i18n.sh
 @@ -0,0 +1,10 @@
@@ -2420,7 +2420,7 @@ index 00000000..97ff4a49
 +done
 diff --git a/src/unix/fcitx/mozc.conf b/src/unix/fcitx/mozc.conf
 new file mode 100644
-index 00000000..ad192303
+index 000000000..ad1923032
 --- /dev/null
 +++ b/src/unix/fcitx/mozc.conf
 @@ -0,0 +1,7 @@
@@ -2433,7 +2433,7 @@ index 00000000..ad192303
 +Parent=fcitx-mozc
 diff --git a/src/unix/fcitx/mozc_connection.cc b/src/unix/fcitx/mozc_connection.cc
 new file mode 100755
-index 00000000..251650a5
+index 000000000..251650a5e
 --- /dev/null
 +++ b/src/unix/fcitx/mozc_connection.cc
 @@ -0,0 +1,209 @@
@@ -2648,7 +2648,7 @@ index 00000000..251650a5
 +}  // namespace mozc
 diff --git a/src/unix/fcitx/mozc_connection.h b/src/unix/fcitx/mozc_connection.h
 new file mode 100755
-index 00000000..74175757
+index 000000000..741757576
 --- /dev/null
 +++ b/src/unix/fcitx/mozc_connection.h
 @@ -0,0 +1,152 @@
@@ -2806,7 +2806,7 @@ index 00000000..74175757
 +#endif  // MOZC_UNIX_SCIM_MOZC_CONNECTION_H_
 diff --git a/src/unix/fcitx/mozc_response_parser.cc b/src/unix/fcitx/mozc_response_parser.cc
 new file mode 100755
-index 00000000..d11589e8
+index 000000000..d11589e8a
 --- /dev/null
 +++ b/src/unix/fcitx/mozc_response_parser.cc
 @@ -0,0 +1,448 @@
@@ -3260,7 +3260,7 @@ index 00000000..d11589e8
 +}  // namespace mozc
 diff --git a/src/unix/fcitx/mozc_response_parser.h b/src/unix/fcitx/mozc_response_parser.h
 new file mode 100755
-index 00000000..9e510562
+index 000000000..9e5105627
 --- /dev/null
 +++ b/src/unix/fcitx/mozc_response_parser.h
 @@ -0,0 +1,97 @@
@@ -3363,7 +3363,7 @@ index 00000000..9e510562
 +#endif  // MOZC_UNIX_FCITX_MOZC_RESPONSE_PARSER_H_
 diff --git a/src/unix/fcitx/po/Messages.sh b/src/unix/fcitx/po/Messages.sh
 new file mode 100755
-index 00000000..be341716
+index 000000000..be3417162
 --- /dev/null
 +++ b/src/unix/fcitx/po/Messages.sh
 @@ -0,0 +1,33 @@
@@ -3402,7 +3402,7 @@ index 00000000..be341716
 +echo "Done"
 diff --git a/src/unix/fcitx/po/ca.po b/src/unix/fcitx/po/ca.po
 new file mode 100644
-index 00000000..ef743e28
+index 000000000..ef743e28e
 --- /dev/null
 +++ b/src/unix/fcitx/po/ca.po
 @@ -0,0 +1,80 @@
@@ -3488,7 +3488,7 @@ index 00000000..ef743e28
 +msgstr "Premeu Ctrl+Alt+H per mostrar els usos."
 diff --git a/src/unix/fcitx/po/da.po b/src/unix/fcitx/po/da.po
 new file mode 100644
-index 00000000..e67d77ce
+index 000000000..e67d77ce9
 --- /dev/null
 +++ b/src/unix/fcitx/po/da.po
 @@ -0,0 +1,80 @@
@@ -3574,7 +3574,7 @@ index 00000000..e67d77ce
 +msgstr "Tryk på Ctrl+Alt+H for at vise anvendelser."
 diff --git a/src/unix/fcitx/po/de.po b/src/unix/fcitx/po/de.po
 new file mode 100644
-index 00000000..c1c17b15
+index 000000000..c1c17b15a
 --- /dev/null
 +++ b/src/unix/fcitx/po/de.po
 @@ -0,0 +1,86 @@
@@ -3666,7 +3666,7 @@ index 00000000..c1c17b15
 +msgstr "Ctrl+Alt+H um die Hilfe anzuzeigen"
 diff --git a/src/unix/fcitx/po/fcitx-mozc.pot b/src/unix/fcitx/po/fcitx-mozc.pot
 new file mode 100644
-index 00000000..56f6c247
+index 000000000..56f6c247a
 --- /dev/null
 +++ b/src/unix/fcitx/po/fcitx-mozc.pot
 @@ -0,0 +1,78 @@
@@ -3750,7 +3750,7 @@ index 00000000..56f6c247
 +msgstr ""
 diff --git a/src/unix/fcitx/po/ja.po b/src/unix/fcitx/po/ja.po
 new file mode 100644
-index 00000000..6de66d8a
+index 000000000..6de66d8a0
 --- /dev/null
 +++ b/src/unix/fcitx/po/ja.po
 @@ -0,0 +1,87 @@
@@ -3843,7 +3843,7 @@ index 00000000..6de66d8a
 +msgstr "Ctrl+Alt+H キーを押して用例を表示"
 diff --git a/src/unix/fcitx/po/ko.po b/src/unix/fcitx/po/ko.po
 new file mode 100644
-index 00000000..8ff2e9be
+index 000000000..8ff2e9be6
 --- /dev/null
 +++ b/src/unix/fcitx/po/ko.po
 @@ -0,0 +1,82 @@
@@ -3931,7 +3931,7 @@ index 00000000..8ff2e9be
 +msgstr "사용법을 보려면 Ctrl+Alt+H를 누릅니다."
 diff --git a/src/unix/fcitx/po/ru.po b/src/unix/fcitx/po/ru.po
 new file mode 100644
-index 00000000..20bf3251
+index 000000000..20bf32514
 --- /dev/null
 +++ b/src/unix/fcitx/po/ru.po
 @@ -0,0 +1,83 @@
@@ -4020,7 +4020,7 @@ index 00000000..20bf3251
 +msgstr "Нажмите Ctrl+Alt+H, чтобы показать использование."
 diff --git a/src/unix/fcitx/po/zh_CN.po b/src/unix/fcitx/po/zh_CN.po
 new file mode 100644
-index 00000000..799ee998
+index 000000000..799ee9985
 --- /dev/null
 +++ b/src/unix/fcitx/po/zh_CN.po
 @@ -0,0 +1,85 @@
@@ -4111,7 +4111,7 @@ index 00000000..799ee998
 +msgstr "按下 Ctrl+Alt+H 显示用法。"
 diff --git a/src/unix/fcitx/po/zh_TW.po b/src/unix/fcitx/po/zh_TW.po
 new file mode 100644
-index 00000000..2c83dfe6
+index 000000000..2c83dfe69
 --- /dev/null
 +++ b/src/unix/fcitx/po/zh_TW.po
 @@ -0,0 +1,84 @@
@@ -4201,7 +4201,7 @@ index 00000000..2c83dfe6
 +msgstr "按下 Ctrl+Alt+H 顯示用法。"
 diff --git a/src/unix/fcitx/surrounding_text_util.cc b/src/unix/fcitx/surrounding_text_util.cc
 new file mode 100644
-index 00000000..a4dc7d29
+index 000000000..a4dc7d29a
 --- /dev/null
 +++ b/src/unix/fcitx/surrounding_text_util.cc
 @@ -0,0 +1,244 @@
@@ -4451,7 +4451,7 @@ index 00000000..a4dc7d29
 +}  // namespace mozc
 diff --git a/src/unix/fcitx/surrounding_text_util.h b/src/unix/fcitx/surrounding_text_util.h
 new file mode 100644
-index 00000000..ce54291c
+index 000000000..ce54291c0
 --- /dev/null
 +++ b/src/unix/fcitx/surrounding_text_util.h
 @@ -0,0 +1,89 @@
@@ -4546,10 +4546,10 @@ index 00000000..ce54291c
 +#endif  // MOZC_UNIX_FCITX_SURROUNDING_TEXT_URIL_H_
 diff --git a/src/unix/fcitx5/BUILD b/src/unix/fcitx5/BUILD
 new file mode 100644
-index 00000000..14295aa2
+index 000000000..2094fe75e
 --- /dev/null
 +++ b/src/unix/fcitx5/BUILD
-@@ -0,0 +1,115 @@
+@@ -0,0 +1,123 @@
 +load(
 +    "//:build_defs.bzl",
 +    "mozc_cc_binary",
@@ -4584,6 +4584,16 @@ index 00000000..14295aa2
 +)
 +
 +mozc_cc_library(
++    name = "i18nwrapper",
++    hdrs = [
++        "i18nwrapper.h"
++    ],
++    deps = [
++        "@fcitx5//:fcitx5"
++    ]
++)
++
++mozc_cc_library(
 +    name = "mozc_engine",
 +    srcs = [
 +        "mozc_engine.cc",
@@ -4595,10 +4605,8 @@ index 00000000..14295aa2
 +        "mozc_response_parser.h",
 +        "mozc_state.h"
 +    ],
-+    local_defines = [
-+        'FCITX_GETTEXT_DOMAIN=\\"fcitx5-mozc\\"',
-+    ],
 +    deps = [
++        ":i18nwrapper",
 +        ":mozc_connection",
 +        ":mozc_client_pool",
 +        ":fcitx_key_util",
@@ -4667,7 +4675,7 @@ index 00000000..14295aa2
 +
 diff --git a/src/unix/fcitx5/Messages.sh b/src/unix/fcitx5/Messages.sh
 new file mode 100755
-index 00000000..e705349b
+index 000000000..e705349bb
 --- /dev/null
 +++ b/src/unix/fcitx5/Messages.sh
 @@ -0,0 +1,3 @@
@@ -4676,7 +4684,7 @@ index 00000000..e705349b
 +gen_pot cxx:desktop:appdata fcitx5-mozc po .
 diff --git a/src/unix/fcitx5/fcitx5.gyp b/src/unix/fcitx5/fcitx5.gyp
 new file mode 100644
-index 00000000..58d9a660
+index 000000000..58d9a6602
 --- /dev/null
 +++ b/src/unix/fcitx5/fcitx5.gyp
 @@ -0,0 +1,118 @@
@@ -4800,10 +4808,10 @@ index 00000000..58d9a660
 +}
 diff --git a/src/unix/fcitx5/fcitx_key_event_handler.cc b/src/unix/fcitx5/fcitx_key_event_handler.cc
 new file mode 100644
-index 00000000..7777753b
+index 000000000..e55a04e49
 --- /dev/null
 +++ b/src/unix/fcitx5/fcitx_key_event_handler.cc
-@@ -0,0 +1,245 @@
+@@ -0,0 +1,252 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012-2017, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -4836,11 +4844,19 @@ index 00000000..7777753b
 +
 +#include "unix/fcitx5/fcitx_key_event_handler.h"
 +
-+#include <map>
++#include <fcitx-utils/key.h>
 +
-+#include "base/logging.h"
++#include <cstdint>
++#include <map>
++#include <memory>
++#include <set>
++
++#include "absl/log/check.h"
++#include "absl/log/log.h"
 +#include "base/singleton.h"
-+#include "base/vlog.h"
++#include "protocol/commands.pb.h"
++#include "protocol/config.pb.h"
++#include "unix/fcitx5/fcitx_key_translator.h"
 +
 +namespace fcitx {
 +
@@ -4878,11 +4894,9 @@ index 00000000..7777753b
 +      mozc::Singleton<AdditionalModifiersData>::get()->data();
 +
 +  // Adds MODIFIER if there are (LEFT|RIGHT)_MODIFIER like LEFT_SHIFT.
-+  for (std::set<mozc::commands::KeyEvent::ModifierKey>::const_iterator it =
-+           modifier_keys_set->begin();
-+       it != modifier_keys_set->end(); ++it) {
-+    std::map<uint32_t, mozc::commands::KeyEvent::ModifierKey>::const_iterator
-+        item = data.find(*it);
++  for (auto it = modifier_keys_set->begin(); it != modifier_keys_set->end();
++       ++it) {
++    auto item = data.find(*it);
 +    if (item != data.end()) {
 +      modifier_keys_set->insert(item->second);
 +    }
@@ -4903,7 +4917,8 @@ index 00000000..7777753b
 +}
 +}  // namespace
 +
-+KeyEventHandler::KeyEventHandler() : key_translator_(new KeyTranslator) {
++KeyEventHandler::KeyEventHandler()
++    : key_translator_(std::make_unique<KeyTranslator>()) {
 +  Clear();
 +}
 +
@@ -5031,7 +5046,7 @@ index 00000000..7777753b
 +    // implementation does NOT do it.
 +    if (currently_pressed_modifiers_.empty() ||
 +        !modifiers_to_be_sent_.empty()) {
-+      for (size_t i = 0; i < key_event->modifier_keys_size(); ++i) {
++      for (int i = 0; i < key_event->modifier_keys_size(); ++i) {
 +        modifiers_to_be_sent_.insert(key_event->modifier_keys(i));
 +      }
 +      AddAdditionalModifiers(&modifiers_to_be_sent_);
@@ -5051,7 +5066,7 @@ index 00000000..7777753b
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/fcitx_key_event_handler.h b/src/unix/fcitx5/fcitx_key_event_handler.h
 new file mode 100644
-index 00000000..1ba2655a
+index 000000000..78942aa2f
 --- /dev/null
 +++ b/src/unix/fcitx5/fcitx_key_event_handler.h
 @@ -0,0 +1,78 @@
@@ -5090,10 +5105,10 @@ index 00000000..1ba2655a
 +
 +#include <fcitx-utils/key.h>
 +
++#include <cstdint>
 +#include <memory>
 +#include <set>
 +
-+#include "base/port.h"
 +#include "protocol/commands.pb.h"
 +#include "protocol/config.pb.h"
 +#include "unix/fcitx5/fcitx_key_translator.h"
@@ -5135,10 +5150,10 @@ index 00000000..1ba2655a
 +#endif  // UNIX_FCITX5_FCITX_KEY_EVENT_HANDLER_H_
 diff --git a/src/unix/fcitx5/fcitx_key_translator.cc b/src/unix/fcitx5/fcitx_key_translator.cc
 new file mode 100644
-index 00000000..fe5992ff
+index 000000000..6a95486ff
 --- /dev/null
 +++ b/src/unix/fcitx5/fcitx_key_translator.cc
-@@ -0,0 +1,417 @@
+@@ -0,0 +1,429 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012-2017, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -5171,13 +5186,23 @@ index 00000000..fe5992ff
 +
 +#include "unix/fcitx5/fcitx_key_translator.h"
 +
-+#include "base/logging.h"
++#include <fcitx-utils/key.h>
++#include <fcitx-utils/keysym.h>
++
++#include <cstdint>
++#include <map>
++#include <string>
++#include <utility>
++
++#include "absl/log/check.h"
 +#include "base/vlog.h"
++#include "protocol/commands.pb.h"
++#include "protocol/config.pb.h"
 +
 +namespace fcitx {
 +using namespace mozc;
 +namespace {
-+static const auto kSpecialKeyMap =
++const auto kSpecialKeyMap =
 +    new std::map<uint32_t, commands::KeyEvent::SpecialKey>({
 +        {FcitxKey_space, commands::KeyEvent::SPACE},
 +        {FcitxKey_Return, commands::KeyEvent::ENTER},
@@ -5277,7 +5302,7 @@ index 00000000..fe5992ff
 +        //   - FcitxKey_Kana_Lock? FcitxKey_KEY_Kana_Shift?
 +    });
 +
-+static const auto kIbusModifierMaskMap = new std::map<uint32_t, KeyState>({
++const auto kFcitxModifierMaskMap = new std::map<uint32_t, KeyState>({
 +    {FcitxKey_Shift_L, KeyState::Shift},
 +    {FcitxKey_Shift_R, KeyState::Shift},
 +    {FcitxKey_Control_L, KeyState::Ctrl},
@@ -5290,8 +5315,8 @@ index 00000000..fe5992ff
 +// '4' is mapped to Japanese 'Hiragana Letter U' (without Shift modifier) and
 +// 'Hiragana Letter Small U' (with Shift modifier).
 +// TODO(team): Add kana_map_dv to support Dvoraklayout.
-+typedef std::map<uint32_t, std::pair<const char *, const char *>> KanaMap;
-+static const KanaMap *kKanaJpMap = new KanaMap({
++using KanaMap = std::map<uint32_t, std::pair<const char *, const char *>>;
++const KanaMap *kKanaJpMap = new KanaMap({
 +    {'1', {"ぬ", "ぬ"}},
 +    {'!', {"ぬ", "ぬ"}},
 +    {'2', {"ふ", "ふ"}},
@@ -5392,7 +5417,7 @@ index 00000000..fe5992ff
 +    {U'¥', {"ー", "ー"}},  // U+00A5
 +});
 +
-+static const KanaMap *kKanaUsMap = new KanaMap({
++const KanaMap *kKanaUsMap = new KanaMap({
 +    {'`', {"ろ", "ろ"}},  {'~', {"ろ", "ろ"}},  {'1', {"ぬ", "ぬ"}},
 +    {'!', {"ぬ", "ぬ"}},  {'2', {"ふ", "ふ"}},  {'@', {"ふ", "ふ"}},
 +    {'3', {"あ", "ぁ"}},  {'#', {"あ", "ぁ"}},  {'4', {"う", "ぅ"}},
@@ -5448,7 +5473,9 @@ index 00000000..fe5992ff
 +  out_event->Clear();
 +
 +  /* this is key we cannot handle, don't process it */
-+  if (modifiers & KeyState::Super) return false;
++  if (modifiers & KeyState::Super) {
++    return false;
++  }
 +
 +  // Due to historical reasons, many linux ditributions set Hiragana_Katakana
 +  // key as Hiragana key (which is Katkana key with shift modifier). So, we
@@ -5470,9 +5497,9 @@ index 00000000..fe5992ff
 +      out_event->add_modifier_keys(mozc::commands::KeyEvent::CAPS);
 +    }
 +    out_event->set_key_code(keyval);
-+  } else if (auto it = kIbusModifierMaskMap->find(keyval);
-+             it != kIbusModifierMaskMap->end()) {
-+    // Convert Ibus modifier key to mask (e.g. FcitxKey_Shift_L to
++  } else if (auto it = kFcitxModifierMaskMap->find(keyval);
++             it != kFcitxModifierMaskMap->end()) {
++    // Convert Fcitx modifier key to mask (e.g. FcitxKey_Shift_L to
 +    // KeyState::Shift)
 +    modifiers |= it->second;
 +  } else if (auto it = kSpecialKeyMap->find(keyval);
@@ -5500,7 +5527,7 @@ index 00000000..fe5992ff
 +}
 +
 +bool KeyTranslator::IsHiraganaKatakanaKeyWithShift(KeySym keyval,
-+                                                   uint32_t keycode,
++                                                   uint32_t /*keycode*/,
 +                                                   KeyStates modifiers) {
 +  return ((modifiers & KeyState::Shift) &&
 +          (keyval == FcitxKey_Hiragana_Katakana));
@@ -5548,8 +5575,8 @@ index 00000000..fe5992ff
 +  return IsAscii(keyval, keycode, modifiers);
 +}
 +
-+bool KeyTranslator::IsAscii(KeySym keyval, uint32_t keycode,
-+                            KeyStates modifiers) {
++bool KeyTranslator::IsAscii(KeySym keyval, uint32_t /*keycode*/,
++                            KeyStates /*modifiers*/) {
 +  return (keyval > FcitxKey_space &&
 +          // Note: Space key (0x20) is a special key in Mozc.
 +          keyval <= FcitxKey_asciitilde);  // 0x7e.
@@ -5558,10 +5585,10 @@ index 00000000..fe5992ff
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/fcitx_key_translator.h b/src/unix/fcitx5/fcitx_key_translator.h
 new file mode 100644
-index 00000000..65c513da
+index 000000000..0991b386c
 --- /dev/null
 +++ b/src/unix/fcitx5/fcitx_key_translator.h
-@@ -0,0 +1,78 @@
+@@ -0,0 +1,76 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012~2023, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -5598,12 +5625,10 @@ index 00000000..65c513da
 +#include <fcitx-utils/key.h>
 +
 +#include <cstdint>
-+#include <map>
-+#include <set>
 +#include <string>
 +
-+#include "base/port.h"
 +#include "protocol/commands.pb.h"
++#include "protocol/config.pb.h"
 +
 +namespace fcitx {
 +
@@ -5640,9 +5665,42 @@ index 00000000..65c513da
 +}  // namespace fcitx
 +
 +#endif  // MOZC_UNIX_FCITX_FCITX_KEY_TRANSLATOR_H_
+diff --git a/src/unix/fcitx5/i18nwrapper.h b/src/unix/fcitx5/i18nwrapper.h
+new file mode 100644
+index 000000000..9680f1856
+--- /dev/null
++++ b/src/unix/fcitx5/i18nwrapper.h
+@@ -0,0 +1,27 @@
++/*
++ * Copyright (C) 2017~2017 by CSSlayer
++ * wengxt@gmail.com
++ *
++ * This library is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as
++ * published by the Free Software Foundation; either version 2 of the
++ * License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; see the file COPYING. If not,
++ * see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef UNIX_FCITX5_I18NWRAPPER_H_
++#define UNIX_FCITX5_I18NWRAPPER_H_
++
++#define FCITX_GETTEXT_DOMAIN "fcitx5-mozc"
++
++#include <fcitx-utils/i18n.h>  // IWYU pragma: export
++
++#endif
 diff --git a/src/unix/fcitx5/mozc-addon.conf b/src/unix/fcitx5/mozc-addon.conf
 new file mode 100644
-index 00000000..88fbc11b
+index 000000000..88fbc11b3
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc-addon.conf
 @@ -0,0 +1,10 @@
@@ -5658,7 +5716,7 @@ index 00000000..88fbc11b
 +0=clipboard
 diff --git a/src/unix/fcitx5/mozc.conf b/src/unix/fcitx5/mozc.conf
 new file mode 100644
-index 00000000..40725d7d
+index 000000000..40725d7d8
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc.conf
 @@ -0,0 +1,7 @@
@@ -5671,10 +5729,10 @@ index 00000000..40725d7d
 +Configurable=True
 diff --git a/src/unix/fcitx5/mozc_client_pool.cc b/src/unix/fcitx5/mozc_client_pool.cc
 new file mode 100644
-index 00000000..d3894a0d
+index 000000000..d913c1f9a
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_client_pool.cc
-@@ -0,0 +1,114 @@
+@@ -0,0 +1,120 @@
 +// Copyright 2023-2023, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
 +//
@@ -5707,12 +5765,18 @@ index 00000000..d3894a0d
 +#include "unix/fcitx5/mozc_client_pool.h"
 +
 +#include <fcitx-utils/charutils.h>
++#include <fcitx-utils/macros.h>
++#include <fcitx-utils/stringutils.h>
++#include <fcitx/inputcontext.h>
++#include <fcitx/inputcontextmanager.h>
++
++#include <cassert>
++#include <memory>
++#include <string>
 +
 +#include "unix/fcitx5/mozc_connection.h"
 +
 +namespace fcitx {
-+
-+MozcClientHolder::MozcClientHolder() {}
 +
 +MozcClientHolder::~MozcClientHolder() {
 +  if (pool_) {
@@ -5791,10 +5855,10 @@ index 00000000..d3894a0d
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/mozc_client_pool.h b/src/unix/fcitx5/mozc_client_pool.h
 new file mode 100644
-index 00000000..3b6eaa3b
+index 000000000..855e88234
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_client_pool.h
-@@ -0,0 +1,87 @@
+@@ -0,0 +1,90 @@
 +// Copyright 2023-2023, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
 +//
@@ -5827,8 +5891,11 @@ index 00000000..3b6eaa3b
 +#ifndef UNIX_FCITX5_MOZC_CLIENT_POOL_H_
 +#define UNIX_FCITX5_MOZC_CLIENT_POOL_H_
 +
++#include <fcitx/inputcontext.h>
 +#include <fcitx/inputcontextmanager.h>
 +
++#include <memory>
++#include <string>
 +#include <unordered_map>
 +
 +#include "client/client_interface.h"
@@ -5842,7 +5909,7 @@ index 00000000..3b6eaa3b
 +  friend class MozcClientPool;
 +
 + public:
-+  MozcClientHolder();
++  MozcClientHolder() = default;
 +
 +  MozcClientHolder(MozcClientHolder &&) = delete;
 +
@@ -5882,13 +5949,12 @@ index 00000000..3b6eaa3b
 +}  // namespace fcitx
 +
 +#endif
-\ No newline at end of file
 diff --git a/src/unix/fcitx5/mozc_connection.cc b/src/unix/fcitx5/mozc_connection.cc
 new file mode 100644
-index 00000000..3f281e44
+index 000000000..b88bf1254
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_connection.cc
-@@ -0,0 +1,69 @@
+@@ -0,0 +1,67 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -5921,10 +5987,8 @@ index 00000000..3f281e44
 +
 +#include "unix/fcitx5/mozc_connection.h"
 +
-+#include <string>
++#include <memory>
 +
-+#include "base/logging.h"
-+#include "base/util.h"
 +#include "base/vlog.h"
 +#include "client/client.h"
 +#include "ipc/ipc.h"
@@ -5960,10 +6024,10 @@ index 00000000..3f281e44
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/mozc_connection.h b/src/unix/fcitx5/mozc_connection.h
 new file mode 100644
-index 00000000..4d5e0eee
+index 000000000..1c9544a62
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_connection.h
-@@ -0,0 +1,70 @@
+@@ -0,0 +1,65 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -5998,11 +6062,6 @@ index 00000000..4d5e0eee
 +#define MOZC_UNIX_FCITX5_MOZC_CONNECTION_H_
 +
 +#include <memory>
-+#include <string>
-+
-+#include "base/port.h"
-+#include "protocol/commands.pb.h"
-+#include "unix/fcitx5/fcitx_key_event_handler.h"
 +
 +namespace mozc {
 +
@@ -6036,10 +6095,10 @@ index 00000000..4d5e0eee
 +#endif  // MOZC_UNIX_FCITX5_MOZC_CONNECTION_H_
 diff --git a/src/unix/fcitx5/mozc_engine.cc b/src/unix/fcitx5/mozc_engine.cc
 new file mode 100644
-index 00000000..d00d3114
+index 000000000..dfb7ecec7
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_engine.cc
-@@ -0,0 +1,331 @@
+@@ -0,0 +1,343 @@
 +/*
 + * Copyright (C) 2017~2017 by CSSlayer
 + * wengxt@gmail.com
@@ -6062,23 +6121,34 @@ index 00000000..d00d3114
 +#include "unix/fcitx5/mozc_engine.h"
 +
 +#include <fcitx-config/iniparser.h>
-+#include <fcitx-utils/i18n.h>
++#include <fcitx-config/rawconfig.h>
 +#include <fcitx-utils/log.h>
++#include <fcitx-utils/macros.h>
++#include <fcitx-utils/semver.h>
 +#include <fcitx-utils/standardpath.h>
++#include <fcitx-utils/stringutils.h>
++#include <fcitx/action.h>
++#include <fcitx/addoninstance.h>
++#include <fcitx/event.h>
 +#include <fcitx/inputcontext.h>
 +#include <fcitx/inputcontextmanager.h>
 +#include <fcitx/inputmethodmanager.h>
++#include <fcitx/instance.h>
++#include <fcitx/statusarea.h>
++#include <fcitx/userinterface.h>
 +#include <fcitx/userinterfacemanager.h>
 +
-+#include <vector>
++#include <cstddef>
++#include <memory>
++#include <string>
 +
-+#include "base/clock.h"
 +#include "base/init_mozc.h"
 +#include "base/process.h"
-+#include "mozc_response_parser.h"
++#include "protocol/commands.pb.h"
++#include "unix/fcitx5/i18nwrapper.h"
 +#include "unix/fcitx5/mozc_client_pool.h"
-+#include "unix/fcitx5/mozc_connection.h"
 +#include "unix/fcitx5/mozc_response_parser.h"
++#include "unix/fcitx5/mozc_state.h"
 +
 +namespace fcitx {
 +
@@ -6146,12 +6216,12 @@ index 00000000..d00d3114
 +}
 +
 +bool MozcModeSubAction::isChecked(InputContext *ic) const {
-+  auto mozc_state = engine_->mozcState(ic);
++  auto *mozc_state = engine_->mozcState(ic);
 +  return mozc_state->GetCompositionMode() == mode_;
 +}
 +
 +void MozcModeSubAction::activate(InputContext *ic) {
-+  auto mozc_state = engine_->mozcState(ic);
++  auto *mozc_state = engine_->mozcState(ic);
 +  mozc_state->SendCompositionMode(mode_);
 +}
 +
@@ -6271,28 +6341,28 @@ index 00000000..d00d3114
 +  readAsIni(config_, "conf/mozc.conf");
 +  ResetClientPool();
 +}
-+void MozcEngine::activate(const fcitx::InputMethodEntry &,
++void MozcEngine::activate(const fcitx::InputMethodEntry & /*entry*/,
 +                          fcitx::InputContextEvent &event) {
 +  if (client_) {
 +    client_->EnsureConnection();
 +  }
-+  auto ic = event.inputContext();
-+  auto mozc_state = mozcState(ic);
++  auto *ic = event.inputContext();
++  auto *mozc_state = mozcState(ic);
 +  mozc_state->FocusIn();
 +  ic->statusArea().addAction(StatusGroup::InputMethod, &toolAction_);
 +}
-+void MozcEngine::deactivate(const fcitx::InputMethodEntry &,
++void MozcEngine::deactivate(const fcitx::InputMethodEntry & /*entry*/,
 +                            fcitx::InputContextEvent &event) {
-+  auto ic = event.inputContext();
++  auto *ic = event.inputContext();
 +  deactivating_ = true;
-+  auto mozc_state = mozcState(ic);
++  auto *mozc_state = mozcState(ic);
 +  mozc_state->FocusOut(event);
 +  deactivating_ = false;
 +}
 +void MozcEngine::keyEvent(const InputMethodEntry &entry, KeyEvent &event) {
-+  auto mozc_state = mozcState(event.inputContext());
++  auto *mozc_state = mozcState(event.inputContext());
 +
-+  auto &group = instance_->inputMethodManager().currentGroup();
++  const auto &group = instance_->inputMethodManager().currentGroup();
 +  std::string layout = group.layoutFor(entry.uniqueName());
 +  if (layout.empty()) {
 +    layout = group.defaultLayout();
@@ -6307,8 +6377,9 @@ index 00000000..d00d3114
 +  }
 +}
 +
-+void MozcEngine::reset(const InputMethodEntry &, InputContextEvent &event) {
-+  auto mozc_state = mozcState(event.inputContext());
++void MozcEngine::reset(const InputMethodEntry & /*entry*/,
++                       InputContextEvent &event) {
++  auto *mozc_state = mozcState(event.inputContext());
 +  mozc_state->Reset();
 +}
 +
@@ -6319,15 +6390,15 @@ index 00000000..d00d3114
 +  client_->SyncData();
 +}
 +
-+std::string MozcEngine::subMode(const fcitx::InputMethodEntry &,
++std::string MozcEngine::subMode(const fcitx::InputMethodEntry & /*entry*/,
 +                                fcitx::InputContext &ic) {
-+  auto mozc_state = mozcState(&ic);
++  auto *mozc_state = mozcState(&ic);
 +  return _(kPropCompositionModes[mozc_state->GetCompositionMode()].description);
 +}
 +
-+std::string MozcEngine::subModeIconImpl(const fcitx::InputMethodEntry &,
-+                                        fcitx::InputContext &ic) {
-+  auto mozc_state = mozcState(&ic);
++std::string MozcEngine::subModeIconImpl(
++    const fcitx::InputMethodEntry & /*unused*/, fcitx::InputContext &ic) {
++  auto *mozc_state = mozcState(&ic);
 +  return _(kPropCompositionModes[mozc_state->GetCompositionMode()].icon);
 +}
 +
@@ -6347,7 +6418,7 @@ index 00000000..d00d3114
 +void MozcEngine::ResetClientPool() {
 +  if (pool_->policy() != GetSharedStatePolicy()) {
 +    instance_->inputContextManager().foreach ([this](InputContext *ic) {
-+      if (auto state = this->mozcState(ic)) {
++      if (auto *state = this->mozcState(ic)) {
 +        state->ReleaseClient();
 +      }
 +      return true;
@@ -6373,10 +6444,10 @@ index 00000000..d00d3114
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/mozc_engine.h b/src/unix/fcitx5/mozc_engine.h
 new file mode 100644
-index 00000000..21b41e0c
+index 000000000..1f3e0f8fb
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_engine.h
-@@ -0,0 +1,169 @@
+@@ -0,0 +1,182 @@
 +/*
 + * Copyright (C) 2017~2017 by CSSlayer
 + * wengxt@gmail.com
@@ -6400,18 +6471,31 @@ index 00000000..21b41e0c
 +
 +#include <fcitx-config/configuration.h>
 +#include <fcitx-config/enum.h>
-+#include <fcitx-utils/i18n.h>
++#include <fcitx-config/option.h>
++#include <fcitx-config/rawconfig.h>
++#include <fcitx-utils/handlertable.h>
 +#include <fcitx-utils/key.h>
 +#include <fcitx-utils/stringutils.h>
 +#include <fcitx/action.h>
 +#include <fcitx/addonfactory.h>
++#include <fcitx/addoninstance.h>
 +#include <fcitx/addonmanager.h>
++#include <fcitx/event.h>
++#include <fcitx/inputcontextmanager.h>
++#include <fcitx/inputcontextproperty.h>
 +#include <fcitx/inputmethodengine.h>
 +#include <fcitx/instance.h>
 +#include <fcitx/menu.h>
 +
++#include <memory>
++#include <string>
++#include <vector>
++
 +#include "base/file_util.h"
 +#include "base/system_util.h"
++#include "client/client_interface.h"
++#include "protocol/commands.pb.h"
++#include "unix/fcitx5/i18nwrapper.h"
 +#include "unix/fcitx5/mozc_client_pool.h"
 +#include "unix/fcitx5/mozc_state.h"
 +
@@ -6476,8 +6560,8 @@ index 00000000..21b41e0c
 +class MozcModeSubAction : public SimpleAction {
 + public:
 +  MozcModeSubAction(MozcEngine *engine, mozc::commands::CompositionMode mode);
-+  bool isChecked(fcitx::InputContext *) const override;
-+  void activate(fcitx::InputContext *) override;
++  bool isChecked(fcitx::InputContext *ic) const override;
++  void activate(fcitx::InputContext *ic) override;
 +
 + private:
 +  MozcEngine *engine_;
@@ -6497,8 +6581,8 @@ index 00000000..21b41e0c
 +  void reloadConfig() override;
 +  void reset(const InputMethodEntry &entry, InputContextEvent &event) override;
 +  void save() override;
-+  std::string subMode(const fcitx::InputMethodEntry &,
-+                      fcitx::InputContext &) override;
++  std::string subMode(const fcitx::InputMethodEntry & /*entry*/,
++                      fcitx::InputContext &ic) override;
 +  std::string subModeIconImpl(const InputMethodEntry &entry,
 +                              InputContext &ic) override;
 +
@@ -6548,10 +6632,10 @@ index 00000000..21b41e0c
 +#endif  // _FCITX_UNIX_FCITX5_MOZC_ENGINE_H_
 diff --git a/src/unix/fcitx5/mozc_engine_factory.cc b/src/unix/fcitx5/mozc_engine_factory.cc
 new file mode 100644
-index 00000000..dc8316e4
+index 000000000..7ba6e799e
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_engine_factory.cc
-@@ -0,0 +1,73 @@
+@@ -0,0 +1,74 @@
 +/*
 + * Copyright (C) 2020~2020 by CSSlayer
 + * wengxt@gmail.com
@@ -6570,16 +6654,17 @@ index 00000000..dc8316e4
 + * License along with this library; see the file COPYING. If not,
 + * see <http://www.gnu.org/licenses/>.
 + */
-+#include <fcitx-utils/i18n.h>
++#include <fcitx-utils/fs.h>
 +#include <fcitx-utils/misc.h>
 +#include <fcitx-utils/stringutils.h>
 +#include <fcitx/addonfactory.h>
-+#include <stdlib.h>
++#include <fcitx/addoninstance.h>
 +
 +#include <string_view>
 +
 +#include "base/system_util.h"
 +#include "mozc_engine.h"
++#include "unix/fcitx5/i18nwrapper.h"
 +
 +namespace fcitx {
 +class MozcEngineFactory : public AddonFactory {
@@ -6627,10 +6712,10 @@ index 00000000..dc8316e4
 +FCITX_ADDON_FACTORY(fcitx::MozcEngineFactory)
 diff --git a/src/unix/fcitx5/mozc_response_parser.cc b/src/unix/fcitx5/mozc_response_parser.cc
 new file mode 100644
-index 00000000..ec0224c6
+index 000000000..0fe9cc020
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_response_parser.cc
-@@ -0,0 +1,484 @@
+@@ -0,0 +1,497 @@
 +// Copyright 2010-2012, Google Inc.
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
@@ -6663,21 +6748,32 @@ index 00000000..ec0224c6
 +
 +#include "unix/fcitx5/mozc_response_parser.h"
 +
-+#include <fcitx-utils/i18n.h>
++#include <fcitx-utils/stringutils.h>
++#include <fcitx-utils/textformatflags.h>
 +#include <fcitx-utils/utf8.h>
 +#include <fcitx/candidatelist.h>
 +#include <fcitx/inputcontext.h>
 +#include <fcitx/inputpanel.h>
++#include <fcitx/text.h>
 +
++#include <cstddef>
++#include <cstdint>
++#include <cstdlib>
++#include <map>
++#include <memory>
++#include <stdexcept>
 +#include <string>
++#include <utility>
 +#include <vector>
 +
-+#include "base/logging.h"
-+#include "base/process.h"
-+#include "base/util.h"
++#include "absl/log/check.h"
++#include "absl/log/log.h"
 +#include "base/vlog.h"
++#include "protocol/candidates.pb.h"
 +#include "protocol/commands.pb.h"
++#include "unix/fcitx5/i18nwrapper.h"
 +#include "unix/fcitx5/mozc_engine.h"
++#include "unix/fcitx5/mozc_state.h"
 +#include "unix/fcitx5/surrounding_text_util.h"
 +
 +namespace fcitx {
@@ -6704,10 +6800,10 @@ index 00000000..ec0224c6
 +class MozcCandidateWord final : public CandidateWord {
 + public:
 +  MozcCandidateWord(int id, std::string text, MozcEngine *engine)
-+      : CandidateWord(Text(text)), id_(id), engine_(engine) {}
++      : CandidateWord(Text(std::move(text))), id_(id), engine_(engine) {}
 +
 +  void select(InputContext *inputContext) const override {
-+    auto mozc_state = engine_->mozcState(inputContext);
++    MozcState *mozc_state = engine_->mozcState(inputContext);
 +    mozc_state->SelectCandidate(id_);
 +  }
 +
@@ -6722,7 +6818,7 @@ index 00000000..ec0224c6
 +  MozcCandidateList(const mozc::commands::Candidates &candidates,
 +                    InputContext *ic, MozcEngine *engine, bool use_annotation)
 +      : ic_(ic), engine_(engine) {
-+    auto state = engine_->mozcState(ic);
++    auto *state = engine_->mozcState(ic);
 +    setPageable(this);
 +    bool index_visible = false;
 +    if (candidates.has_footer()) {
@@ -6756,7 +6852,9 @@ index 00000000..ec0224c6
 +      const mozc::commands::InformationList &usages = candidates.usages();
 +      for (size_t i = 0; i < usages.information().size(); ++i) {
 +        const mozc::commands::Information &information = usages.information(i);
-+        if (!information.has_id() || !information.has_description()) continue;
++        if (!information.has_id() || !information.has_description()) {
++          continue;
++        }
 +        usage_map[information.id()].first = information.title();
 +        usage_map[information.id()].second = information.description();
 +      }
@@ -6850,11 +6948,11 @@ index 00000000..ec0224c6
 +  bool hasPrev() const override { return hasPrev_; }
 +  bool hasNext() const override { return hasNext_; }
 +  void prev() override {
-+    auto mozc_state = engine_->mozcState(ic_);
++    auto *mozc_state = engine_->mozcState(ic_);
 +    mozc_state->Paging(true);
 +  }
 +  void next() override {
-+    auto mozc_state = engine_->mozcState(ic_);
++    auto *mozc_state = engine_->mozcState(ic_);
 +    mozc_state->Paging(false);
 +  }
 +
@@ -6897,7 +6995,7 @@ index 00000000..ec0224c6
 +void MozcResponseParser::LaunchTool(const mozc::commands::Output &response,
 +                                    InputContext *ic) const {
 +  if (response.has_launch_tool_mode()) {
-+    auto mozc_state = engine_->mozcState(ic);
++    auto *mozc_state = engine_->mozcState(ic);
 +    mozc_state->GetClient()->LaunchToolWithProtoBuf(response);
 +  }
 +}
@@ -6950,7 +7048,7 @@ index 00000000..ec0224c6
 +      return;
 +  }
 +
-+  auto mozc_state = engine_->mozcState(ic);
++  auto *mozc_state = engine_->mozcState(ic);
 +  mozc::commands::Output new_output;
 +  if (!mozc_state->SendCommand(session_command, &new_output)) {
 +    LOG(ERROR) << "Callback Command Failed";
@@ -6982,7 +7080,7 @@ index 00000000..ec0224c6
 +
 +bool MozcResponseParser::ParseResponse(const mozc::commands::Output &response,
 +                                       InputContext *ic) const {
-+  auto mozc_state = engine_->mozcState(ic);
++  auto *mozc_state = engine_->mozcState(ic);
 +  mozc_state->SetUsage("", "");
 +
 +  UpdateDeletionRange(response, ic);
@@ -7029,7 +7127,7 @@ index 00000000..ec0224c6
 +
 +void MozcResponseParser::ParseResult(const mozc::commands::Result &result,
 +                                     InputContext *ic) const {
-+  auto mozc_state = engine_->mozcState(ic);
++  auto *mozc_state = engine_->mozcState(ic);
 +  switch (result.type()) {
 +    case mozc::commands::Result::NONE: {
 +      mozc_state->SetAuxString("No result");  // not a fatal error.
@@ -7044,7 +7142,7 @@ index 00000000..ec0224c6
 +
 +void MozcResponseParser::ParseCandidates(
 +    const mozc::commands::Candidates &candidates, InputContext *ic) const {
-+  auto mozc_state = engine_->mozcState(ic);
++  auto *mozc_state = engine_->mozcState(ic);
 +  const mozc::commands::Footer &footer = candidates.footer();
 +  if (candidates.has_footer()) {
 +    std::string auxString;
@@ -7077,7 +7175,7 @@ index 00000000..ec0224c6
 +void MozcResponseParser::ParsePreedit(const mozc::commands::Preedit &preedit,
 +                                      uint32_t position,
 +                                      InputContext *ic) const {
-+  auto mozc_state = engine_->mozcState(ic);
++  auto *mozc_state = engine_->mozcState(ic);
 +  Text preedit_text;
 +  std::string s;
 +
@@ -7117,7 +7215,7 @@ index 00000000..ec0224c6
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/mozc_response_parser.h b/src/unix/fcitx5/mozc_response_parser.h
 new file mode 100644
-index 00000000..2deca500
+index 000000000..2deca5000
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_response_parser.h
 @@ -0,0 +1,89 @@
@@ -7212,10 +7310,10 @@ index 00000000..2deca500
 +#endif  // MOZC_UNIX_FCITX_MOZC_RESPONSE_PARSER_H_
 diff --git a/src/unix/fcitx5/mozc_state.cc b/src/unix/fcitx5/mozc_state.cc
 new file mode 100644
-index 00000000..e438d1d4
+index 000000000..c5e3308a9
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_state.cc
-@@ -0,0 +1,439 @@
+@@ -0,0 +1,448 @@
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
 +//
@@ -7247,23 +7345,31 @@ index 00000000..e438d1d4
 +
 +#include "unix/fcitx5/mozc_state.h"
 +
-+#include <fcitx-utils/i18n.h>
++#include <fcitx-utils/capabilityflags.h>
++#include <fcitx-utils/key.h>
++#include <fcitx-utils/keysym.h>
 +#include <fcitx-utils/log.h>
 +#include <fcitx-utils/stringutils.h>
 +#include <fcitx/candidatelist.h>
++#include <fcitx/event.h>
 +#include <fcitx/inputpanel.h>
++#include <fcitx/text.h>
++#include <fcitx/userinterface.h>
 +
++#include <cstdint>
++#include <memory>
 +#include <string>
++#include <utility>
 +
-+#include "base/const.h"
-+#include "base/file_util.h"
-+#include "base/logging.h"
++#include "absl/log/check.h"
++#include "absl/log/log.h"
 +#include "base/process.h"
-+#include "base/system_util.h"
-+#include "base/util.h"
 +#include "base/vlog.h"
 +#include "client/client_interface.h"
++#include "protocol/commands.pb.h"
++#include "protocol/config.pb.h"
 +#include "unix/fcitx5/fcitx_key_event_handler.h"
++#include "unix/fcitx5/i18nwrapper.h"
 +#include "unix/fcitx5/mozc_connection.h"
 +#include "unix/fcitx5/mozc_engine.h"
 +#include "unix/fcitx5/mozc_response_parser.h"
@@ -7337,8 +7443,9 @@ index 00000000..e438d1d4
 +
 +  mozc::commands::KeyEvent event;
 +  if (!handler_->GetKeyEvent(sym, keycode, state, preedit_method_, layout_is_jp,
-+                             is_key_up, &event))
++                             is_key_up, &event)) {
 +    return false;
++  }
 +
 +  if ((composition_mode == mozc::commands::DIRECT) &&
 +      !client->IsDirectModeCommand(event)) {
@@ -7354,13 +7461,13 @@ index 00000000..e438d1d4
 +    context.set_following_text(surrounding_text_info.following_text);
 +  }
 +
-+  MOZC_VLOG(1) << "TrySendKeyEvent: " << std::endl << event.DebugString();
++  MOZC_VLOG(1) << "TrySendKeyEvent: " << event.DebugString();
 +  if (!client->SendKeyWithContext(event, context, out)) {
 +    *out_error = "SendKey failed";
 +    MOZC_VLOG(1) << "ERROR";
 +    return false;
 +  }
-+  MOZC_VLOG(1) << "OK: " << std::endl << out->DebugString();
++  MOZC_VLOG(1) << "OK: " << out->DebugString();
 +  return true;
 +}
 +
@@ -7406,13 +7513,13 @@ index 00000000..e438d1d4
 +bool MozcState::TrySendRawCommand(const mozc::commands::SessionCommand& command,
 +                                  mozc::commands::Output* out,
 +                                  std::string* out_error) const {
-+  MOZC_VLOG(1) << "TrySendRawCommand: " << std::endl << command.DebugString();
++  MOZC_VLOG(1) << "TrySendRawCommand: " << command.DebugString();
 +  if (!GetClient()->SendCommand(command, out)) {
 +    *out_error = "SendCommand failed";
 +    MOZC_VLOG(1) << "ERROR";
 +    return false;
 +  }
-+  MOZC_VLOG(1) << "OK: " << std::endl << out->DebugString();
++  MOZC_VLOG(1) << "OK: " << out->DebugString();
 +  return true;
 +}
 +
@@ -7596,10 +7703,10 @@ index 00000000..e438d1d4
 +    }
 +  } else {
 +    Text preedit = preedit_;
-+    if (preedit.size()) {
++    if (!preedit.empty()) {
 +      preedit.append(" ");
 +      preedit.append(aux);
-+      ic_->inputPanel().setPreedit(std::move(preedit));
++      ic_->inputPanel().setPreedit(preedit);
 +    } else if (!aux_.empty()) {
 +      ic_->inputPanel().setAuxUp(Text(aux));
 +    }
@@ -7657,10 +7764,10 @@ index 00000000..e438d1d4
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/mozc_state.h b/src/unix/fcitx5/mozc_state.h
 new file mode 100644
-index 00000000..5df75519
+index 000000000..da09dc604
 --- /dev/null
 +++ b/src/unix/fcitx5/mozc_state.h
-@@ -0,0 +1,169 @@
+@@ -0,0 +1,170 @@
 +// Copyright 2012~2013, Weng Xuetian <wengxt@gmail.com>
 +// All rights reserved.
 +//
@@ -7698,16 +7805,17 @@ index 00000000..5df75519
 +#include <fcitx/inputcontextproperty.h>
 +#include <fcitx/text.h>
 +
++#include <cstdint>
 +#include <memory>
++#include <string>
 +
-+#include "base/port.h"
-+#include "base/run_level.h"
 +#include "client/client_interface.h"
 +#include "protocol/commands.pb.h"
++#include "protocol/config.pb.h"
 +#include "unix/fcitx5/mozc_client_pool.h"
 +
 +namespace fcitx {
-+const int32_t kBadCandidateId = -12345;
++inline const int32_t kBadCandidateId = -12345;
 +class MozcConnectionInterface;
 +class MozcResponseParser;
 +class KeyTranslator;
@@ -7752,7 +7860,7 @@ index 00000000..5df75519
 +  // Sets the url to be opened by the default browser.
 +  void SetUrl(const std::string &url);
 +
-+  const std::string &GetIconFile(const std::string key);
++  const std::string &GetIconFile(std::string key);
 +
 +  mozc::commands::CompositionMode GetCompositionMode() {
 +    return composition_mode_;
@@ -7801,7 +7909,7 @@ index 00000000..5df75519
 +
 +  // Parses the response from mozc_server. Returns whether the server consumes
 +  // the input or not (true means 'consumed').
-+  bool ParseResponse(const mozc::commands::Output &request);
++  bool ParseResponse(const mozc::commands::Output &raw_response);
 +
 +  void ClearAll();
 +  void DrawPreeditInfo();
@@ -7832,7 +7940,7 @@ index 00000000..5df75519
 +#endif  // MOZC_UNIX_FCITX_FCITX_MOZC_H_
 diff --git a/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in b/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in
 new file mode 100644
-index 00000000..1d70ff0f
+index 000000000..1d70ff0f8
 --- /dev/null
 +++ b/src/unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in
 @@ -0,0 +1,27 @@
@@ -7865,7 +7973,7 @@ index 00000000..1d70ff0f
 +</component>
 diff --git a/src/unix/fcitx5/po/LINGUAS b/src/unix/fcitx5/po/LINGUAS
 new file mode 100644
-index 00000000..f7c759ac
+index 000000000..f7c759acf
 --- /dev/null
 +++ b/src/unix/fcitx5/po/LINGUAS
 @@ -0,0 +1,11 @@
@@ -7882,7 +7990,7 @@ index 00000000..f7c759ac
 +zh_TW
 diff --git a/src/unix/fcitx5/po/ca.po b/src/unix/fcitx5/po/ca.po
 new file mode 100644
-index 00000000..d26bd401
+index 000000000..d26bd4010
 --- /dev/null
 +++ b/src/unix/fcitx5/po/ca.po
 @@ -0,0 +1,139 @@
@@ -8027,7 +8135,7 @@ index 00000000..d26bd401
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/da.po b/src/unix/fcitx5/po/da.po
 new file mode 100644
-index 00000000..2ed5dc29
+index 000000000..2ed5dc296
 --- /dev/null
 +++ b/src/unix/fcitx5/po/da.po
 @@ -0,0 +1,139 @@
@@ -8172,7 +8280,7 @@ index 00000000..2ed5dc29
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/de.po b/src/unix/fcitx5/po/de.po
 new file mode 100644
-index 00000000..059c7a62
+index 000000000..059c7a628
 --- /dev/null
 +++ b/src/unix/fcitx5/po/de.po
 @@ -0,0 +1,140 @@
@@ -8318,7 +8426,7 @@ index 00000000..059c7a62
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/fcitx5-mozc.pot b/src/unix/fcitx5/po/fcitx5-mozc.pot
 new file mode 100644
-index 00000000..71339973
+index 000000000..71339973c
 --- /dev/null
 +++ b/src/unix/fcitx5/po/fcitx5-mozc.pot
 @@ -0,0 +1,135 @@
@@ -8459,7 +8567,7 @@ index 00000000..71339973
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/he.po b/src/unix/fcitx5/po/he.po
 new file mode 100644
-index 00000000..a81ecb2d
+index 000000000..a81ecb2da
 --- /dev/null
 +++ b/src/unix/fcitx5/po/he.po
 @@ -0,0 +1,141 @@
@@ -8606,7 +8714,7 @@ index 00000000..a81ecb2d
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/ja.po b/src/unix/fcitx5/po/ja.po
 new file mode 100644
-index 00000000..f1ae1b88
+index 000000000..f1ae1b88a
 --- /dev/null
 +++ b/src/unix/fcitx5/po/ja.po
 @@ -0,0 +1,140 @@
@@ -8752,7 +8860,7 @@ index 00000000..f1ae1b88
 +msgstr "候補を縦に並べる"
 diff --git a/src/unix/fcitx5/po/ko.po b/src/unix/fcitx5/po/ko.po
 new file mode 100644
-index 00000000..246dbc58
+index 000000000..246dbc582
 --- /dev/null
 +++ b/src/unix/fcitx5/po/ko.po
 @@ -0,0 +1,141 @@
@@ -8899,7 +9007,7 @@ index 00000000..246dbc58
 +msgstr "세로 후보 목록"
 diff --git a/src/unix/fcitx5/po/ru.po b/src/unix/fcitx5/po/ru.po
 new file mode 100644
-index 00000000..64b70727
+index 000000000..64b707279
 --- /dev/null
 +++ b/src/unix/fcitx5/po/ru.po
 @@ -0,0 +1,143 @@
@@ -9048,7 +9156,7 @@ index 00000000..64b70727
 +msgstr "Вертикальный список кандидатов"
 diff --git a/src/unix/fcitx5/po/tr.po b/src/unix/fcitx5/po/tr.po
 new file mode 100644
-index 00000000..83fbc984
+index 000000000..83fbc984c
 --- /dev/null
 +++ b/src/unix/fcitx5/po/tr.po
 @@ -0,0 +1,139 @@
@@ -9193,7 +9301,7 @@ index 00000000..83fbc984
 +msgstr ""
 diff --git a/src/unix/fcitx5/po/zh_CN.po b/src/unix/fcitx5/po/zh_CN.po
 new file mode 100644
-index 00000000..9c5bcab0
+index 000000000..9c5bcab09
 --- /dev/null
 +++ b/src/unix/fcitx5/po/zh_CN.po
 @@ -0,0 +1,140 @@
@@ -9339,7 +9447,7 @@ index 00000000..9c5bcab0
 +msgstr "垂直候选列表"
 diff --git a/src/unix/fcitx5/po/zh_TW.po b/src/unix/fcitx5/po/zh_TW.po
 new file mode 100644
-index 00000000..e667890f
+index 000000000..e667890f3
 --- /dev/null
 +++ b/src/unix/fcitx5/po/zh_TW.po
 @@ -0,0 +1,144 @@
@@ -9489,10 +9597,10 @@ index 00000000..e667890f
 +msgstr "垂直候選字列表"
 diff --git a/src/unix/fcitx5/surrounding_text_util.cc b/src/unix/fcitx5/surrounding_text_util.cc
 new file mode 100644
-index 00000000..f4b88120
+index 000000000..bed152e90
 --- /dev/null
 +++ b/src/unix/fcitx5/surrounding_text_util.cc
-@@ -0,0 +1,223 @@
+@@ -0,0 +1,228 @@
 +// Copyright 2010-2013, Google Inc.
 +// All rights reserved.
 +//
@@ -9525,13 +9633,18 @@ index 00000000..f4b88120
 +#include "unix/fcitx5/surrounding_text_util.h"
 +
 +#include <fcitx-module/clipboard/clipboard_public.h>
++#include <fcitx-utils/capabilityflags.h>
 +#include <fcitx/inputcontext.h>
 +
++#include <algorithm>
++#include <cstddef>
++#include <cstdint>
++#include <cstdlib>
 +#include <limits>
 +#include <string>
 +
-+#include "base/logging.h"
-+#include "base/port.h"
++#include "absl/log/check.h"
++#include "absl/log/log.h"
 +#include "base/util.h"
 +#include "base/vlog.h"
 +
@@ -9718,10 +9831,10 @@ index 00000000..f4b88120
 +}  // namespace fcitx
 diff --git a/src/unix/fcitx5/surrounding_text_util.h b/src/unix/fcitx5/surrounding_text_util.h
 new file mode 100644
-index 00000000..77885ee5
+index 000000000..8370b74e0
 --- /dev/null
 +++ b/src/unix/fcitx5/surrounding_text_util.h
-@@ -0,0 +1,86 @@
+@@ -0,0 +1,83 @@
 +// Copyright 2010-2013, Google Inc.
 +// All rights reserved.
 +//
@@ -9756,18 +9869,15 @@ index 00000000..77885ee5
 +
 +#include <fcitx/inputcontext.h>
 +
++#include <cstdint>
 +#include <string>
-+
-+#include "base/port.h"
 +
 +namespace fcitx {
 +
 +class AddonInstance;
 +
 +struct SurroundingTextInfo {
-+  SurroundingTextInfo() : relative_selected_length(0) {}
-+
-+  int32_t relative_selected_length;
++  int32_t relative_selected_length = 0;
 +  std::string preceding_text;
 +  std::string selection_text;
 +  std::string following_text;
