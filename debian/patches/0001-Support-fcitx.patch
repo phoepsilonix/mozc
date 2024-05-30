@@ -283,10 +283,10 @@ index f3f55e9dc..c38a2b632 100755
  
 diff --git a/src/unix/fcitx/BUILD b/src/unix/fcitx/BUILD
 new file mode 100644
-index 000000000..2f90b3e15
+index 000000000..64eb83604
 --- /dev/null
 +++ b/src/unix/fcitx/BUILD
-@@ -0,0 +1,99 @@
+@@ -0,0 +1,102 @@
 +load(
 +    "//:build_defs.bzl",
 +    "mozc_cc_binary",
@@ -307,6 +307,7 @@ index 000000000..2f90b3e15
 +        "//base:vlog",
 +        "//client:client",
 +        "//protocol:commands_cc_proto",
++	"@com_google_absl//absl/log:check",
 +    ]
 +)
 +
@@ -331,6 +332,7 @@ index 000000000..2f90b3e15
 +        "//base:vlog",
 +        "//protocol:commands_cc_proto",
 +        "//client:client_interface",
++	"@com_google_absl//absl/log:check",
 +    ],
 +)
 +
@@ -345,11 +347,11 @@ index 000000000..2f90b3e15
 +        "fcitx_key_translator.h",
 +    ],
 +    deps = [
-+        "//base:logging",
 +        "//base:port",
 +        "//base:vlog",
 +        "//protocol:config_cc_proto",
 +        "//protocol:commands_cc_proto",
++	"@com_google_absl//absl/log:check",
 +        "@fcitx//:fcitx",
 +    ],
 +)
@@ -367,6 +369,7 @@ index 000000000..2f90b3e15
 +        "//base:logging",
 +        "//base:port",
 +        "//base:vlog",
++	"@com_google_absl//absl/log:check",
 +        "@fcitx//:fcitx",
 +    ],
 +)
@@ -802,7 +805,7 @@ index 000000000..7fedaa043
 +}
 diff --git a/src/unix/fcitx/fcitx_key_event_handler.cc b/src/unix/fcitx/fcitx_key_event_handler.cc
 new file mode 100644
-index 000000000..61cbe92e9
+index 000000000..2b07f5c9a
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_key_event_handler.cc
 @@ -0,0 +1,244 @@
@@ -840,7 +843,7 @@ index 000000000..61cbe92e9
 +
 +#include <map>
 +
-+#include "base/logging.h"
++#include "absl/log/check.h"
 +#include "base/vlog.h"
 +#include "base/singleton.h"
 +
@@ -1137,7 +1140,7 @@ index 000000000..d11a440f2
 +#endif  // MOZC_UNIX_FCITX_KEY_EVENT_HANDLER_H_
 diff --git a/src/unix/fcitx/fcitx_key_translator.cc b/src/unix/fcitx/fcitx_key_translator.cc
 new file mode 100644
-index 000000000..775adaca2
+index 000000000..c8fdfebe4
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_key_translator.cc
 @@ -0,0 +1,421 @@
@@ -1177,7 +1180,7 @@ index 000000000..775adaca2
 +#include <set>
 +#include <string>
 +
-+#include "base/logging.h"
++#include "absl/log/check.h"
 +#include "base/vlog.h"
 +
 +namespace mozc {
@@ -1663,7 +1666,7 @@ index 000000000..ca9089592
 +#endif  // MOZC_UNIX_FCITX_FCITX_KEY_TRANSLATOR_H_
 diff --git a/src/unix/fcitx/fcitx_mozc.cc b/src/unix/fcitx/fcitx_mozc.cc
 new file mode 100644
-index 000000000..351d2e124
+index 000000000..6b4c15583
 --- /dev/null
 +++ b/src/unix/fcitx/fcitx_mozc.cc
 @@ -0,0 +1,553 @@
@@ -1707,8 +1710,8 @@ index 000000000..351d2e124
 +// Resolve macro naming conflict with absl.
 +#undef InvokeFunction
 +
++#include "absl/log/check.h"
 +#include "base/const.h"
-+#include "base/logging.h"
 +#include "base/vlog.h"
 +#include "base/process.h"
 +#include "base/util.h"
@@ -2433,7 +2436,7 @@ index 000000000..ad1923032
 +Parent=fcitx-mozc
 diff --git a/src/unix/fcitx/mozc_connection.cc b/src/unix/fcitx/mozc_connection.cc
 new file mode 100755
-index 000000000..251650a5e
+index 000000000..d63426aeb
 --- /dev/null
 +++ b/src/unix/fcitx/mozc_connection.cc
 @@ -0,0 +1,209 @@
@@ -2471,7 +2474,7 @@ index 000000000..251650a5e
 +
 +#include <string>
 +
-+#include "base/logging.h"
++#include "absl/log/check.h"
 +#include "base/vlog.h"
 +#include "base/util.h"
 +#include "client/client.h"
@@ -2806,7 +2809,7 @@ index 000000000..741757576
 +#endif  // MOZC_UNIX_SCIM_MOZC_CONNECTION_H_
 diff --git a/src/unix/fcitx/mozc_response_parser.cc b/src/unix/fcitx/mozc_response_parser.cc
 new file mode 100755
-index 000000000..d11589e8a
+index 000000000..e8710dc6b
 --- /dev/null
 +++ b/src/unix/fcitx/mozc_response_parser.cc
 @@ -0,0 +1,448 @@
@@ -2845,7 +2848,7 @@ index 000000000..d11589e8a
 +#include <string>
 +#include <vector>
 +
-+#include "base/logging.h"
++#include "absl/log/check.h"
 +#include "base/vlog.h"
 +#include "base/util.h"
 +#include "protocol/commands.pb.h"
@@ -4201,7 +4204,7 @@ index 000000000..2c83dfe69
 +msgstr "按下 Ctrl+Alt+H 顯示用法。"
 diff --git a/src/unix/fcitx/surrounding_text_util.cc b/src/unix/fcitx/surrounding_text_util.cc
 new file mode 100644
-index 000000000..a4dc7d29a
+index 000000000..4cfbd8508
 --- /dev/null
 +++ b/src/unix/fcitx/surrounding_text_util.cc
 @@ -0,0 +1,244 @@
@@ -4245,8 +4248,8 @@ index 000000000..a4dc7d29a
 +#undef InvokeFunction
 +#endif
 +
++#include "absl/log/check.h"
 +#include "base/port.h"
-+#include "base/logging.h"
 +#include "base/vlog.h"
 +#include "base/util.h"
 +
@@ -4546,7 +4549,7 @@ index 000000000..ce54291c0
 +#endif  // MOZC_UNIX_FCITX_SURROUNDING_TEXT_URIL_H_
 diff --git a/src/unix/fcitx5/BUILD b/src/unix/fcitx5/BUILD
 new file mode 100644
-index 000000000..2094fe75e
+index 000000000..4d96a8aba
 --- /dev/null
 +++ b/src/unix/fcitx5/BUILD
 @@ -0,0 +1,123 @@
@@ -4634,12 +4637,12 @@ index 000000000..2094fe75e
 +        "fcitx_key_translator.h",
 +    ],
 +    deps = [
-+        "//base:logging",
 +        "//base:port",
 +        "//base:vlog",
 +        "//base:singleton",
 +        "//protocol:config_cc_proto",
 +        "//protocol:commands_cc_proto",
++        "@com_google_absl//absl/log:check",
 +        "@fcitx5//:fcitx5",
 +    ],
 +)
@@ -4654,9 +4657,9 @@ index 000000000..2094fe75e
 +    ],
 +    deps = [
 +        "//base:util",
-+        "//base:logging",
 +        "//base:port",
 +        "//base:vlog",
++        "@com_google_absl//absl/log:check",
 +        "@fcitx5//:fcitx5",
 +    ],
 +)
@@ -9648,10 +9651,10 @@ index 000000000..e667890f3
 +msgstr "垂直候選字列表"
 diff --git a/src/unix/fcitx5/surrounding_text_util.cc b/src/unix/fcitx5/surrounding_text_util.cc
 new file mode 100644
-index 000000000..bed152e90
+index 000000000..68bf40ec8
 --- /dev/null
 +++ b/src/unix/fcitx5/surrounding_text_util.cc
-@@ -0,0 +1,228 @@
+@@ -0,0 +1,227 @@
 +// Copyright 2010-2013, Google Inc.
 +// All rights reserved.
 +//
@@ -9697,7 +9700,6 @@ index 000000000..bed152e90
 +#include "absl/log/check.h"
 +#include "absl/log/log.h"
 +#include "base/util.h"
-+#include "base/vlog.h"
 +
 +namespace fcitx {
 +
