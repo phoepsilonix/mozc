@@ -66,9 +66,9 @@ jobs:
             echo "tag_commit=$(git log -1 --pretty=%H ${TAG})" >> $GITHUB_OUTPUT
           else
             echo $TAG
-            COMMIT=$(git log -1 ${TAG} --pretty=%h)
+            COMMIT=$(git log -1 ${TAG} --pretty=%H)
             echo $COMMIT
-            echo "tag_name=$(git describe --tags --always ${COMMIT})" >> $GITHUB_OUTPUT
+            echo "tag_name=${TAG}" >> $GITHUB_OUTPUT
             echo "tag_commit=$(git log -1 --pretty=%H ${COMMIT})" >> $GITHUB_OUTPUT
           fi
       - name: check variables
