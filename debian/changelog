@@ -1,3 +1,10 @@
+mozc (2.30.5490.102+dfsg-2.2build1.1) UNRELEASED; urgency=medium
+
+  * Non-maintainer upload.
+  * git src.
+
+ -- Masato TOYOSHIMA <phoepsilonix@phoepsilonix.love>  Sun, 16 Jun 2024 15:48:46 +0900
+
 mozc (2.30.5448.102+dfsg-2.2build1) unstable; urgency=medium
 
   * git src.
