@@ -10,6 +10,7 @@ CPPFLAGS:=$(shell dpkg-buildflags --get CPPFLAGS)
 CFLAGS:=$(shell dpkg-buildflags --get CFLAGS) $(CPPFLAGS) -fPIE -gdwarf-4 -fPIC
 CXXFLAGS:=$(shell dpkg-buildflags --get CXXFLAGS) $(CPPFLAGS) -fPIE -gdwarf-4 -fPIC
 LDFLAGS:=$(shell dpkg-buildflags --get LDFLAGS) -Wl,--as-needed -Wl,--build-id=sha1
+BAZEL_LDFLAGS:=$(shell echo $(LDFLAGS)|xargs -n1 echo "--linkopt")
 BAZEL_CFLAGS:=$(shell echo $(shell dpkg-buildflags --get CFLAGS) -fPIE -gdwarf-4 -fPIC|xargs -n1 echo "--copt")
 BAZEL_CXXFLAGS:=$(shell echo $(shell dpkg-buildflags --get CXXFLAGS) -fPIE -gdwarf-4 -fPIC|xargs -n1 echo "--cxxopt")
 # clear XDG_CONFIG_DIRS for qtchooser
@@ -38,13 +39,13 @@ override_dh_auto_configure:
 override_dh_auto_build: build_dynamic_link build_static_link
 build_static_link:
 	cd src; \
-	bazel build $(TARGET_STATIC) --config oss_linux --compilation_mode opt --linkopt "$(LDFLAGS)" $(BAZEL_CFLAGS) $(BAZEL_CXXFLAGS)
+	bazel build $(TARGET_STATIC) --config oss_linux --compilation_mode opt $(BAZEL_LDFLAGS) $(BAZEL_CFLAGS) $(BAZEL_CXXFLAGS)
 	cd src ;
 	bazel shutdown
 
 build_dynamic_link:
 	cd src ; \
-	bazel build $(TARGETS) $(TARGET_FCITX5) --config oss_linux --compilation_mode opt --linkopt "$(LDFLAGS)" $(BAZEL_CFLAGS) $(BAZEL_CXXFLAGS)
+	bazel build $(TARGETS) $(TARGET_FCITX5) --config oss_linux --compilation_mode opt $(BAZEL_LDFLAGS) $(BAZEL_CFLAGS) $(BAZEL_CXXFLAGS)
 	cd src ;
 	bazel shutdown
 	cd src ; \
