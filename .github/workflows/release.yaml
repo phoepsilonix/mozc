@@ -26,7 +26,7 @@ jobs:
           sudo apt-get -y install apt-fast git
       - uses: actions/checkout@v4
         with:
-          ref: ubuntu
+          ref: ubuntu-noble
           submodules: 'recursive'
           path: source
       - name: Setup variables
