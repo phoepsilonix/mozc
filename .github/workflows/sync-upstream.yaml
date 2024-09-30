@@ -1,0 +1,85 @@
+name: Sync Master with Upstream
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'  # 毎日4時間毎
+  workflow_dispatch:  # 手動実行用
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      ORIGINAL_OWNER: "google"
+      ORIGINAL_REPOSITORY: "mozc"
+
+    steps:
+      - name: Checkout sync-upstream branch
+        uses: actions/checkout@v4
+        with:
+          ref: sync-upstream
+          fetch-depth: 0
+          fetch-tags: 'true'
+          token: ${{ secrets.MOZC_WORKFLOW_KEY }}
+
+      - name: Configure Git
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - name: Fetch upstream
+        run: git fetch --prune --filter=tree:0 https://github.com/$ORIGINAL_OWNER/$ORIGINAL_REPOSITORY.git master
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git checkout master
+          if git diff --quiet master FETCH_HEAD; then
+            echo "No changes detected"
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected"
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+          fi
+
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.PRIVATE_REPO_SSH_KEY }}
+
+      - name: Import bot's GPG key for signing commits
+        id: import-gpg
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.BOT_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.BOT_GPG_PASSPHRASE }}
+
+      - name: Sync master branch
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.MOZC_WORKFLOW_KEY }}
+        run: |
+          git checkout master
+          git reset --hard FETCH_HEAD
+          git config --global "url.https://${{ secrets.MOZC_WORKFLOW_KEY }}@github.com/.insteadOf" https://github.com/
+          git push origin master --force
+
+          # MOZC_VERSION CHECK
+          MOZC_TAG_1=$(git describe --tags --abbrev=0)
+          source <(grep = src/data/version/mozc_version_template.bzl| tr -d ' ')
+          MOZC_TAG_2=$(printf "v%s.%s.%s.%s" "$MAJOR" "$MINOR" "$BUILD_OSS" "$((REVISION+2))")
+          echo "$MOZC_TAG_1"
+          echo "$MOZC_TAG_2"
+          if [[ "$MOZC_TAG_1" != "$MOZC_TAG_2" ]];then
+            OSS_COMMIT=$(git log -G "BUILD_OSS [^ ]* $BUILD_OSS" -1 --pretty=%H)
+            [[ -z "$OSS_COMMIT" ]] && OSS_COMMIT=$(git log -G "$BUILD_OSS" -1 --pretty=%H)
+            if [[ -n "$OSS_COMMIT" ]]; then
+              git tag $MOZC_TAG_2 $OSS_COMMIT
+              #git push https://github.com/phoepsilonix/mozc.git master --force --tags
+              git push origin master --force --tags
+            else
+              echo "is BUILD_OSS updated? But COMMIT LOG is Nothing?"
+              exit 1;
+            fi
+          fi
+          git checkout sync-upstream
+          git merge FETCH_HEAD --no-ff --no-edit
+          git push origin sync-upstream --force
