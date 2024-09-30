@@ -2,7 +2,7 @@ name: Sync Master with Upstream
 
 on:
   schedule:
-    - cron: '0 */4 * * *'  # 毎日4時間毎
+    - cron: '0 03-23/6 * * *'  # 毎日6時間毎
   workflow_dispatch:  # 手動実行用
 
 jobs:
@@ -23,8 +23,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.name "Masato TOYOSHIMA"
+          git config user.email phoepsilonix@phoepsilonix.love
 
       - name: Fetch upstream
         run: git fetch --prune --filter=tree:0 https://github.com/$ORIGINAL_OWNER/$ORIGINAL_REPOSITORY.git master
