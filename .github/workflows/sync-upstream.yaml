@@ -77,7 +77,8 @@ jobs:
               git push origin master --force --tags
             else
               echo "is BUILD_OSS updated? But COMMIT LOG is Nothing?"
-              exit 1;
+              git tag $MOZC_TAG_2 HEAD
+              git push origin master --force --tags
             fi
           fi
           git checkout sync-upstream
