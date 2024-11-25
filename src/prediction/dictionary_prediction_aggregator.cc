@@ -116,9 +116,8 @@ bool MaybeRedundant(const absl::string_view reference,
 }
 
 bool IsLatinInputMode(const ConversionRequest &request) {
-  return (request.has_composer() &&
-          (request.composer().GetInputMode() == transliteration::HALF_ASCII ||
-           request.composer().GetInputMode() == transliteration::FULL_ASCII));
+  return request.composer().GetInputMode() == transliteration::HALF_ASCII ||
+         request.composer().GetInputMode() == transliteration::FULL_ASCII;
 }
 
 bool IsQwertyMobileTable(const ConversionRequest &request) {
@@ -206,9 +205,12 @@ size_t GetDefaultSizeForRealtimeCandidates(bool is_long_key) {
 
 ConversionRequest GetConversionRequestForRealtimeCandidates(
     const ConversionRequest &request, size_t realtime_candidates_size) {
-  ConversionRequest ret = request;
-  ret.set_max_conversion_candidates_size(realtime_candidates_size);
-  return ret;
+  ConversionRequest::Options options = request.options();
+  options.max_conversion_candidates_size = realtime_candidates_size;
+  return ConversionRequestBuilder()
+      .SetConversionRequest(request)
+      .SetOptions(std::move(options))
+      .Build();
 }
 
 Segments GetSegmentsForRealtimeCandidatesGeneration(
@@ -818,15 +820,19 @@ bool DictionaryPredictionAggregator::PushBackTopConversionResult(
   DCHECK_EQ(1, segments.conversion_segments_size());
 
   Segments tmp_segments = GetSegmentsForRealtimeCandidatesGeneration(segments);
-  ConversionRequest tmp_request = request;
-  tmp_request.set_max_conversion_candidates_size(20);
-  tmp_request.set_composer_key_selection(ConversionRequest::PREDICTION_KEY);
+  ConversionRequest::Options options;
+  options.max_conversion_candidates_size = 20;
+  options.composer_key_selection = ConversionRequest::PREDICTION_KEY;
   // Some rewriters cause significant performance loss. So we skip them.
-  tmp_request.set_skip_slow_rewriters(true);
+  options.skip_slow_rewriters = true;
   // This method emulates usual converter's behavior so here disable
   // partial candidates.
-  tmp_request.set_create_partial_candidates(false);
-  tmp_request.set_request_type(ConversionRequest::CONVERSION);
+  options.create_partial_candidates = false;
+  options.request_type = ConversionRequest::CONVERSION;
+  const ConversionRequest tmp_request = ConversionRequestBuilder()
+                                            .SetConversionRequest(request)
+                                            .SetOptions(std::move(options))
+                                            .Build();
   if (!converter_->StartConversion(tmp_request, &tmp_segments)) {
     return false;
   }
@@ -998,8 +1004,11 @@ DictionaryPredictionAggregator::GenerateQueryForHandwriting(
     Segment *segment = tmp_segments.add_segment();
     segment->set_key(composition_event.composition_string());
   }
-  ConversionRequest request_for_realtime = request;
-  request_for_realtime.set_request_type(ConversionRequest::REVERSE_CONVERSION);
+  const ConversionRequest request_for_realtime =
+      ConversionRequestBuilder()
+          .SetConversionRequest(request)
+          .SetRequestType(ConversionRequest::REVERSE_CONVERSION)
+          .Build();
   if (!immutable_converter_->ConvertForRequest(request_for_realtime,
                                                &tmp_segments) ||
       tmp_segments.conversion_segments_size() == 0 ||
@@ -1045,7 +1054,6 @@ DictionaryPredictionAggregator::AggregateUnigramCandidateForHandwriting(
     std::vector<Result> *results) const {
   DCHECK(results);
   DCHECK(dictionary_);
-  DCHECK(request.has_composer());
   DCHECK(request.request_type() == ConversionRequest::PREDICTION ||
          request.request_type() == ConversionRequest::SUGGESTION);
   const commands::DecoderExperimentParams &param =
@@ -1353,7 +1361,7 @@ void DictionaryPredictionAggregator::GetPredictiveResults(
     Segment::Candidate::SourceInfo source_info, int zip_code_id, int unknown_id,
     std::vector<Result> *results) {
   const absl::btree_set<std::string> empty_expanded;
-  if (!request.has_composer()) {
+  if (request.use_conversion_segment_key_as_typing_corrected_key()) {
     std::string input_key(history_key);
     input_key.append(segments.conversion_segment(0).key());
     PredictiveLookupCallback callback(types, lookup_limit, input_key.size(),
@@ -1405,7 +1413,7 @@ void DictionaryPredictionAggregator::GetPredictiveResultsForBigram(
     Segment::Candidate::SourceInfo source_info, int unknown_id_,
     std::vector<Result> *results) const {
   absl::btree_set<std::string> expanded;
-  if (!request.has_composer()) {
+  if (request.use_conversion_segment_key_as_typing_corrected_key()) {
     std::string input_key(history_key);
     input_key.append(segments.conversion_segment(0).key());
     PredictiveBigramLookupCallback callback(
@@ -1475,8 +1483,7 @@ void DictionaryPredictionAggregator::GetPredictiveResultsForEnglishKey(
     dictionary.LookupPredictive(input_key, request, &callback);
   }
   // If input mode is FULL_ASCII, then convert the results to full-width.
-  if (request.has_composer() &&
-      request.composer().GetInputMode() == transliteration::FULL_ASCII) {
+  if (request.composer().GetInputMode() == transliteration::FULL_ASCII) {
     std::string tmp;
     for (size_t i = prev_results_size; i < results->size(); ++i) {
       tmp.assign((*results)[i].value);
@@ -1664,10 +1671,6 @@ void DictionaryPredictionAggregator::AggregateEnglishPredictionUsingRawInput(
   DCHECK(results);
   DCHECK(dictionary_);
 
-  if (!request.has_composer()) {
-    return;
-  }
-
   const size_t cutoff_threshold =
       GetCandidateCutoffThreshold(request.request_type());
   const size_t prev_results_size = results->size();
@@ -1691,8 +1694,7 @@ void DictionaryPredictionAggregator::AggregateTypingCorrectedPrediction(
 
   const size_t prev_results_size = results->size();
 
-  if (!request.has_composer() || segments.conversion_segments_size() == 0 ||
-      prev_results_size > 10000) {
+  if (segments.conversion_segments_size() == 0 || prev_results_size > 10000) {
     return;
   }
 
@@ -1714,13 +1716,19 @@ void DictionaryPredictionAggregator::AggregateTypingCorrectedPrediction(
     return;
   }
 
-  // Make ConversionRequest that has no composer to avoid the original key
-  // from being used during the candidate aggregation. Kana modifier
-  // insensitive dictionary lookup is also disabled as composition
+  // Make ConversionRequest that uses conversion_segment(0).key() as typing
+  // corrected key instead of ComposerData to avoid the original key from being
+  // used during the candidate aggregation.
+  // Kana modifier insensitive dictionary lookup is also disabled as composition
   // spellchecker has already fixed them.
-  ConversionRequest corrected_request = request;
-  corrected_request.reset_composer();
-  corrected_request.set_kana_modifier_insensitive_conversion(false);
+  ConversionRequest::Options options = request.options();
+  options.kana_modifier_insensitive_conversion = false;
+  options.use_conversion_segment_key_as_typing_corrected_key = true;
+  const ConversionRequest corrected_request =
+      ConversionRequestBuilder()
+          .SetConversionRequest(request)
+          .SetOptions(std::move(options))
+          .Build();
 
   // Populates number when number candidate is not added.
   bool number_added = base_selected_types & NUMBER;
@@ -1815,10 +1823,10 @@ bool DictionaryPredictionAggregator::AggregateNumberCandidates(
   }
 
   std::string input_key;
-  if (request.has_composer()) {
-    input_key = request.composer().GetQueryForPrediction();
-  } else {
+  if (request.use_conversion_segment_key_as_typing_corrected_key()) {
     input_key = segments.conversion_segment(0).key();
+  } else {
+    input_key = request.composer().GetQueryForPrediction();
   }
 
   return AggregateNumberCandidates(input_key, results);
@@ -1868,15 +1876,12 @@ void DictionaryPredictionAggregator::AggregatePrefixCandidates(
     return;
   }
 
-  const std::string &input_key = [&]() {
-    std::string ret;
-    if (request.has_composer()) {
-      ret = request.composer().GetQueryForPrediction();
-    } else {
-      ret = segments.conversion_segment(0).key();
-    }
-    return ret;
-  }();
+  // TODO(b/365909808): Change GetQueryForPrediction() to return string_view.
+  // It returns std::string now.
+  const std::string input_key =
+      request.use_conversion_segment_key_as_typing_corrected_key()
+          ? segments.conversion_segment(0).key()
+          : request.composer().GetQueryForPrediction();
 
   const size_t input_key_len = Util::CharsLen(input_key);
   if (input_key_len <= 1) {
