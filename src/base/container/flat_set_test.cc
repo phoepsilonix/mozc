@@ -84,7 +84,8 @@ TEST(FlatSetDeathTest, DuplicateEntries) {
   // Runtime construction with duplicate entries hits LOG(FATAL). Compile-time
   // construction with duplicate entries fails the build instead.
 #ifdef ABSL_MIN_LOG_LEVEL
-  constexpr bool kIsLogFatal = ABSL_MIN_LOG_LEVEL <= absl::LogSeverity::kFatal;
+  constexpr bool kIsLogFatal =
+      ABSL_MIN_LOG_LEVEL <= static_cast<int>(absl::LogSeverity::kFatal);
 #else  // ABSL_MIN_LOG_LEVEL
   constexpr bool kIsLogFatal = true;
 #endif  // ABSL_MIN_LOG_LEVEL
