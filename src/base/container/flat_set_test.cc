@@ -31,6 +31,7 @@
 
 #include <functional>
 
+#include "absl/base/log_severity.h"
 #include "absl/strings/string_view.h"
 #include "testing/gunit.h"
 
@@ -82,10 +83,19 @@ TEST(FlatSetTest, SingleElement) {
 TEST(FlatSetDeathTest, DuplicateEntries) {
   // Runtime construction with duplicate entries hits LOG(FATAL). Compile-time
   // construction with duplicate entries fails the build instead.
-  EXPECT_DEATH(CreateFlatSet<int>({1, 1, 2, 3, 4}), "Duplicate entry found");
+#ifdef ABSL_MIN_LOG_LEVEL
+  constexpr bool kIsLogFatal = ABSL_MIN_LOG_LEVEL <= absl::LogSeverity::kFatal;
+#else  // ABSL_MIN_LOG_LEVEL
+  constexpr bool kIsLogFatal = true;
+#endif  // ABSL_MIN_LOG_LEVEL
+
+  constexpr const absl::string_view kExpectedMessage =
+      kIsLogFatal ? "Duplicate entry found" : "";
+
+  EXPECT_DEATH(CreateFlatSet<int>({1, 1, 2, 3, 4}), kExpectedMessage);
   // The uniqueness verification used to stop at the middle of the sorted
   // array, missing duplicates in the second half.
-  EXPECT_DEATH(CreateFlatSet<int>({1, 2, 3, 4, 4}), "Duplicate entry found");
+  EXPECT_DEATH(CreateFlatSet<int>({1, 2, 3, 4, 4}), kExpectedMessage);
 }
 #endif  // defined(EXPECT_DEATH)
 
