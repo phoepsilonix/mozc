@@ -30,10 +30,14 @@
 #include "base/container/flat_set.h"
 
 #include <functional>
+#include <string>
 
-#include "absl/base/log_severity.h"
 #include "absl/strings/string_view.h"
 #include "testing/gunit.h"
+
+#if defined(EXPECT_DEATH) && defined(ABSL_MIN_LOG_LEVEL)
+#include "absl/base/log_severity.h"
+#endif  // EXPECT_DEATH && ABSL_MIN_LOG_LEVEL
 
 namespace mozc {
 namespace {
@@ -83,14 +87,14 @@ TEST(FlatSetTest, SingleElement) {
 TEST(FlatSetDeathTest, DuplicateEntries) {
   // Runtime construction with duplicate entries hits LOG(FATAL). Compile-time
   // construction with duplicate entries fails the build instead.
-#ifdef ABSL_MIN_LOG_LEVEL
+#if defined(ABSL_MIN_LOG_LEVEL)
   constexpr bool kIsLogFatal =
       ABSL_MIN_LOG_LEVEL <= static_cast<int>(absl::LogSeverity::kFatal);
 #else  // ABSL_MIN_LOG_LEVEL
   constexpr bool kIsLogFatal = true;
 #endif  // ABSL_MIN_LOG_LEVEL
 
-  constexpr const absl::string_view kExpectedMessage =
+  const std::string kExpectedMessage =
       kIsLogFatal ? "Duplicate entry found" : "";
 
   EXPECT_DEATH(CreateFlatSet<int>({1, 1, 2, 3, 4}), kExpectedMessage);
